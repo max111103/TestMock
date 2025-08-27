@@ -255,15 +255,15 @@
         }
 
         .warehouse-card.zama {
-            background-color: #d1fae5;
+            background-color: #dcfce7;
         }
 
         .warehouse-card.yokohama {
-            background-color: #fef9c3;
+            background-color: #fff8e5;
         }
 
         .warehouse-card.koshien {
-            background-color: #fee2e2;
+            background-color: #fddada;
         }
 
         .warehouse-card:hover {
@@ -386,7 +386,8 @@
             display: flex;
             flex-direction: column;
             min-height: 0;
-            height: calc(100vh - 170px); /* さらに下まで引き伸ばし */
+            height: calc(100vh - 170px);
+            /* さらに下まで引き伸ばし */
         }
 
         .table-tools {
@@ -566,10 +567,13 @@
             font-size: 14px;
         }
 
-        .btn-primary,
-        .btn-success {
+        .btn-primary {
             padding: 8px 16px;
             /* narrower buttons */
+        }
+
+        .btn-success {
+            padding: 10px 24px;
         }
 
         .btn-primary {
@@ -606,6 +610,24 @@
 
         .btn-danger:hover {
             background: #dc2626;
+        }
+
+        /* FAX出力ボタン専用スタイル */
+        #fax-modal-btn,
+        #order-fax-modal-btn,
+        #order-delay-fax-modal-btn,
+        #delivery-fax-modal-btn {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+
+        #fax-modal-btn:hover,
+        #order-fax-modal-btn:hover,
+        #order-delay-fax-modal-btn:hover,
+        #delivery-fax-modal-btn:hover {
+            background: #7c3aed;
+            border-color: #7c3aed;
         }
 
         /* Details row in table */
@@ -724,6 +746,16 @@
 
         .table-tools .dynamic-actions.show #order-edit-btn,
         .table-tools .dynamic-actions.show #order-edit-btn-delay {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Always show dynamic actions (order view). Buttons will be disabled until a row is selected. */
+        #order-view .dynamic-actions {
+            display: flex !important;
+        }
+
+        #order-view .dynamic-actions button {
             display: inline-flex;
             align-items: center;
         }
@@ -948,7 +980,7 @@
         .new-badge {
             position: absolute;
             top: -5px;
-            right: -5px;
+            left: -5px;
             background: #ef4444;
             color: white;
             font-size: 10px;
@@ -968,8 +1000,246 @@
             z-index: 3000;
         }
 
+        /* Delivery Alert Modal styles */
+        .delivery-alert-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+        }
+
+        .delivery-alert-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .delivery-alert-header {
+            background: #dc2626;
+            color: white;
+            padding: 20px 24px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            gap: 12px;
+        }
+
+        .delivery-alert-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .delivery-alert-title {
+            font-size: 20px;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .delivery-alert-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .delivery-alert-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .delivery-alert-body {
+            padding: 24px;
+        }
+
+        .delivery-alert-summary {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .delivery-alert-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .delivery-alert-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delivery-alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .delivery-alert-item:nth-child(odd) {
+            background-color: #f9fafb;
+        }
+
+        .delivery-alert-item-content {
+            flex: 1;
+        }
+
+        .delivery-alert-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warehouse-summary-item {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .warehouse-summary-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .warehouse-summary-content {
+            flex: 1;
+        }
+
+        .warehouse-summary-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .warehouse-summary-detail {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .warehouse-summary-actions {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .warehouse-overdue-count {
+            background: #dc2626;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .delivery-detail-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .delivery-detail-btn:hover {
+            background: #2563eb;
+        }
+
+        .delivery-delay-days {
+            background: #dc2626;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .warehouse-header-section {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #d1d5db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .warehouse-header-section:first-child {
+            margin-top: 0;
+        }
+
+        .warehouse-header-zama {
+            background-color: #dcfce7;
+        }
+
+        .warehouse-header-yokohama {
+            background-color: #fff8e5;
+        }
+
+        .warehouse-header-koshien {
+            background-color: #fddada;
+        }
+
         .update-modal-backdrop.show {
             display: flex;
+        }
+
+        /* FAXボタンの disabled (初期グレーアウト) スタイル */
+        #fax-modal-btn:disabled,
+        #order-fax-modal-btn:disabled,
+        #order-delay-fax-modal-btn:disabled,
+        #delivery-fax-modal-btn:disabled {
+            background: #d1d5db !important;
+            /* グレー */
+            color: #9ca3af !important;
+            /* 文字色も薄く */
+            border-color: #d1d5db !important;
+            cursor: not-allowed !important;
+            opacity: 1 !important;
         }
 
         .update-modal {
@@ -1082,6 +1352,12 @@
 
         /* Dynamic Action Buttons */
         .dynamic-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .dynamic-actions {
             display: none;
             align-items: center;
             gap: 12px;
@@ -1090,6 +1366,11 @@
 
         .dynamic-actions.show {
             display: flex;
+        }
+
+        /* Always show dynamic actions (quotation view). Buttons will be disabled until a row is selected. */
+        #quotation-view .dynamic-actions {
+            display: flex !important;
         }
 
         /* Dropdown Styles */
@@ -1250,6 +1531,7 @@
 
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
+
             /* Layout adjustments */
             .app-container {
                 flex-direction: column;
@@ -1628,7 +1910,7 @@
                 left: 12px;
                 right: 12px;
             }
-            
+
         }
     </style>
 </head>
@@ -1696,7 +1978,8 @@
                 <div style="display:flex; align-items:center; gap:12px;">
                     <!-- Mobile menu button -->
                     <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="メニューを開く" style="display: none;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <line x1="3" y1="12" x2="21" y2="12"></line>
                             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -1716,14 +1999,18 @@
                     <h1 class="page-title">ダッシュボード</h1>
                     <!-- Warehouse Selection Dropdown (visible in quotation, order, and delivery views) -->
                     <div class="dropdown" id="header-warehouse-dropdown" style="display: none;">
-                        <button class="filter-btn" id="warehouse-dropdown-btn" style="padding: 8px 16px; font-size: 14px;">
+                        <button class="filter-btn" id="warehouse-dropdown-btn"
+                            style="padding: 8px 16px; font-size: 14px;">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 2L3 7v11a2 2 0 002 2h10a2 2 0 002-2V7l-7-5z"></path>
                                 <polyline points="9,21 9,13 11,13 11,21"></polyline>
                             </svg>
                             <span id="warehouse-btn-text">全倉庫</span>
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" style="margin-left: 4px;">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path>
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"
+                                style="margin-left: 4px;">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                </path>
                             </svg>
                         </button>
                         <div class="dropdown-menu" id="warehouse-dropdown-menu">
@@ -1738,25 +2025,72 @@
 
             <!-- Content Area -->
             <div class="content">
-                <!-- Dashboard View -->
-                <div id="dashboard-view">
-                    <!-- Notifications -->
-                    <div class="notification-area">
-                        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">お知らせ</h3>
-                        <div class="notification">
-                            <div class="notification-text">
-                                座間フルフィルメントセンター：入荷予定日を過ぎている明細　座間: 122件 / 横浜: 0件 / 甲子園: 0件 / 合計: 122件
+                <!-- Delivery Alert Modal -->
+                <div class="delivery-alert-backdrop" id="delivery-alert-modal">
+                    <div class="delivery-alert-modal">
+                        <div class="delivery-alert-header">
+                            <svg class="delivery-alert-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <div class="delivery-alert-title">納期超過アラート</div>
+                            <button class="delivery-alert-close" id="delivery-alert-close">&times;</button>
+                        </div>
+                        <div class="delivery-alert-body">
+                            <div class="delivery-alert-summary">
+                                <h4 style="color: #dc2626; margin-bottom: 8px; font-size: 16px;">⚠️ 入荷予定を超過している商品があります
+                                </h4>
+                                <p style="color: #7f1d1d; font-size: 14px;">以下の倉庫で入荷予定日を超過している商品があります。詳細をご確認ください。</p>
+                            </div>
+                            <div class="delivery-alert-list">
+                                <div class="warehouse-summary-item warehouse-header-zama">
+                                    <div class="warehouse-summary-content">
+                                        <div class="warehouse-summary-name">座間フルフィルメントセンター</div>
+                                        <div class="warehouse-summary-detail">神奈川県座間市広野台2-10-10 GLP座間 1階A区</div>
+                                    </div>
+                                    <div class="warehouse-summary-actions">
+                                        <div class="warehouse-overdue-count">3件</div>
+                                        <button class="delivery-detail-btn"
+                                            onclick="showWarehouseDetail('zama')">詳細確認</button>
+                                    </div>
+                                </div>
+
+                                <div class="warehouse-summary-item warehouse-header-yokohama">
+                                    <div class="warehouse-summary-content">
+                                        <div class="warehouse-summary-name">横浜フルフィルメントセンター</div>
+                                        <div class="warehouse-summary-detail">神奈川県横浜市金沢区福浦2-1-1 横浜物流センター 2階B区</div>
+                                    </div>
+                                    <div class="warehouse-summary-actions">
+                                        <div class="warehouse-overdue-count">2件</div>
+                                        <button class="delivery-detail-btn"
+                                            onclick="showWarehouseDetail('yokohama')">詳細確認</button>
+                                    </div>
+                                </div>
+
+                                <div class="warehouse-summary-item warehouse-header-koshien">
+                                    <div class="warehouse-summary-content">
+                                        <div class="warehouse-summary-name">甲子園フルフィルメントセンター</div>
+                                        <div class="warehouse-summary-detail">兵庫県西宮市甲子園町8-15 甲子園ロジスティクス 3階C区</div>
+                                    </div>
+                                    <div class="warehouse-summary-actions">
+                                        <div class="warehouse-overdue-count">1件</div>
+                                        <button class="delivery-detail-btn"
+                                            onclick="showWarehouseDetail('koshien')">詳細確認</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <!-- Dashboard View -->
+                <div id="dashboard-view">
                     <!-- Update Information -->
                     <div class="notification-area" style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">アップデート情報</h3>
-                        <div class="notification update-notification unread" id="update-notification" style="background-color: #f0f9ff; border-color: #0ea5e9;">
-                            <svg class="update-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L8.23 10.661a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-                            </svg>
+                        <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">お知らせ</h3>
+                        <div class="notification update-notification read" id="update-notification"
+                            style="background-color: #f8fafc; border-color: #e2e8f0;">
                             <div class="notification-text">
                                 <div class="update-title" id="update-title">
                                     【2025年08月18日（月）】Webike-SCM お知らせ
@@ -1764,20 +2098,39 @@
                             </div>
                             <div class="new-badge" id="new-badge">NEW</div>
                         </div>
+
+                        <div class="notification update-notification read"
+                            style="background-color: #f8fafc; border-color: #e2e8f0; margin-top: 12px;">
+                            <div class="notification-text">
+                                <div class="update-title">
+                                    【2025年08月20日（火）】システムメンテナンスのお知らせ
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="notification update-notification read"
+                            style="background-color: #f8fafc; border-color: #e2e8f0; margin-top: 12px;">
+                            <div class="notification-text">
+                                <div class="update-title">
+                                    【2025年08月15日（木）】新機能リリースのご案内
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Update Modal -->
                     <div class="update-modal-backdrop" id="update-modal">
                         <div class="update-modal">
                             <div class="update-modal-header">
-                                <div class="update-modal-title">アップデート情報</div>
+                                <div class="update-modal-title">お知らせ</div>
                                 <button class="update-modal-close" id="update-modal-close">&times;</button>
                             </div>
                             <div class="update-modal-body">
                                 <h4 style="margin-bottom: 16px; color: #0ea5e9;">【2025年08月18日（月）】Webike-SCM お知らせ</h4>
                                 <p style="margin-bottom: 16px;">平素より弊社サービスをご利用いただき、ありがとうございます。</p>
                                 <p style="margin-bottom: 16px;">2025年08月18日（月）　夜間にWebike-SCMのバグ修正を行いました。</p>
-                                <p style="margin-bottom: 16px;">今回のアップデートは、一部仕入先様の処理中に下記のエラーメッセージが表示される事象への対応となり、現在は解消しております。</p>
+                                <p style="margin-bottom: 16px;">
+                                    今回のアップデートは、一部仕入先様の処理中に下記のエラーメッセージが表示される事象への対応となり、現在は解消しております。</p>
                                 <p style="margin-bottom: 16px; font-weight: 600;">修正内容：</p>
                                 <ul style="margin-left: 20px; margin-bottom: 16px;">
                                     <li style="margin-bottom: 8px;">見積処理中のタイムアウトエラーを修正</li>
@@ -1801,21 +2154,25 @@
                                 </div>
                                 <div class="warehouse-info">
                                     〒252-0012<br>
-                                    神奈川県座間市広野台2-10-10 GLP座間 1階A区<br>
+                                    神奈川県座間市広野台2-10-10 GLP座間 1階A区 001<br>
                                     電話番号：050-1743-7370
                                 </div>
                                 <div class="status-grid">
                                     <div class="status-item">
                                         <div class="status-label">見積処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="zama" data-action="quotation-unprocessed">157件</span> / 見積中: 0件</div>
+                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="zama"
+                                                data-action="quotation-unprocessed">157件</span> / 見積中: 0件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">受注処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="zama" data-action="order-unprocessed">7件</span> / 在庫あり: 3件 / 手配中: 0件 / 手配済: 2件 / 納期超過: 1件 / BO: 2件</div>
+                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="zama"
+                                                data-action="order-unprocessed">7件</span> / 在庫あり: 3件 / 手配中: 0件 / 手配済: 2件
+                                            / <span style="color: #ef4444;">納期超過: 1件</span> / BO: 2件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">納品処理</div>
-                                        <div class="status-value">出荷待: <span class="status-link" data-warehouse="zama" data-action="delivery-wait">0件</span> / 出荷済: 5件</div>
+                                        <div class="status-value">出荷待: <span class="status-link" data-warehouse="zama"
+                                                data-action="delivery-wait">0件</span> / 出荷済: 5件</div>
                                     </div>
                                 </div>
                             </div>
@@ -1828,21 +2185,28 @@
                                 </div>
                                 <div class="warehouse-info">
                                     〒242-0008<br>
-                                    神奈川県大和市中央林間西6丁目8-26<br>
+                                    神奈川県大和市中央林間西6丁目8-26 001<br>
                                     電話番号：050-5497-3532
                                 </div>
                                 <div class="status-grid">
                                     <div class="status-item">
                                         <div class="status-label">見積処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="yokohama" data-action="quotation-unprocessed">157件</span> / 見積中: 0件</div>
+                                        <div class="status-value">未処理: <span class="status-link"
+                                                data-warehouse="yokohama"
+                                                data-action="quotation-unprocessed">157件</span> / 見積中: 0件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">受注処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="yokohama" data-action="order-unprocessed">7件</span> / 在庫あり: 3件 / 手配中: 0件 / 手配済: 2件 / 納期超過: 1件 / BO: 2件</div>
+                                        <div class="status-value">未処理: <span class="status-link"
+                                                data-warehouse="yokohama" data-action="order-unprocessed">7件</span> /
+                                            在庫あり: 3件 / 手配中: 0件 / 手配済: 2件 / <span style="color: #ef4444;">納期超過: 1件</span>
+                                            / BO: 2件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">納品処理</div>
-                                        <div class="status-value">出荷待: <span class="status-link" data-warehouse="yokohama" data-action="delivery-wait">0件</span> / 出荷済: 5件</div>
+                                        <div class="status-value">出荷待: <span class="status-link"
+                                                data-warehouse="yokohama" data-action="delivery-wait">0件</span> / 出荷済:
+                                            5件</div>
                                     </div>
                                 </div>
                             </div>
@@ -1855,21 +2219,28 @@
                                 </div>
                                 <div class="warehouse-info">
                                     〒663-8142<br>
-                                    兵庫県西宮市鳴尾浜1－20 GLP鳴尾浜 2階B区<br>
+                                    兵庫県西宮市鳴尾浜1－20 GLP鳴尾浜 2階B区 001<br>
                                     電話番号：050-1753-8600
                                 </div>
                                 <div class="status-grid">
                                     <div class="status-item">
                                         <div class="status-label">見積処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="koshien" data-action="quotation-unprocessed">157件</span> / 見積中: 0件</div>
+                                        <div class="status-value">未処理: <span class="status-link"
+                                                data-warehouse="koshien" data-action="quotation-unprocessed">157件</span>
+                                            / 見積中: 0件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">受注処理</div>
-                                        <div class="status-value">未処理: <span class="status-link" data-warehouse="koshien" data-action="order-unprocessed">7件</span> / 在庫あり: 3件 / 手配中: 0件 / 手配済: 2件 / 納期超過: 1件 / BO: 2件</div>
+                                        <div class="status-value">未処理: <span class="status-link"
+                                                data-warehouse="koshien" data-action="order-unprocessed">7件</span> /
+                                            在庫あり: 3件 / 手配中: 0件 / 手配済: 2件 / <span style="color: #ef4444;">納期超過: 1件</span>
+                                            / BO: 2件</div>
                                     </div>
                                     <div class="status-item">
                                         <div class="status-label">納品処理</div>
-                                        <div class="status-value">出荷待: <span class="status-link" data-warehouse="koshien" data-action="delivery-wait">0件</span> / 出荷済: 5件</div>
+                                        <div class="status-value">出荷待: <span class="status-link"
+                                                data-warehouse="koshien" data-action="delivery-wait">0件</span> / 出荷済: 5件
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1879,7 +2250,8 @@
                     <!-- Total Warehouse Status -->
                     <div style="margin-top: 40px;">
                         <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">全倉庫ステータス件数</h3>
-                        <div class="warehouse-card" style="background: #e2e8f0; color: #1f2937; max-width: 800px; border: 1px solid #cbd5e1;">
+                        <div class="warehouse-card"
+                            style="background: #e2e8f0; color: #1f2937; max-width: 800px; border: 1px solid #cbd5e1;">
                             <div class="warehouse-header">
                                 <h3 class="warehouse-name" style="color: #1f2937;">全フルフィルメントセンター合計</h3>
                                 <div class="warehouse-status" style="background: #4CAF50;"></div>
@@ -1890,15 +2262,22 @@
                             <div class="status-grid">
                                 <div class="status-item" style="background: #f8fafc; border: 1px solid #d1d5db;">
                                     <div class="status-label" style="color: #64748b;">見積処理</div>
-                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">未処理: <span class="status-link" data-warehouse="all" data-action="quotation-unprocessed">471件</span> / 見積中: 0件</div>
+                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">未処理: <span
+                                            class="status-link" data-warehouse="all"
+                                            data-action="quotation-unprocessed">471件</span> / 見積中: 0件</div>
                                 </div>
                                 <div class="status-item" style="background: #f8fafc; border: 1px solid #d1d5db;">
                                     <div class="status-label" style="color: #64748b;">受注処理</div>
-                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">未処理: <span class="status-link" data-warehouse="all" data-action="order-unprocessed">21件</span> / 在庫あり: 9件 / 手配中: 0件 / 手配済: 6件 / 納期超過: 3件 / BO: 6件</div>
+                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">未処理: <span
+                                            class="status-link" data-warehouse="all"
+                                            data-action="order-unprocessed">21件</span> / 在庫あり: 9件 / 手配中: 0件 / 手配済: 6件 /
+                                        <span style="color: #ef4444;">納期超過: 3件</span> / BO: 6件</div>
                                 </div>
                                 <div class="status-item" style="background: #f8fafc; border: 1px solid #d1d5db;">
                                     <div class="status-label" style="color: #64748b;">納品処理</div>
-                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">出荷待: <span class="status-link" data-warehouse="all" data-action="delivery-wait">0件</span> / 出荷済: 15件</div>
+                                    <div class="status-value" style="color: #1f2937; font-weight: 700;">出荷待: <span
+                                            class="status-link" data-warehouse="all"
+                                            data-action="delivery-wait">0件</span> / 出荷済: 15件</div>
                                 </div>
                             </div>
                         </div>
@@ -1923,32 +2302,16 @@
 
                             <!-- Dynamic Action Buttons -->
                             <div class="dynamic-actions" id="dynamic-actions">
+                                <!-- 見積処理関連のボタンは編集モーダルに統合 -->
+                                <button class="btn btn-success" id="edit-btn" disabled>納期操作・備考編集</button>
                                 <div class="dropdown">
-                                    <button class="dropdown-btn" id="stock-dropdown-btn"
-                                        style="background-color: #f0f0f0; color: #333;">納期を選択する <span
-                                            style="margin-left: 8px;">▼</span></button>
-                                    <div class="dropdown-menu" id="stock-dropdown-menu">
-                                        <div class="dropdown-item" data-value="none">納期を選択する</div>
-                                        <div class="dropdown-item" data-value="stock">在庫あり</div>
-                                        <div class="dropdown-item" data-value="1day">1日</div>
-                                        <div class="dropdown-item" data-value="2days">2日</div>
-                                        <div class="dropdown-item" data-value="3days">3日</div>
-                                        <div class="dropdown-item" data-value="1week">1週間</div>
-                                        <div class="dropdown-item" data-value="out-of-stock">欠品中未定</div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" id="quotation-send-btn">見積送信</button>
-                                <span class="quotation-processing-btn-container">
-                                    <button class="btn btn-primary" id="quotation-processing-btn">見積中にする</button>
-                                </span>
-                                <button class="btn btn-success" id="edit-btn">編集</button>
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-btn" id="export-dropdown-btn">CSVエクスポート</button>
+                                    <button class="btn btn-secondary dropdown-btn" id="export-dropdown-btn"
+                                        disabled>CSV出力</button>
                                     <div class="dropdown-menu" id="export-dropdown-menu" style="left: auto; right: 0;">
-                                        <button class="dropdown-item" id="export-csv-btn">CSVダウンロード</button>
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="fax-modal-btn" style="margin-left:8px;">FAX出力</button>
+                                <button class="btn btn-secondary" id="fax-modal-btn" style="margin-left:8px;"
+                                    disabled>FAX出力</button>
                             </div>
                         </div>
 
@@ -1995,7 +2358,8 @@
                                         <td>1</td>
                                         <td></td>
                                         <td></td>
-                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333</td>
+                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333
+                                        </td>
                                     </tr>
                                     <tr class="details-row">
                                         <td colspan="14">
@@ -2033,7 +2397,8 @@
                                         <td>1</td>
                                         <td></td>
                                         <td></td>
-                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333</td>
+                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333
+                                        </td>
                                     </tr>
                                     <tr class="details-row">
                                         <td colspan="14">
@@ -2309,33 +2674,16 @@
                                 <button type="submit" aria-label="検索" id="order-search-btn"></button>
                             </form>
                             <div class="dynamic-actions" id="order-dynamic-actions">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <label for="order-date" style="font-size:14px; color:#374151;">日付選択</label>
-                                    <input type="date" id="order-date" class="form-input"
-                                        style="width:auto; padding:6px 10px;">
-                                </div>
-                                <div class="btn-group-equal">
-                                    <button class="btn btn-primary" id="btn-to-shipment-wait">出荷待ちにする</button>
-                                    <button class="btn btn-primary" id="btn-to-in-progress">手配中にする</button>
-                                    <button class="btn btn-primary" id="btn-to-done">手配済にする</button>
-                                    <button class="btn btn-success" id="order-edit-btn">編集</button>
-                                    <div class="dropdown" style="display:inline-block;">
-                                        <button class="btn btn-secondary dropdown-btn" id="order-export-dropdown-btn">CSVエクスポート</button>
-                                        <div class="dropdown-menu" id="order-export-dropdown-menu" style="left: auto; right: 0;">
-                                            <button class="dropdown-item" id="order-export-csv-btn">CSVダウンロード</button>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-secondary" id="order-fax-modal-btn">FAX出力</button>
-                                    <button class="btn btn-danger" id="btn-delay" style="display:none;">遅延処理</button>
-                                    <button class="btn btn-success" id="order-edit-btn-delay" style="display:none;">編集</button>
-                                    <div class="dropdown" id="order-delay-export-dropdown" style="display:none;">
-                                        <button class="btn btn-secondary dropdown-btn" id="order-delay-export-dropdown-btn">CSVエクスポート</button>
-                                        <div class="dropdown-menu" id="order-delay-export-dropdown-menu" style="left: auto; right: 0;">
-                                            <button class="dropdown-item" id="order-delay-export-csv-btn">CSVダウンロード</button>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-secondary" id="order-delay-fax-modal-btn" style="display:none;">FAX出力</button>
-                                </div>
+                                <button class="btn btn-success" id="order-edit-btn">受注操作・備考編集</button>
+                                <button class="btn btn-secondary dropdown-btn" id="order-export-csv-btn">CSV出力</button>
+                                <button class="btn btn-secondary" id="order-fax-modal-btn">FAX出力</button>
+                                <button class="btn btn-danger" id="btn-delay" style="display:none;">遅延処理</button>
+                                <button class="btn btn-success" id="order-edit-btn-delay"
+                                    style="display:none;">受注操作・備考編集</button>
+                                <button class="btn btn-secondary dropdown-btn" id="order-delay-export-csv-btn"
+                                    style="display:none;">CSV出力</button>
+                                <button class="btn btn-secondary" id="order-delay-fax-modal-btn"
+                                    style="display:none;">FAX出力</button>
                             </div>
                         </div>
 
@@ -2382,7 +2730,8 @@
                                         <td>1</td>
                                         <td></td>
                                         <td></td>
-                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333</td>
+                                        <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333
+                                        </td>
                                     </tr>
                                     <tr class="details-row">
                                         <td colspan="14">
@@ -2498,7 +2847,8 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=KT-MIR-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=KT-MIR-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
                                                     <div><span class="label">タイプ:</span><span class="value"></span>
                                                     </div>
@@ -2535,7 +2885,8 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=DT-HLD-02" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=DT-HLD-02"
+                                                    alt="image">
                                                 <div class="details-card-info">
                                                     <div><span class="label">タイプ:</span><span class="value"></span>
                                                     </div>
@@ -2572,7 +2923,8 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=KJ-WNK-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=KJ-WNK-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
                                                     <div><span class="label">タイプ:</span><span class="value"></span>
                                                     </div>
@@ -2609,7 +2961,8 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=SP-HND-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=SP-HND-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
                                                     <div><span class="label">タイプ:</span><span class="value"></span>
                                                     </div>
@@ -2686,9 +3039,12 @@
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=YS-EX01" alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">フルエキゾースト</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">車種専用設計</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">ホンダ</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">フルエキゾースト</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">車種専用設計</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">ホンダ</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2720,11 +3076,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=BR-PAD01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=BR-PAD01"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">フロント用</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">高性能パッド</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">汎用</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">フロント用</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">高性能パッド</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">汎用</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2756,11 +3116,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=KN-AF101" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=KN-AF101"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">高流量フィルター</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">繰り返し使用可能</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">多車種対応</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">高流量フィルター</span></div>
+                                                    <div><span class="label">備考:</span><span
+                                                            class="value">繰り返し使用可能</span></div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">多車種対応</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2794,9 +3158,12 @@
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=MT-7100" alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">10W-40</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">高性能エンジンオイル</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">4輪・2輪共用</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">10W-40</span></div>
+                                                    <div><span class="label">備考:</span><span
+                                                            class="value">高性能エンジンオイル</span></div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">4輪・2輪共用</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2828,11 +3195,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=NGK-CR8E" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=NGK-CR8E"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">標準プラグ</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">高品質プラグ</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">多車種対応</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">標準プラグ</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">高品質プラグ</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">多車種対応</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2864,11 +3235,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=PI-DIABLO" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=PI-DIABLO"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">スポーツタイヤ</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">前後セット</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">スポーツバイク用</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">スポーツタイヤ</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">前後セット</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">スポーツバイク用</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2900,11 +3275,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=OH-RSU46" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=OH-RSU46"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">リアサスペンション</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">プロ仕様</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">スポーツバイク</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">リアサスペンション</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">プロ仕様</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">スポーツバイク</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2938,9 +3317,12 @@
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=GV-E55" alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">55L</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">モノロック</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">汎用</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">55L</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">モノロック</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">汎用</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -2974,9 +3356,12 @@
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=SH-X14" alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">フルフェイス</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">最新モデル</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">-</span></div>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">フルフェイス</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">最新モデル</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">-</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -3010,9 +3395,12 @@
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=AS-GP01" alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">レーシング</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">本革製</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">-</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">レーシング</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">本革製</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">-</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -3044,11 +3432,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=OX-CV200" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=OX-CV200"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">防水カバー</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">UV対応</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">中型バイク</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">防水カバー</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">UV対応</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">中型バイク</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -3080,11 +3472,15 @@
                                     <tr class="details-row">
                                         <td colspan="14">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=DT-LED01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=DT-LED01"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">LED</span></div>
-                                                    <div><span class="label">備考:</span><span class="value">省電力</span></div>
-                                                    <div><span class="label">対応車種メーカー:</span><span class="value">汎用</span></div>
+                                                    <div><span class="label">タイプ:</span><span class="value">LED</span>
+                                                    </div>
+                                                    <div><span class="label">備考:</span><span class="value">省電力</span>
+                                                    </div>
+                                                    <div><span class="label">対応車種メーカー:</span><span
+                                                            class="value">汎用</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -3122,13 +3518,17 @@
                                 </div>
                                 <button class="btn btn-secondary" id="btn-set-tracking-modal">追跡番号設定</button>
                                 <button class="btn btn-success" id="delivery-edit-btn" style="display:none;">編集</button>
-                                <div class="dropdown" id="delivery-export-dropdown" style="display:none; margin-left:0;">
-                                    <button class="btn btn-secondary dropdown-btn" id="delivery-export-dropdown-btn">CSVエクスポート</button>
-                                    <div class="dropdown-menu" id="delivery-export-dropdown-menu" style="left: auto; right: 0;">
-                                        <button class="dropdown-item" id="delivery-export-csv-btn">CSVダウンロード</button>
+                                <div class="dropdown" id="delivery-export-dropdown"
+                                    style="display:none; margin-left:0;">
+                                    <button class="btn btn-secondary dropdown-btn"
+                                        id="delivery-export-dropdown-btn">CSV出力</button>
+                                    <div class="dropdown-menu" id="delivery-export-dropdown-menu"
+                                        style="left: auto; right: 0;">
+
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="delivery-fax-modal-btn" style="display:none;">FAX出力</button>
+                                <button class="btn btn-secondary" id="delivery-fax-modal-btn"
+                                    style="display:none;">FAX出力</button>
                             </div>
                         </div>
 
@@ -3178,12 +3578,16 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=DT-OF-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=DT-OF-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">フィルター類</span>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">フィルター類</span>
                                                     </div>
-                                                    <div><span class="label">備考:</span><span class="value">定期交換部品</span></div>
-                                                    <div><span class="label">メーカー対応車種:</span><span class="value">汎用</span>
+                                                    <div><span class="label">備考:</span><span class="value">定期交換部品</span>
+                                                    </div>
+                                                    <div><span class="label">メーカー対応車種:</span><span
+                                                            class="value">汎用</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3215,12 +3619,16 @@
                                     <tr class="details-row">
                                         <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=KT-LVR-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=KT-LVR-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
-                                                    <div><span class="label">タイプ:</span><span class="value">操作系パーツ</span>
+                                                    <div><span class="label">タイプ:</span><span
+                                                            class="value">操作系パーツ</span>
                                                     </div>
-                                                    <div><span class="label">備考:</span><span class="value">レバー調整可能</span></div>
-                                                    <div><span class="label">メーカー対応車種:</span><span class="value">ホンダ/ヤマハ</span>
+                                                    <div><span class="label">備考:</span><span
+                                                            class="value">レバー調整可能</span></div>
+                                                    <div><span class="label">メーカー対応車種:</span><span
+                                                            class="value">ホンダ/ヤマハ</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3260,7 +3668,6 @@
                                         <th>注文数</th>
                                         <th>運送会社</th>
                                         <th>追跡番号</th>
-                                        <th>アクション</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -3286,23 +3693,19 @@
                                         <td>1</td>
                                         <td>ヤマト運輸</td>
                                         <td>ABC123456789</td>
-                                        <td>
-                                            <div style="display: flex; gap: 4px; justify-content: flex-start; align-items: center;">
-                                                <button class="btn btn-success btn-sm">編集</button>
-                                                <button class="btn btn-secondary btn-sm">CSV</button>
-                                                <button class="btn btn-secondary btn-sm">FAX</button>
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="13">
                                             <div class="details-card">
-                                                <img src="https://via.placeholder.com/100x100?text=SP-HL-01" alt="image">
+                                                <img src="https://via.placeholder.com/100x100?text=SP-HL-01"
+                                                    alt="image">
                                                 <div class="details-card-info">
                                                     <div><span class="label">タイプ:</span><span class="value">照明パーツ</span>
                                                     </div>
-                                                    <div><span class="label">備考:</span><span class="value">LED仕様</span></div>
-                                                    <div><span class="label">メーカー対応車種:</span><span class="value">モンキー125</span>
+                                                    <div><span class="label">備考:</span><span class="value">LED仕様</span>
+                                                    </div>
+                                                    <div><span class="label">メーカー対応車種:</span><span
+                                                            class="value">モンキー125</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3319,9 +3722,31 @@
                 <!-- Edit Modal -->
                 <div class="modal-backdrop" id="edit-modal">
                     <div class="modal">
-                        <div class="modal-header">編集</div>
+                        <div class="modal-header">納期操作・備考編集</div>
                         <div class="modal-subinfo" id="edit-selected-count">選択された商品 0件</div>
                         <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">見積処理操作</label>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <label for="stock-select"
+                                        style="font-size: 12px; color: #6b7280; min-width: 40px;">納期:</label>
+                                    <select id="stock-select" class="form-select" style="flex: 1;">
+                                        <option value="">選択してください</option>
+                                        <option value="在庫あり">在庫あり</option>
+                                        <option value="1週間">1週間</option>
+                                        <option value="2週間">2週間</option>
+                                        <option value="3週間">3週間</option>
+                                        <option value="1ヶ月">1ヶ月</option>
+                                        <option value="2ヶ月">2ヶ月</option>
+                                        <option value="3ヶ月">3ヶ月</option>
+                                        <option value="要相談">要相談</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                    <button class="btn btn-primary" id="modal-quotation-send-btn" disabled>見積送信</button>
+                                    <button class="btn btn-primary" id="modal-quotation-processing-btn">見積中にする</button>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">入力支援</label>
                                 <select class="form-select" id="assist-select">
@@ -3338,10 +3763,12 @@
                             <div class="form-group">
                                 <label class="form-label">自社管理番号</label>
                                 <input type="text" class="form-input" id="own-input" placeholder="自社管理番号を入力" />
+                                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                    <button class="btn btn-primary" id="edit-apply-btn">更新</button>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" id="edit-apply-btn">更新</button>
                             <button class="btn btn-muted" id="edit-close-btn">閉じる</button>
                         </div>
                     </div>
@@ -3384,6 +3811,52 @@
                         </div>
                     </div>
                 </div>
+                <!-- Order Edit Modal -->
+                <div class="modal-backdrop" id="order-edit-modal">
+                    <div class="modal">
+                        <div class="modal-header">受注処理操作</div>
+                        <div class="modal-subinfo" id="order-edit-selected-count">選択された商品 0件</div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">日付選択</label>
+                                <input type="date" id="modal-order-date" class="form-input" style="width: 100%;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">受注処理操作</label>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="btn btn-primary" id="modal-btn-to-shipment-wait">出荷待ちにする</button>
+                                    <button class="btn btn-primary" id="modal-btn-to-in-progress">手配中にする</button>
+                                    <button class="btn btn-primary" id="modal-btn-to-done">手配済にする</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">入力支援</label>
+                                <select class="form-select" id="order-assist-select">
+                                    <option value="">選択してください</option>
+                                    <option value="至急対応お願いします">至急対応お願いします</option>
+                                    <option value="メーカー確認中">メーカー確認中</option>
+                                    <option value="入荷予定日未定">入荷予定日未定</option>
+                                    <option value="出荷準備中">出荷準備中</option>
+                                    <option value="在庫確認中">在庫確認中</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">担当備考</label>
+                                <input type="text" class="form-input" id="order-memo-input" placeholder="担当備考を入力" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">自社管理番号</label>
+                                <input type="text" class="form-input" id="order-own-input" placeholder="自社管理番号を入力" />
+                                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                    <button class="btn btn-primary" id="order-edit-apply-btn">更新</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-muted" id="order-edit-close-btn">閉じる</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-backdrop" id="tracking-modal">
                     <div class="modal">
                         <div class="modal-header">追跡番号設定</div>
@@ -3407,45 +3880,6 @@
                             <button class="btn btn-primary" id="tracking-apply-btn">保存</button>
                             <button class="btn btn-muted" id="tracking-close-btn">閉じる</button>
                         </div>
-                    </div>
-                </div>
-                <div class="filter-panel">
-                    <div class="filter-header">
-                        <h3 class="filter-title">検索条件</h3>
-                        <svg class="close-btn" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
-                        </svg>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">商品メーカー</label>
-                        <input type="text" class="filter-input" placeholder="選択してください">
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">商品名</label>
-                        <input type="text" class="filter-input" placeholder="商品名を入力">
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">品番</label>
-                        <input type="text" class="filter-input" placeholder="品番を入力">
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">JAN</label>
-                        <input type="text" class="filter-input" placeholder="JANコードを入力">
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">SCMコード</label>
-                        <input type="text" class="filter-input" placeholder="SCMコードを入力">
-                    </div>
-
-                    <div style="display: flex; gap: 12px; margin-top: 32px;">
-                        <button class="btn btn-primary" style="flex: 1;">検索</button>
-                        <button class="btn btn-secondary" style="flex: 1;">クリア</button>
                     </div>
                 </div>
             </div>
@@ -3472,6 +3906,78 @@
                 localStorage.setItem('scm.sidebar.collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
             });
         })();
+
+        // 納期超過明細詳細表示機能（倉庫別）
+        function showWarehouseDetail(warehouseCode) {
+            // 納期超過アラートを閉じる
+            const alertBackdrop = document.querySelector('.delivery-alert-backdrop');
+            if (alertBackdrop) {
+                alertBackdrop.remove();
+            }
+
+            // 受注処理タブに切り替え
+            const orderView = document.getElementById('order-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            const quotationView = document.getElementById('quotation-view');
+            const deliveryView = document.getElementById('delivery-view');
+
+            // 全てのビューを非表示
+            if (dashboardView) dashboardView.style.display = 'none';
+            if (quotationView) quotationView.style.display = 'none';
+            if (deliveryView) deliveryView.style.display = 'none';
+            if (orderView) orderView.style.display = 'block';
+
+            // ナビゲーションの状態を更新
+            document.querySelectorAll('.nav-item').forEach(navItem => {
+                navItem.classList.remove('active');
+            });
+            const orderNavItem = document.querySelector('.nav-item[href="#order"]');
+            if (orderNavItem) {
+                orderNavItem.classList.add('active');
+            }
+
+            // ページタイトルを更新
+            const pageTitle = document.querySelector('.page-title');
+            if (pageTitle) {
+                pageTitle.textContent = '受注処理';
+            }
+
+            // 倉庫ドロップダウンを該当倉庫に設定
+            const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
+            const warehouseBtnText = document.getElementById('warehouse-btn-text');
+
+            const warehouseNames = {
+                'zama': '座間倉庫',
+                'yokohama': '横浜倉庫',
+                'koshien': '甲子園倉庫'
+            };
+
+            if (warehouseBtnText && warehouseNames[warehouseCode]) {
+                warehouseBtnText.textContent = warehouseNames[warehouseCode];
+            }
+
+            // ヘッダー背景色を更新
+            if (typeof updateHeaderBackground === 'function') {
+                updateHeaderBackground(warehouseCode);
+            }
+
+            // 受注処理の納期超過タブに切り替え（納期超過データのフィルタリング）
+            // 実際の実装では、ここで該当倉庫の納期超過データをフィルタリング・表示
+            console.log(`${warehouseNames[warehouseCode] || warehouseCode}の納期超過データを表示中...`);
+        }
+
+        // 納期超過明細詳細表示機能（個別SCMコード用・下位互換性のため残す）
+        function showDeliveryDetail(scmCode) {
+            // ここで納期超過詳細画面に遷移
+            // 実際の実装では、詳細画面のURLにSCMコードをパラメータとして渡す
+            alert(`SCMコード ${scmCode} の納期超過詳細画面に遷移します。\n\n実際の実装では、詳細画面に遷移します。`);
+
+            // 例: 実際の遷移処理（コメントアウト）
+            // window.location.href = `/delivery-detail?scm_code=${scmCode}`;
+            // または
+            // window.open(`/delivery-detail?scm_code=${scmCode}`, '_blank');
+        }
+
         // Simple navigation functionality
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function (e) {
@@ -3490,7 +3996,7 @@
                     '#quotation': '見積処理',
                     '#order': '受注処理',
                     '#delivery': '納品処理'
-                    };
+                };
                 pageTitle.textContent = pageTitles[this.getAttribute('href')] || 'ダッシュボード';
 
                 // Show/hide views
@@ -3502,25 +4008,35 @@
                     this.getAttribute('href') === '#order' ? 'block' : 'none';
                 document.getElementById('delivery-view').style.display =
                     this.getAttribute('href') === '#delivery' ? 'block' : 'none';
-                
+
+                // 見積処理ページが表示されたときにボタンの状態を初期化
+                if (this.getAttribute('href') === '#quotation') {
+                    const editBtn = document.getElementById('edit-btn');
+                    const csvExportBtn = document.getElementById('export-dropdown-btn');
+                    const faxModalBtn = document.getElementById('fax-modal-btn');
+                    if (editBtn) editBtn.disabled = true;
+                    if (csvExportBtn) csvExportBtn.disabled = true;
+                    if (faxModalBtn) faxModalBtn.disabled = true;
+                }
+
                 // Show/hide header warehouse dropdown (for quotation, order, and delivery views)
                 const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
                 if (headerWarehouseDropdown) {
                     const showDropdown = ['#quotation', '#order', '#delivery'].includes(this.getAttribute('href'));
                     headerWarehouseDropdown.style.display = showDropdown ? 'block' : 'none';
-                    
+
                     // Apply warehouse background color when switching to warehouse views
                     if (showDropdown && typeof updateHeaderBackground === 'function') {
                         updateHeaderBackground(selectedWarehouse);
                     }
                 }
-                
+
                 // Reset header background color when switching to dashboard
                 const topBar = document.querySelector('.top-bar');
                 if (topBar && this.getAttribute('href') === '#dashboard') {
                     topBar.style.background = '#fff'; // Reset to default when switching to dashboard
                 }
-                
+
                 // Re-bind toggle buttons after view switch
                 bindToggleButtons();
             });
@@ -3530,51 +4046,51 @@
         document.querySelectorAll('.status-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const warehouse = this.getAttribute('data-warehouse');
                 const action = this.getAttribute('data-action');
-                
+
                 if (action === 'quotation-unprocessed') {
                     // Set selected warehouse
                     selectedWarehouse = warehouse;
-                    
+
                     // Switch to quotation view
                     document.querySelectorAll('.nav-item').forEach(navItem => {
                         navItem.classList.remove('active');
                     });
                     document.querySelector('.nav-item[href="#quotation"]').classList.add('active');
-                    
+
                     // Update page title
                     const pageTitle = document.querySelector('.page-title');
                     pageTitle.textContent = '見積処理';
-                    
+
                     // Show quotation view
                     document.getElementById('dashboard-view').style.display = 'none';
                     document.getElementById('quotation-view').style.display = 'block';
                     document.getElementById('order-view').style.display = 'none';
                     document.getElementById('delivery-view').style.display = 'none';
-                    
+
                     // Show warehouse dropdown
                     const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
                     if (headerWarehouseDropdown) {
                         headerWarehouseDropdown.style.display = 'block';
                     }
-                    
+
                     // Update warehouse dropdown button text and background
                     const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
                     const warehouseBtnText = document.getElementById('warehouse-btn-text');
-                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' : 
-                                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' : 
-                                        warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
+                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' :
+                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' :
+                            warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
                     if (warehouseBtnText) {
                         warehouseBtnText.textContent = warehouseName;
                     }
-                    
+
                     // Update header background color
                     if (typeof updateHeaderBackground === 'function') {
                         updateHeaderBackground(warehouse);
                     }
-                    
+
                     // Set active tab to 未処理
                     const quotationTabs = document.querySelectorAll('#quotation-view .tab');
                     quotationTabs.forEach(tab => tab.classList.remove('active'));
@@ -3582,50 +4098,50 @@
                     if (unprocessedTab) {
                         unprocessedTab.classList.add('active');
                     }
-                    
+
                     // Re-bind toggle buttons after view switch
                     bindToggleButtons();
                 } else if (action === 'order-unprocessed') {
                     // Set selected warehouse
                     selectedWarehouse = warehouse;
-                    
+
                     // Switch to order view
                     document.querySelectorAll('.nav-item').forEach(navItem => {
                         navItem.classList.remove('active');
                     });
                     document.querySelector('.nav-item[href="#order"]').classList.add('active');
-                    
+
                     // Update page title
                     const pageTitle = document.querySelector('.page-title');
                     pageTitle.textContent = '受注処理';
-                    
+
                     // Show order view
                     document.getElementById('dashboard-view').style.display = 'none';
                     document.getElementById('quotation-view').style.display = 'none';
                     document.getElementById('order-view').style.display = 'block';
                     document.getElementById('delivery-view').style.display = 'none';
-                    
+
                     // Show warehouse dropdown
                     const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
                     if (headerWarehouseDropdown) {
                         headerWarehouseDropdown.style.display = 'block';
                     }
-                    
+
                     // Update warehouse dropdown button text and background
                     const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
                     const warehouseBtnText = document.getElementById('warehouse-btn-text');
-                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' : 
-                                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' : 
-                                        warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
+                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' :
+                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' :
+                            warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
                     if (warehouseBtnText) {
                         warehouseBtnText.textContent = warehouseName;
                     }
-                    
+
                     // Update header background color
                     if (typeof updateHeaderBackground === 'function') {
                         updateHeaderBackground(warehouse);
                     }
-                    
+
                     // Set active tab to 未処理
                     const orderTabs = document.querySelectorAll('#order-view .tab');
                     orderTabs.forEach(tab => tab.classList.remove('active'));
@@ -3636,44 +4152,44 @@
                 } else if (action === 'delivery-wait') {
                     // Set selected warehouse
                     selectedWarehouse = warehouse;
-                    
+
                     // Switch to delivery view
                     document.querySelectorAll('.nav-item').forEach(navItem => {
                         navItem.classList.remove('active');
                     });
                     document.querySelector('.nav-item[href="#delivery"]').classList.add('active');
-                    
+
                     // Update page title
                     const pageTitle = document.querySelector('.page-title');
                     pageTitle.textContent = '納品処理';
-                    
+
                     // Show delivery view
                     document.getElementById('dashboard-view').style.display = 'none';
                     document.getElementById('quotation-view').style.display = 'none';
                     document.getElementById('order-view').style.display = 'none';
                     document.getElementById('delivery-view').style.display = 'block';
-                    
+
                     // Show warehouse dropdown
                     const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
                     if (headerWarehouseDropdown) {
                         headerWarehouseDropdown.style.display = 'block';
                     }
-                    
+
                     // Update warehouse dropdown button text and background
                     const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
                     const warehouseBtnText = document.getElementById('warehouse-btn-text');
-                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' : 
-                                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' : 
-                                        warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
+                    const warehouseName = warehouse === 'zama' ? '座間フルフィルメントセンター' :
+                        warehouse === 'yokohama' ? '横浜フルフィルメントセンター' :
+                            warehouse === 'koshien' ? '甲子園フルフィルメントセンター' : '全倉庫';
                     if (warehouseBtnText) {
                         warehouseBtnText.textContent = warehouseName;
                     }
-                    
+
                     // Update header background color
                     if (typeof updateHeaderBackground === 'function') {
                         updateHeaderBackground(warehouse);
                     }
-                    
+
                     // Set active tab to 出荷待
                     const deliveryTabs = document.querySelectorAll('#delivery-view .tab');
                     deliveryTabs.forEach(tab => tab.classList.remove('active'));
@@ -3681,7 +4197,7 @@
                     if (waitTab) {
                         waitTab.classList.add('active');
                     }
-                    
+
                     // Show delivery wait container and hide delivered container
                     const deliveryWaitContainer = document.getElementById('delivery-wait-container');
                     const deliveredContainer = document.getElementById('delivered-container');
@@ -3743,55 +4259,46 @@
                             processingBtn.style.display = 'none';
                         }
                     }
+
+                    // タブ切り替え時にボタンの状態をリセット
+                    const editBtn = document.getElementById('edit-btn');
+                    const csvExportBtn = document.getElementById('export-dropdown-btn');
+                    const faxModalBtn = document.getElementById('fax-modal-btn');
+                    if (editBtn) editBtn.disabled = true;
+                    if (csvExportBtn) csvExportBtn.disabled = true;
+                    if (faxModalBtn) faxModalBtn.disabled = true;
                 }
                 // If in order-view, toggle buttons based on active tab
                 const orderView = document.getElementById('order-view');
                 if (orderView && orderView.style.display !== 'none') {
-                    const toInProgressBtn = document.getElementById('btn-to-in-progress');
-                    const toDoneBtn = document.getElementById('btn-to-done');
                     const delayBtn = document.getElementById('btn-delay');
                     const editBtn = document.getElementById('order-edit-btn');
                     const editBtnDelay = document.getElementById('order-edit-btn-delay');
-                    const orderExportDropdown = document.getElementById('order-export-dropdown-btn');
+                    const orderExportBtn = document.getElementById('order-export-csv-btn');
                     const orderFaxBtn = document.getElementById('order-fax-modal-btn');
-                    const orderDelayExportDropdown = document.getElementById('order-delay-export-dropdown');
+                    const orderDelayExportBtn = document.getElementById('order-delay-export-csv-btn');
                     const orderDelayFaxBtn = document.getElementById('order-delay-fax-modal-btn');
-                    
-                    if (toInProgressBtn && toDoneBtn && delayBtn && editBtn && editBtnDelay) {
+
+                    if (delayBtn && editBtn && editBtnDelay) {
                         const label = this.textContent;
                         const showDelayTabs = ['手配済', '在庫あり', '納期超過', 'BO'];
                         if (showDelayTabs.some(t => label.includes(t))) {
                             // 手配済／在庫あり／納期超過／BO では 遅延処理と編集ボタン（遅延処理用）を表示
-                            toInProgressBtn.style.display = 'none';
-                            toDoneBtn.style.display = 'none';
                             editBtn.style.display = 'none';
-                            if (orderExportDropdown) orderExportDropdown.parentElement.style.display = 'none';
+                            if (orderExportBtn) orderExportBtn.style.display = 'none';
                             if (orderFaxBtn) orderFaxBtn.style.display = 'none';
                             delayBtn.style.display = '';
                             editBtnDelay.style.display = '';
-                            if (orderDelayExportDropdown) orderDelayExportDropdown.style.display = 'inline-block';
+                            if (orderDelayExportBtn) orderDelayExportBtn.style.display = '';
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = '';
-                        } else if (label.includes('手配中')) {
-                            // 手配中では「手配済にする」と編集ボタンを表示
-                            toInProgressBtn.style.display = 'none';
-                            toDoneBtn.style.display = '';
-                            editBtn.style.display = '';
-                            if (orderExportDropdown) orderExportDropdown.parentElement.style.display = 'inline-block';
-                            if (orderFaxBtn) orderFaxBtn.style.display = '';
-                            delayBtn.style.display = 'none';
-                            editBtnDelay.style.display = 'none';
-                            if (orderDelayExportDropdown) orderDelayExportDropdown.style.display = 'none';
-                            if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = 'none';
                         } else {
-                            // 未処理などその他タブでは 2ボタンと編集ボタンを表示、遅延処理は非表示
-                            toInProgressBtn.style.display = '';
-                            toDoneBtn.style.display = '';
+                            // 未処理・手配中などその他タブでは編集ボタンを表示、遅延処理は非表示
                             editBtn.style.display = '';
-                            if (orderExportDropdown) orderExportDropdown.parentElement.style.display = 'inline-block';
+                            if (orderExportBtn) orderExportBtn.style.display = '';
                             if (orderFaxBtn) orderFaxBtn.style.display = '';
                             delayBtn.style.display = 'none';
                             editBtnDelay.style.display = 'none';
-                            if (orderDelayExportDropdown) orderDelayExportDropdown.style.display = 'none';
+                            if (orderDelayExportBtn) orderDelayExportBtn.style.display = 'none';
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = 'none';
                         }
                     }
@@ -3873,14 +4380,25 @@
         }
 
         function updateActionButtons() {
-            const checkedBoxes = document.querySelectorAll('td .checkbox:checked');
-            if (checkedBoxes.length > 0) {
-                dynamicActions.classList.add('show');
-            } else {
-                dynamicActions.classList.remove('show');
-            }
+            const checkedBoxes = document.querySelectorAll('#quotation-view tbody td .checkbox:checked');
+            const hasSelection = checkedBoxes.length > 0;
+
+            // コンテナは常時表示。ボタンのみ有効/無効を切り替える。
             const editBtn = document.getElementById('edit-btn');
-            if (editBtn) editBtn.disabled = checkedBoxes.length === 0;
+            const csvExportBtn = document.getElementById('export-dropdown-btn');
+            const faxModalBtn = document.getElementById('fax-modal-btn');
+
+            // チェックボックスが選択されていない場合は全て無効化
+            if (!hasSelection) {
+                if (editBtn) editBtn.disabled = true;
+                if (csvExportBtn) csvExportBtn.disabled = true;
+                if (faxModalBtn) faxModalBtn.disabled = true;
+            } else {
+                // チェックボックスが選択されている場合は有効化
+                if (editBtn) editBtn.disabled = false;
+                if (csvExportBtn) csvExportBtn.disabled = false;
+                if (faxModalBtn) faxModalBtn.disabled = false;
+            }
         }
 
         if (mainCheckbox) {
@@ -3900,6 +4418,9 @@
         initCheckboxListeners();
 
         renderPage(1);
+
+        // 初期状態でボタンの状態を確実に設定
+        updateActionButtons();
 
         // Quotation search
         const qSearchInput = document.getElementById('quotation-search-input');
@@ -3926,10 +4447,10 @@
         qSearchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') applyQuotationSearch(qSearchInput.value); });
 
         // Dropdown functionality
-        const dropdownBtn = document.getElementById('stock-dropdown-btn');
-        const dropdownMenu = document.getElementById('stock-dropdown-menu');
-        const quotationSendBtn = document.getElementById('quotation-send-btn');
-        const quotationProcessingBtn = document.getElementById('quotation-processing-btn');
+        const dropdownBtn = null; // 元のドロップダウンは削除済み
+        const dropdownMenu = null; // 元のドロップダウンは削除済み
+        const quotationSendBtn = null; // 元のボタンは削除済み
+        const quotationProcessingBtn = null; // 元のボタンは削除済み
         // Modal edit button & modal elements
         const editBtn = document.getElementById('edit-btn');
         const editModal = document.getElementById('edit-modal');
@@ -3939,60 +4460,72 @@
         const memoInput = document.getElementById('memo-input');
         const ownInput = document.getElementById('own-input');
         const editSelectedCount = document.getElementById('edit-selected-count');
+
+        // モーダル内の新しいボタンと要素
+        const modalQuotationSendBtn = document.getElementById('modal-quotation-send-btn');
+        const modalQuotationProcessingBtn = document.getElementById('modal-quotation-processing-btn');
+        const stockSelect = document.getElementById('stock-select');
         let selectedStockValue = null;
 
-        // 初期状態: 見積送信ボタンはdisabled、見積中にするボタンはenabled
-        if (quotationSendBtn) {
-            quotationSendBtn.disabled = true;
+        // 初期状態: チェックボックス未選択時は全ての操作ボタンを無効化
+        // その他の操作ボタンも初期状態で無効化
+        const csvExportBtn = document.getElementById('export-dropdown-btn');
+        const faxModalBtn = document.getElementById('fax-modal-btn');
+        if (editBtn) {
+            editBtn.disabled = true;
         }
-        if (quotationProcessingBtn) {
-            quotationProcessingBtn.disabled = false;
-            // Ensure default is visible (for 未処理)
-            quotationProcessingBtn.style.display = '';
+        if (csvExportBtn) {
+            csvExportBtn.disabled = true;
+        }
+        if (faxModalBtn) {
+            faxModalBtn.disabled = true;
         }
 
-        if (dropdownBtn && dropdownMenu) {
-            dropdownBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                dropdownMenu.classList.toggle('show');
-            });
-
-            dropdownMenu.addEventListener('click', function (e) {
-                if (e.target.classList.contains('dropdown-item')) {
-                    const value = e.target.getAttribute('data-value');
-                    const text = e.target.textContent;
-
-                    // Update button text
-                    if (value === 'none') {
-                        dropdownBtn.innerHTML = '納期を選択する <span style="margin-left: 8px;">▼</span>';
-                        selectedStockValue = null;
-                        // 納期未選択時: 見積送信disabled、見積中にするenabled
-                        if (quotationSendBtn) {
-                            quotationSendBtn.disabled = true;
-                        }
-                        if (quotationProcessingBtn) {
-                            quotationProcessingBtn.disabled = false;
-                        }
+        // 納期選択機能をモーダル内に移動
+        if (stockSelect) {
+            stockSelect.addEventListener('change', function () {
+                selectedStockValue = this.value;
+                // 見積送信ボタンの状態を更新
+                if (modalQuotationSendBtn) {
+                    modalQuotationSendBtn.disabled = !selectedStockValue;
+                }
+                // 納期選択時は「見積中にする」ボタンをグレーアウト
+                if (modalQuotationProcessingBtn) {
+                    if (selectedStockValue) {
+                        modalQuotationProcessingBtn.disabled = true;
                     } else {
-                        dropdownBtn.innerHTML = text + ' <span style="margin-left: 8px;">▼</span>';
-                        selectedStockValue = value;
-                        // 納期選択時: 見積送信enabled、見積中にするdisabled
-                        if (quotationSendBtn) {
-                            quotationSendBtn.disabled = false;
-                        }
-                        if (quotationProcessingBtn) {
-                            quotationProcessingBtn.disabled = true;
-                        }
+                        modalQuotationProcessingBtn.disabled = false;
                     }
-
-                    // Close dropdown
-                    dropdownMenu.classList.remove('show');
                 }
             });
+        }
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function () {
-                dropdownMenu.classList.remove('show');
+        // モーダル内の見積処理ボタン機能
+        if (modalQuotationSendBtn) {
+            modalQuotationSendBtn.addEventListener('click', function () {
+                const checkedBoxes = document.querySelectorAll('td .checkbox:checked');
+                if (!selectedStockValue) {
+                    alert('納期を選択してください。');
+                    return;
+                }
+                if (checkedBoxes.length === 0) {
+                    alert('商品を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の商品を「${stockSelect.options[stockSelect.selectedIndex].text}」で見積送信しました。`);
+                closeEditModal();
+            });
+        }
+
+        if (modalQuotationProcessingBtn) {
+            modalQuotationProcessingBtn.addEventListener('click', function () {
+                const checkedBoxes = document.querySelectorAll('td .checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('商品を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の商品を見積中にしました。`);
+                closeEditModal();
             });
         }
 
@@ -4006,11 +4539,11 @@
             const topBar = document.querySelector('.top-bar');
             const warehouseBtn = document.getElementById('warehouse-dropdown-btn');
             const warehouseBtnText = document.getElementById('warehouse-btn-text');
-            
+
             if (topBar) {
                 // Reset to default background
                 topBar.style.background = '#fff';
-                
+
                 // Apply warehouse-specific background color and text color
                 switch (warehouse) {
                     case 'zama':
@@ -4042,10 +4575,10 @@
             const quotationView = document.getElementById('quotation-view');
             const orderView = document.getElementById('order-view');
             const deliveryView = document.getElementById('delivery-view');
-            
+
             return (quotationView && quotationView.style.display !== 'none') ||
-                   (orderView && orderView.style.display !== 'none') ||
-                   (deliveryView && deliveryView.style.display !== 'none');
+                (orderView && orderView.style.display !== 'none') ||
+                (deliveryView && deliveryView.style.display !== 'none');
         }
 
         if (warehouseDropdownBtn && warehouseDropdownMenu) {
@@ -4059,21 +4592,21 @@
                     const warehouse = e.target.getAttribute('data-warehouse');
                     const warehouseName = e.target.textContent;
                     selectedWarehouse = warehouse;
-                    
+
                     // Update button text
                     const warehouseBtnText = document.getElementById('warehouse-btn-text');
                     if (warehouseBtnText) {
                         warehouseBtnText.textContent = warehouseName;
                     }
-                    
+
                     // Update header background color if warehouse view is active
                     if (isWarehouseViewActive()) {
                         updateHeaderBackground(warehouse);
                     }
-                    
+
                     // Close dropdown
                     warehouseDropdownMenu.classList.remove('show');
-                    
+
                     // Filter table based on selected warehouse (実装例)
                     console.log(`Selected warehouse: ${warehouse} (${warehouseName})`);
                     // ここで実際のフィルタリング処理を実装できます
@@ -4086,26 +4619,7 @@
             });
         }
 
-        // 見積送信ボタンを押したとき、在庫選択が必須
-        if (quotationSendBtn) {
-            quotationSendBtn.addEventListener('click', function () {
-                if (!selectedStockValue) {
-                    alert('在庫状況を選択してください。');
-                    return;
-                }
-                const checkedCount = document.querySelectorAll('td .checkbox:checked').length;
-                alert(`${checkedCount}件の商品を「${dropdownBtn.textContent.replace('▼', '').trim()}」で見積送信しました。`);
-            });
-        }
-
-        // 見積中にするボタンは納期未選択時のみ有効
-        document.getElementById('quotation-processing-btn')?.addEventListener('click', function () {
-            if (this.disabled) {
-                return; // disabled状態では何もしない
-            }
-            const checkedCount = document.querySelectorAll('td .checkbox:checked').length;
-            alert(`${checkedCount}件の商品を見積中にしました。`);
-        });
+        // 見積処理関連の機能は編集モーダル内に統合済み
 
         // New function to handle details toggle
         function bindToggleButtons() {
@@ -4163,15 +4677,15 @@
             function renderWaitPage(page) {
                 const totalPages = Math.ceil(waitFiltered.length / waitPerPage) || 1;
                 waitCurrentPage = Math.max(1, Math.min(page, totalPages));
-                
+
                 // テーブルをクリア
                 waitTbody.innerHTML = '';
-                
+
                 // 現在のページのデータを表示
                 const start = (waitCurrentPage - 1) * waitPerPage;
                 const end = start + waitPerPage;
                 const pageRows = waitFiltered.slice(start, end);
-                
+
                 pageRows.forEach(row => {
                     waitTbody.appendChild(row);
                     // 詳細行も追加
@@ -4180,7 +4694,7 @@
                         waitTbody.appendChild(nextSibling);
                     }
                 });
-                
+
                 // チェックボックスのイベントリスナーを再バインド
                 bindRowCbs();
                 // ページネーションボタンを更新
@@ -4191,14 +4705,14 @@
             function buildWaitPagination(totalPages) {
                 if (!waitPager) return;
                 waitPager.innerHTML = '';
-                
+
                 const prev = document.createElement('button');
                 prev.textContent = '前へ';
                 prev.className = 'page-btn';
                 prev.disabled = waitCurrentPage === 1;
                 prev.addEventListener('click', () => renderWaitPage(waitCurrentPage - 1));
                 waitPager.appendChild(prev);
-                
+
                 for (let i = 1; i <= Math.min(totalPages, 5); i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
@@ -4207,7 +4721,7 @@
                     btn.addEventListener('click', () => renderWaitPage(i));
                     waitPager.appendChild(btn);
                 }
-                
+
                 const next = document.createElement('button');
                 next.textContent = '次へ';
                 next.className = 'page-btn';
@@ -4227,15 +4741,15 @@
             function renderDonePage(page) {
                 const totalPages = Math.ceil(doneFiltered.length / donePerPage) || 1;
                 doneCurrentPage = Math.max(1, Math.min(page, totalPages));
-                
+
                 // テーブルをクリア
                 doneTbody.innerHTML = '';
-                
+
                 // 現在のページのデータを表示
                 const start = (doneCurrentPage - 1) * donePerPage;
                 const end = start + donePerPage;
                 const pageRows = doneFiltered.slice(start, end);
-                
+
                 pageRows.forEach(row => {
                     doneTbody.appendChild(row);
                     // 詳細行も追加
@@ -4244,7 +4758,7 @@
                         doneTbody.appendChild(nextSibling);
                     }
                 });
-                
+
                 // ページネーションボタンを更新
                 buildDonePagination(totalPages);
             }
@@ -4252,14 +4766,14 @@
             function buildDonePagination(totalPages) {
                 if (!donePager) return;
                 donePager.innerHTML = '';
-                
+
                 const prev = document.createElement('button');
                 prev.textContent = '前へ';
                 prev.className = 'page-btn';
                 prev.disabled = doneCurrentPage === 1;
                 prev.addEventListener('click', () => renderDonePage(doneCurrentPage - 1));
                 donePager.appendChild(prev);
-                
+
                 for (let i = 1; i <= Math.min(totalPages, 5); i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
@@ -4268,7 +4782,7 @@
                     btn.addEventListener('click', () => renderDonePage(i));
                     donePager.appendChild(btn);
                 }
-                
+
                 const next = document.createElement('button');
                 next.textContent = '次へ';
                 next.className = 'page-btn';
@@ -4305,7 +4819,7 @@
                 actions.classList.toggle('show', hasSel);
                 backBtn.disabled = !hasSel;
                 shipBtn.disabled = !(hasSel && !!dateInput.value);
-                
+
                 // 編集ボタンとエクスポート/FAXボタンの表示制御
                 const editBtn = document.getElementById('delivery-edit-btn');
                 const exportDropdown = document.getElementById('delivery-export-dropdown');
@@ -4340,7 +4854,7 @@
             const dSearchInput = document.getElementById('delivery-search-input');
             const dSearchBtn = document.getElementById('delivery-search-btn');
             const dSearchForm = dSearchBtn?.closest('form');
-            
+
             function performDeliverySearch() {
                 const q = (dSearchInput?.value || '').toLowerCase();
                 if (!q) {
@@ -4350,7 +4864,7 @@
                 }
                 renderWaitPage(1);
             }
-            
+
             dSearchBtn?.addEventListener('click', (e) => {
                 e.preventDefault();
                 performDeliverySearch();
@@ -4363,7 +4877,7 @@
             const doneSearchInput = document.getElementById('delivered-search-input');
             const doneSearchBtn = document.getElementById('delivered-search-btn');
             const doneSearchForm = doneSearchBtn?.closest('form');
-            
+
             function performDeliveredSearch() {
                 const q = (doneSearchInput?.value || '').toLowerCase();
                 if (!q) {
@@ -4373,7 +4887,7 @@
                 }
                 renderDonePage(1);
             }
-            
+
             doneSearchBtn?.addEventListener('click', (e) => {
                 e.preventDefault();
                 performDeliveredSearch();
@@ -4407,19 +4921,6 @@
             const selectedCount = container.querySelector('#order-selected-count');
             const selectedBody = container.querySelector('#order-selected-info-tbody');
             const pager = container.querySelector('#order-pagination');
-            // Declare button refs early
-            const orderDate = container.querySelector('#order-date');
-            // Set default to today's date if empty
-            if (orderDate && !orderDate.value) {
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                orderDate.value = `${yyyy}-${mm}-${dd}`;
-            }
-            const toShipWaitBtn = container.querySelector('#btn-to-shipment-wait');
-            const toInProgressBtn = container.querySelector('#btn-to-in-progress');
-            const toDoneBtn = container.querySelector('#btn-to-done');
             const delayBtn = container.querySelector('#btn-delay');
             const delayModal = document.getElementById('delay-modal');
             const delayUndecided = document.getElementById('delay-undecided');
@@ -4439,24 +4940,32 @@
             }
             function updateActions() {
                 const checked = container.querySelectorAll('tbody td .checkbox:checked').length;
-                if (actions) {
-                    actions.classList.toggle('show', checked > 0);
-                }
+                // アクションコンテナは常に表示し、ボタンの無効化のみで制御
+                updateButtonStates();
             }
             // Add a state updater for buttons
             function updateButtonStates() {
                 const count = container.querySelectorAll('tbody td .checkbox:checked').length;
-                const hasDate = !!(orderDate && orderDate.value);
-                if (toInProgressBtn) toInProgressBtn.disabled = count === 0;
-                if (toDoneBtn) toDoneBtn.disabled = count === 0;
-                if (toShipWaitBtn) toShipWaitBtn.disabled = !(count > 0 && hasDate);
-                if (delayBtn) delayBtn.disabled = count === 0;
-                
-                // 編集ボタンの状態を更新
+
+                // 全てのボタンの状態を更新（見積処理と同様の実装）
                 const editBtn = container.querySelector('#order-edit-btn');
                 const editBtnDelay = container.querySelector('#order-edit-btn-delay');
-                if (editBtn) editBtn.disabled = count === 0;
-                if (editBtnDelay) editBtnDelay.disabled = count === 0;
+                const csvBtn = container.querySelector('#order-export-csv-btn');
+                const faxBtn = container.querySelector('#order-fax-modal-btn');
+                const delayBtn = container.querySelector('#btn-delay');
+                const csvDelayBtn = container.querySelector('#order-delay-export-csv-btn');
+                const faxDelayBtn = container.querySelector('#order-delay-fax-modal-btn');
+
+                const hasSelection = count > 0;
+
+                // チェックボックス選択状態に関係なく、常にボタンを有効にする（デフォルト表示のため）
+                if (editBtn) editBtn.disabled = false;
+                if (editBtnDelay) editBtnDelay.disabled = false;
+                if (csvBtn) csvBtn.disabled = false;
+                if (faxBtn) faxBtn.disabled = false;
+                if (delayBtn) delayBtn.disabled = false;
+                if (csvDelayBtn) csvDelayBtn.disabled = false;
+                if (faxDelayBtn) faxDelayBtn.disabled = false;
             }
             function renderSelected() {
                 const checked = Array.from(container.querySelectorAll('tbody td .checkbox:checked'));
@@ -4592,8 +5101,6 @@
             renderPage(1);
             renderSelected();
 
-            // Call the updater when the date changes
-            orderDate?.addEventListener('change', updateButtonStates);
             // Initialize disabled state on load
             updateButtonStates();
 
@@ -4621,32 +5128,7 @@
             });
             oSearchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') applyOrderSearch(oSearchInput.value); });
 
-            // Status transition button handlers (keep only event listeners, not duplicate declarations)
-            function ensureSelection() {
-                const count = container.querySelectorAll('tbody td .checkbox:checked').length;
-                return count;
-            }
-            function dateText() {
-                return (orderDate && orderDate.value) ? orderDate.value : '日付未選択';
-            }
-
-            toShipWaitBtn?.addEventListener('click', () => {
-                const count = ensureSelection();
-                if (count === 0) { alert('対象の受注を選択してください。'); return; }
-                alert(`${count}件を「出荷待ち」に変更しました（基準日: ${dateText()}）。`);
-            });
-
-            toInProgressBtn?.addEventListener('click', () => {
-                const count = ensureSelection();
-                if (count === 0) { alert('対象の受注を選択してください。'); return; }
-                alert(`${count}件を「手配中」に変更しました（基準日: ${dateText()}）。`);
-            });
-
-            toDoneBtn?.addEventListener('click', () => {
-                const count = ensureSelection();
-                if (count === 0) { alert('対象の受注を選択してください。'); return; }
-                alert(`${count}件を「手配済」に変更しました（基準日: ${dateText()}）。`);
-            });
+            // 削除されたボタンのイベントリスナーはここに存在していましたが、モーダル内に統合されました
         })();
     </script>
     <script>
@@ -4654,9 +5136,32 @@
         function openEditModal() {
             const count = document.querySelectorAll('tbody td .checkbox:checked').length;
             if (editSelectedCount) editSelectedCount.textContent = `選択された商品 ${count}件`;
+
+            // モーダル内のボタンの状態を更新
+            if (modalQuotationSendBtn) {
+                modalQuotationSendBtn.disabled = !selectedStockValue || count === 0;
+            }
+            if (modalQuotationProcessingBtn) {
+                modalQuotationProcessingBtn.disabled = count === 0;
+            }
+
             if (editModal) editModal.classList.add('show');
         }
         function closeEditModal() { if (editModal) editModal.classList.remove('show'); }
+
+        // --- Order Edit Modal helpers ---
+        function openOrderEditModal() {
+            const count = document.querySelectorAll('#order-view tbody td .checkbox:checked').length;
+            const orderEditSelectedCount = document.getElementById('order-edit-selected-count');
+            if (orderEditSelectedCount) orderEditSelectedCount.textContent = `選択された商品 ${count}件`;
+
+            const orderEditModal = document.getElementById('order-edit-modal');
+            if (orderEditModal) orderEditModal.classList.add('show');
+        }
+        function closeOrderEditModal() {
+            const orderEditModal = document.getElementById('order-edit-modal');
+            if (orderEditModal) orderEditModal.classList.remove('show');
+        }
 
         // --- Edit button open modal ---
         if (editBtn) {
@@ -4696,6 +5201,107 @@
                 });
                 // 下部パネルの再描画とモーダルを閉じる
                 closeEditModal();
+            });
+        }
+
+        // --- Order Edit Modal functionality ---
+        const orderEditBtn = document.getElementById('order-edit-btn');
+        const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
+        const orderEditModal = document.getElementById('order-edit-modal');
+        const orderEditCloseBtn = document.getElementById('order-edit-close-btn');
+        const orderAssistSelect = document.getElementById('order-assist-select');
+        const orderMemoInput = document.getElementById('order-memo-input');
+        const orderOwnInput = document.getElementById('order-own-input');
+        const orderEditApplyBtn = document.getElementById('order-edit-apply-btn');
+        const modalOrderDate = document.getElementById('modal-order-date');
+
+        // モーダル内のアクションボタン
+        const modalBtnToShipmentWait = document.getElementById('modal-btn-to-shipment-wait');
+        const modalBtnToInProgress = document.getElementById('modal-btn-to-in-progress');
+        const modalBtnToDone = document.getElementById('modal-btn-to-done');
+
+        // --- Order Edit button open modal ---
+        if (orderEditBtn) {
+            orderEditBtn.addEventListener('click', openOrderEditModal);
+        }
+        if (orderEditBtnDelay) {
+            orderEditBtnDelay.addEventListener('click', openOrderEditModal);
+        }
+
+        // --- Order Modal close actions ---
+        orderEditCloseBtn?.addEventListener('click', closeOrderEditModal);
+        orderEditModal?.addEventListener('click', function (e) {
+            if (e.target === orderEditModal) closeOrderEditModal();
+        });
+
+        // --- Order 入力支援: テンプレ反映 ---
+        if (orderAssistSelect) {
+            orderAssistSelect.addEventListener('change', function () {
+                if (this.value) orderMemoInput.value = this.value;
+            });
+        }
+
+        // --- Order 更新ボタン: 選択行へ反映 ---
+        if (orderEditApplyBtn) {
+            orderEditApplyBtn.addEventListener('click', function () {
+                const memo = orderMemoInput?.value ?? '';
+                const own = orderOwnInput?.value ?? '';
+                const checked = Array.from(document.querySelectorAll('#order-view tbody td .checkbox:checked'));
+                checked.forEach(cb => {
+                    const tr = cb.closest('tr');
+                    if (!tr) return;
+                    const tds = tr.querySelectorAll('td');
+                    if (tds[10]) tds[10].textContent = own;   // 自社管理番号
+                    if (tds[11]) tds[11].textContent = memo;  // 担当者備考
+                });
+                closeOrderEditModal();
+            });
+        }
+
+        // --- Modal内のアクションボタン機能 ---
+        function getOrderSelectionInfo() {
+            const checked = Array.from(document.querySelectorAll('#order-view tbody td .checkbox:checked'));
+            const dateValue = modalOrderDate?.value;
+            return { checked, dateValue, count: checked.length };
+        }
+
+        if (modalBtnToShipmentWait) {
+            modalBtnToShipmentWait.addEventListener('click', function () {
+                const { checked, dateValue, count } = getOrderSelectionInfo();
+                if (count === 0) {
+                    alert('対象の受注を選択してください。');
+                    return;
+                }
+                if (!dateValue) {
+                    alert('日付を選択してください。');
+                    return;
+                }
+                alert(`${count}件を「出荷待ち」に変更しました（基準日: ${dateValue}）。`);
+                closeOrderEditModal();
+            });
+        }
+
+        if (modalBtnToInProgress) {
+            modalBtnToInProgress.addEventListener('click', function () {
+                const { checked, dateValue, count } = getOrderSelectionInfo();
+                if (count === 0) {
+                    alert('対象の受注を選択してください。');
+                    return;
+                }
+                alert(`${count}件を「手配中」に変更しました（基準日: ${dateValue || '未設定'}）。`);
+                closeOrderEditModal();
+            });
+        }
+
+        if (modalBtnToDone) {
+            modalBtnToDone.addEventListener('click', function () {
+                const { checked, dateValue, count } = getOrderSelectionInfo();
+                if (count === 0) {
+                    alert('対象の受注を選択してください。');
+                    return;
+                }
+                alert(`${count}件を「手配済」に変更しました（基準日: ${dateValue || '未設定'}）。`);
+                closeOrderEditModal();
             });
         }
     </script>
@@ -4782,10 +5388,10 @@
             }
 
             // タイトルクリックでモーダル表示
-            updateTitle.addEventListener('click', function(e) {
+            updateTitle.addEventListener('click', function (e) {
                 e.preventDefault();
                 updateModal.classList.add('show');
-                
+
                 // 既読状態に変更
                 if (!isRead) {
                     updateNotification.classList.remove('unread');
@@ -4798,19 +5404,19 @@
             });
 
             // モーダル閉じる
-            updateModalClose.addEventListener('click', function() {
+            updateModalClose.addEventListener('click', function () {
                 updateModal.classList.remove('show');
             });
 
             // モーダル背景クリックで閉じる
-            updateModal.addEventListener('click', function(e) {
+            updateModal.addEventListener('click', function (e) {
                 if (e.target === updateModal) {
                     updateModal.classList.remove('show');
                 }
             });
 
             // ESCキーでモーダル閉じる
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape' && updateModal.classList.contains('show')) {
                     updateModal.classList.remove('show');
                 }
@@ -4819,12 +5425,12 @@
     </script>
     <script>
         // Mobile responsive functionality
-        (function() {
+        (function () {
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const desktopToggleBtn = document.getElementById('sidebar-toggle');
             const sidebar = document.querySelector('.sidebar');
             const mobileOverlay = document.getElementById('mobile-overlay');
-            
+
             // Show/hide buttons based on screen size
             function updateButtonVisibility() {
                 const isMobile = window.innerWidth <= 768;
@@ -4833,7 +5439,7 @@
                     desktopToggleBtn.style.display = isMobile ? 'none' : 'flex';
                 }
             }
-            
+
             // Mobile menu toggle
             function toggleMobileMenu() {
                 if (sidebar && mobileOverlay) {
@@ -4847,7 +5453,7 @@
                     }
                 }
             }
-            
+
             // Close mobile menu
             function closeMobileMenu() {
                 if (sidebar && mobileOverlay) {
@@ -4855,16 +5461,16 @@
                     mobileOverlay.classList.remove('show');
                 }
             }
-            
+
             // Event listeners
             if (mobileMenuBtn) {
                 mobileMenuBtn.addEventListener('click', toggleMobileMenu);
             }
-            
+
             if (mobileOverlay) {
                 mobileOverlay.addEventListener('click', closeMobileMenu);
             }
-            
+
             // Close mobile menu when clicking nav items
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -4873,7 +5479,7 @@
                     }
                 });
             });
-            
+
             // Handle window resize
             window.addEventListener('resize', () => {
                 updateButtonVisibility();
@@ -4882,17 +5488,21 @@
                     closeMobileMenu();
                 }
             });
-            
+
             // Initial setup
             updateButtonVisibility();
         })();
 
         // ====== Event Listeners for CSV Export and FAX Output Buttons ======
-        (function() {
+        (function () {
             // 見積処理 - CSVエクスポート
             const quotationExportBtn = document.getElementById('export-csv-btn');
             if (quotationExportBtn) {
-                quotationExportBtn.addEventListener('click', function() {
+                quotationExportBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('見積処理のCSVエクスポートを実行しました。');
                 });
             }
@@ -4900,7 +5510,11 @@
             // 見積処理 - FAX出力
             const quotationFaxBtn = document.getElementById('fax-modal-btn');
             if (quotationFaxBtn) {
-                quotationFaxBtn.addEventListener('click', function() {
+                quotationFaxBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('見積処理のFAX出力モーダルを開きます。');
                 });
             }
@@ -4908,7 +5522,7 @@
             // 受注処理 - CSVエクスポート（通常）
             const orderExportBtn = document.getElementById('order-export-csv-btn');
             if (orderExportBtn) {
-                orderExportBtn.addEventListener('click', function() {
+                orderExportBtn.addEventListener('click', function () {
                     alert('受注処理のCSVエクスポートを実行しました。');
                 });
             }
@@ -4916,7 +5530,7 @@
             // 受注処理 - FAX出力（通常）
             const orderFaxBtn = document.getElementById('order-fax-modal-btn');
             if (orderFaxBtn) {
-                orderFaxBtn.addEventListener('click', function() {
+                orderFaxBtn.addEventListener('click', function () {
                     alert('受注処理のFAX出力モーダルを開きます。');
                 });
             }
@@ -4924,7 +5538,7 @@
             // 受注処理 - CSVエクスポート（遅延処理用）
             const orderDelayExportBtn = document.getElementById('order-delay-export-csv-btn');
             if (orderDelayExportBtn) {
-                orderDelayExportBtn.addEventListener('click', function() {
+                orderDelayExportBtn.addEventListener('click', function () {
                     alert('受注処理（遅延処理）のCSVエクスポートを実行しました。');
                 });
             }
@@ -4932,7 +5546,7 @@
             // 受注処理 - FAX出力（遅延処理用）
             const orderDelayFaxBtn = document.getElementById('order-delay-fax-modal-btn');
             if (orderDelayFaxBtn) {
-                orderDelayFaxBtn.addEventListener('click', function() {
+                orderDelayFaxBtn.addEventListener('click', function () {
                     alert('受注処理（遅延処理）のFAX出力モーダルを開きます。');
                 });
             }
@@ -4940,7 +5554,7 @@
             // 納期調整 - CSVエクスポート
             const deliveryExportBtn = document.getElementById('delivery-export-csv-btn');
             if (deliveryExportBtn) {
-                deliveryExportBtn.addEventListener('click', function() {
+                deliveryExportBtn.addEventListener('click', function () {
                     alert('納期調整のCSVエクスポートを実行しました。');
                 });
             }
@@ -4948,7 +5562,7 @@
             // 納期調整 - FAX出力
             const deliveryFaxBtn = document.getElementById('delivery-fax-modal-btn');
             if (deliveryFaxBtn) {
-                deliveryFaxBtn.addEventListener('click', function() {
+                deliveryFaxBtn.addEventListener('click', function () {
                     alert('納期調整のFAX出力モーダルを開きます。');
                 });
             }
@@ -4957,7 +5571,7 @@
             const quotationExportDropdownBtn = document.getElementById('export-dropdown-btn');
             const quotationExportDropdownMenu = document.getElementById('export-dropdown-menu');
             if (quotationExportDropdownBtn && quotationExportDropdownMenu) {
-                quotationExportDropdownBtn.addEventListener('click', function(e) {
+                quotationExportDropdownBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     quotationExportDropdownMenu.style.display = quotationExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
@@ -4967,7 +5581,7 @@
             const orderExportDropdownBtn = document.getElementById('order-export-dropdown-btn');
             const orderExportDropdownMenu = document.getElementById('order-export-dropdown-menu');
             if (orderExportDropdownBtn && orderExportDropdownMenu) {
-                orderExportDropdownBtn.addEventListener('click', function(e) {
+                orderExportDropdownBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     orderExportDropdownMenu.style.display = orderExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
@@ -4977,7 +5591,7 @@
             const orderDelayExportDropdownBtn = document.getElementById('order-delay-export-dropdown-btn');
             const orderDelayExportDropdownMenu = document.getElementById('order-delay-export-dropdown-menu');
             if (orderDelayExportDropdownBtn && orderDelayExportDropdownMenu) {
-                orderDelayExportDropdownBtn.addEventListener('click', function(e) {
+                orderDelayExportDropdownBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     orderDelayExportDropdownMenu.style.display = orderDelayExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
@@ -4987,18 +5601,49 @@
             const deliveryExportDropdownBtn = document.getElementById('delivery-export-dropdown-btn');
             const deliveryExportDropdownMenu = document.getElementById('delivery-export-dropdown-menu');
             if (deliveryExportDropdownBtn && deliveryExportDropdownMenu) {
-                deliveryExportDropdownBtn.addEventListener('click', function(e) {
+                deliveryExportDropdownBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     deliveryExportDropdownMenu.style.display = deliveryExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
             }
 
             // ドロップダウンメニューを閉じる処理
-            document.addEventListener('click', function() {
+            document.addEventListener('click', function () {
                 if (quotationExportDropdownMenu) quotationExportDropdownMenu.style.display = 'none';
                 if (orderExportDropdownMenu) orderExportDropdownMenu.style.display = 'none';
                 if (orderDelayExportDropdownMenu) orderDelayExportDropdownMenu.style.display = 'none';
                 if (deliveryExportDropdownMenu) deliveryExportDropdownMenu.style.display = 'none';
+            });
+
+            // 納期超過アラートの制御
+            const deliveryAlertModal = document.getElementById('delivery-alert-modal');
+            const deliveryAlertClose = document.getElementById('delivery-alert-close');
+
+            // ページ読み込み時に納期超過アラートを表示
+            window.addEventListener('load', function () {
+                // 少し遅延させてからアラートを表示
+                setTimeout(function () {
+                    deliveryAlertModal.style.display = 'flex';
+                }, 500);
+            });
+
+            // 閉じるボタンのクリックイベント
+            deliveryAlertClose.addEventListener('click', function () {
+                deliveryAlertModal.style.display = 'none';
+            });
+
+            // 背景クリックで閉じる
+            deliveryAlertModal.addEventListener('click', function (e) {
+                if (e.target === deliveryAlertModal) {
+                    deliveryAlertModal.style.display = 'none';
+                }
+            });
+
+            // ESCキーで閉じる
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && deliveryAlertModal.style.display === 'flex') {
+                    deliveryAlertModal.style.display = 'none';
+                }
             });
         })();
     </script>
