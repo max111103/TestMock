@@ -494,6 +494,10 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            /* enable fixed layout for column resizing */
+            min-width: 1200px;
+            /* minimum width to trigger horizontal scroll */
         }
 
         .data-table th {
@@ -503,16 +507,46 @@
             text-align: left;
             font-weight: 600;
             color: #ffffff;
-            font-size: 13px;
-            /* slightly smaller header text */
+            font-size: 12px;
+            /* smaller header text */
             border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+            /* prevent header text wrapping */
+            position: relative;
+            user-select: none;
+            /* prevent text selection during resize */
+            border-right: 1px solid #374151;
+            /* visible border for resizing */
+        }
+
+        /* Header resize handle */
+        .data-table th::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            cursor: col-resize;
+            background: transparent;
+            border-right: 2px solid transparent;
+        }
+
+        .data-table th:hover::after {
+            border-right-color: #60a5fa;
         }
 
         .data-table td {
             padding: 10px 12px;
             /* narrower cell padding */
             border-bottom: 1px solid #f3f4f6;
-            font-size: 14px;
+            font-size: 12px;
+            white-space: nowrap;
+            /* prevent cell content wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /* show ellipsis for long content */
+            border-right: 1px solid #f3f4f6;
         }
 
         /* --- Quotation Processing Table Row Height Adjustment --- */
@@ -539,6 +573,10 @@
             flex: 1;
             overflow: auto;
             min-height: 0;
+            overflow-x: auto;
+            /* enable horizontal scrolling */
+            overflow-y: auto;
+            /* enable vertical scrolling */
         }
 
         /* Keep table headers visible while scrolling */
@@ -546,6 +584,8 @@
             position: sticky;
             top: 0;
             z-index: 2;
+            background: #1e293b;
+            /* ensure header background is maintained */
         }
 
         /* Action Buttons */
@@ -756,6 +796,16 @@
         }
 
         #order-view .dynamic-actions button {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Always show dynamic actions (delivery view). Buttons will be disabled until a row is selected. */
+        #delivery-view .dynamic-actions {
+            display: flex !important;
+        }
+
+        #delivery-view .dynamic-actions button {
             display: inline-flex;
             align-items: center;
         }
@@ -1228,11 +1278,20 @@
             display: flex;
         }
 
-        /* FAXボタンの disabled (初期グレーアウト) スタイル */
+        /* ボタンの disabled (初期グレーアウト) スタイル */
         #fax-modal-btn:disabled,
         #order-fax-modal-btn:disabled,
         #order-delay-fax-modal-btn:disabled,
-        #delivery-fax-modal-btn:disabled {
+        #delivery-fax-modal-btn:disabled,
+        #edit-btn:disabled,
+        #order-edit-btn:disabled,
+        #order-edit-btn-delay:disabled,
+        #export-dropdown-btn:disabled,
+        #order-export-csv-btn:disabled,
+        #order-delay-export-csv-btn:disabled,
+        #delivery-export-dropdown-btn:disabled,
+        #delay-processing-btn:disabled,
+        #btn-delay:disabled {
             background: #d1d5db !important;
             /* グレー */
             color: #9ca3af !important;
@@ -1507,8 +1566,15 @@
             color: #fff;
         }
 
-        #btn-back-to-arranged:hover {
+        #btn-back-to-arranged:hover:not(:disabled) {
             background: #dc2626;
+        }
+
+        /* 手配済に戻すボタンのdisabled状態は標準のグレースタイルを使用 */
+        #btn-back-to-arranged:disabled {
+            background: #d1d5db !important;
+            color: #9ca3af !important;
+            cursor: not-allowed !important;
         }
 
         /* RC担当備考の重要な情報のスタイル */
@@ -2320,7 +2386,7 @@
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" class="checkbox"></th>
-                                        <th></th><!-- for toggle button -->
+                                        <th>明細情報</th><!-- for toggle button -->
                                         <th>Webike依頼日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -2688,11 +2754,12 @@
                         </div>
 
                         <div class="table-scroll">
-                            <table class="data-table" id="order-data-table">
+                            <!-- 未処理・手配中タブ用のテーブル -->
+                            <table class="data-table" id="order-unprocessed-table">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" class="checkbox" id="order-main-checkbox"></th>
-                                        <th></th><!-- for toggle button -->
+                                        <th>明細情報</th><!-- for toggle button -->
                                         <th>受注日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -2703,6 +2770,7 @@
                                         <th>仕切価格(税抜)</th>
                                         <th>注文数</th>
                                         <th>自社管理番号</th>
+                                        <th>納期</th>
                                         <th>担当者備考</th>
                                         <th>RC担当備考</th>
                                     </tr>
@@ -2729,12 +2797,13 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>在庫あり</td>
                                         <td></td>
                                         <td class="rc-memo-important">【自動OFF】フロント：18Ｔ　リア：42Ｔ無ければ41Ｔ　オフセット量：不明　減速比2.333
                                         </td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=12345" alt="image">
                                                 <div class="details-card-info">
@@ -2768,10 +2837,11 @@
                                         <td>¥0</td>
                                         <td>2</td>
                                         <td></td>
+                                        <td>1週間</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=KT-001" alt="image">
                                                 <div class="details-card-info">
@@ -2805,10 +2875,11 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>在庫あり</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=SP-777" alt="image">
                                                 <div class="details-card-info">
@@ -2842,10 +2913,11 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>欠品中未定</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=KT-MIR-01"
                                                     alt="image">
@@ -2880,10 +2952,11 @@
                                         <td>¥0</td>
                                         <td>2</td>
                                         <td></td>
+                                        <td>在庫あり</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=DT-HLD-02"
                                                     alt="image">
@@ -2918,10 +2991,11 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>3日</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=KJ-WNK-01"
                                                     alt="image">
@@ -2956,10 +3030,11 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>5日</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=SP-HND-01"
                                                     alt="image">
@@ -2994,10 +3069,11 @@
                                         <td>¥0</td>
                                         <td>4</td>
                                         <td></td>
+                                        <td>1週間</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=AM-FUSE" alt="image">
                                                 <div class="details-card-info">
@@ -3031,11 +3107,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td>YS-001</td>
+                                        <td>1か月</td>
                                         <td>取り寄せ商品</td>
                                         <td>【要確認】車種適合要チェック</td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=YS-EX01" alt="image">
                                                 <div class="details-card-info">
@@ -3070,11 +3147,12 @@
                                         <td>¥0</td>
                                         <td>2</td>
                                         <td>BR-001</td>
+                                        <td>4日</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=BR-PAD01"
                                                     alt="image">
@@ -3110,11 +3188,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>2週間</td>
                                         <td>洗浄可能</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=KN-AF101"
                                                     alt="image">
@@ -3150,11 +3229,12 @@
                                         <td>¥0</td>
                                         <td>4</td>
                                         <td></td>
+                                        <td>10日</td>
                                         <td>4L缶</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=MT-7100" alt="image">
                                                 <div class="details-card-info">
@@ -3189,11 +3269,12 @@
                                         <td>¥0</td>
                                         <td>4</td>
                                         <td></td>
+                                        <td>在庫あり</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=NGK-CR8E"
                                                     alt="image">
@@ -3229,11 +3310,12 @@
                                         <td>¥0</td>
                                         <td>2</td>
                                         <td>PI-001</td>
+                                        <td>在庫あり</td>
                                         <td>前後セット</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=PI-DIABLO"
                                                     alt="image">
@@ -3269,11 +3351,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td>OH-001</td>
+                                        <td>1週間</td>
                                         <td>受注生産</td>
                                         <td>【納期要確認】受注生産品のため納期長期</td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=OH-RSU46"
                                                     alt="image">
@@ -3309,11 +3392,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>在庫あり</td>
                                         <td>モノロックベース別売</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=GV-E55" alt="image">
                                                 <div class="details-card-info">
@@ -3348,11 +3432,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td>SH-001</td>
+                                        <td>3日</td>
                                         <td>Lサイズ</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=SH-X14" alt="image">
                                                 <div class="details-card-info">
@@ -3387,11 +3472,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>2日</td>
                                         <td>Mサイズ</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=AS-GP01" alt="image">
                                                 <div class="details-card-info">
@@ -3426,11 +3512,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>1か月</td>
                                         <td>Lサイズ</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=OX-CV200"
                                                     alt="image">
@@ -3466,11 +3553,12 @@
                                         <td>¥0</td>
                                         <td>1</td>
                                         <td></td>
+                                        <td>2か月</td>
                                         <td>フロント・リアセット</td>
                                         <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="14">
+                                        <td colspan="15">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=DT-LED01"
                                                     alt="image">
@@ -3481,6 +3569,147 @@
                                                     </div>
                                                     <div><span class="label">対応車種メーカー:</span><span
                                                             class="value">汎用</span></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <!-- 手配済・在庫あり・納期超過・BOタブ用のテーブル -->
+                            <table class="data-table" id="order-arranged-table" style="display: none;">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" class="checkbox" id="order-arranged-main-checkbox"></th>
+                                        <th>明細情報</th><!-- for toggle button -->
+                                        <th>受注日</th>
+                                        <th>SCMコード</th>
+                                        <th>メーカー名</th>
+                                        <th>商品名</th>
+                                        <th>商品番号</th>
+                                        <th>JAN</th>
+                                        <th>定価(税込)</th>
+                                        <th>仕切価格(税抜)</th>
+                                        <th>注文数</th>
+                                        <th>自社管理番号</th>
+                                        <th>入荷予定</th>
+                                        <th>遅延回数</th>
+                                        <th>担当者備考</th>
+                                        <th>RC担当備考</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 手配済・在庫あり・納期超過・BO用のサンプルデータ -->
+                                    <tr class="data-row">
+                                        <td><input type="checkbox" class="checkbox"></td>
+                                        <td>
+                                            <button class="toggle-details-btn" aria-expanded="false">
+                                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td>2016/05/25</td>
+                                        <td>160525R00101</td>
+                                        <td>デイトナ</td>
+                                        <td>ブレーキパッド</td>
+                                        <td>DT-BP001</td>
+                                        <td>4909449112233</td>
+                                        <td>¥6,800</td>
+                                        <td>¥0</td>
+                                        <td>2</td>
+                                        <td>DT-001</td>
+                                        <td>2016/08/30</td>
+                                        <td>0</td>
+                                        <td>フロント用</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="details-row">
+                                        <td colspan="16">
+                                            <div class="details-card">
+                                                <img src="https://via.placeholder.com/100x100?text=DT-BP001" alt="image">
+                                                <div class="details-card-info">
+                                                    <div><span class="label">タイプ:</span><span class="value">フロント用</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">高性能パッド</span></div>
+                                                    <div><span class="label">対応車種メーカー:</span><span class="value">汎用</span></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row">
+                                        <td><input type="checkbox" class="checkbox"></td>
+                                        <td>
+                                            <button class="toggle-details-btn" aria-expanded="false">
+                                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td>2016/05/28</td>
+                                        <td>160528R00102</td>
+                                        <td>キタコ</td>
+                                        <td>エアフィルター</td>
+                                        <td>KT-AF002</td>
+                                        <td>4901234445566</td>
+                                        <td>¥4,200</td>
+                                        <td>¥0</td>
+                                        <td>1</td>
+                                        <td>KT-002</td>
+                                        <td>2016/09/05</td>
+                                        <td>1</td>
+                                        <td>高性能フィルター</td>
+                                        <td class="rc-memo-important">【遅延中】メーカー在庫切れのため入荷遅延</td>
+                                    </tr>
+                                    <tr class="details-row">
+                                        <td colspan="16">
+                                            <div class="details-card">
+                                                <img src="https://via.placeholder.com/100x100?text=KT-AF002" alt="image">
+                                                <div class="details-card-info">
+                                                    <div><span class="label">タイプ:</span><span class="value">高流量</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">洗浄可能</span></div>
+                                                    <div><span class="label">対応車種メーカー:</span><span class="value">多車種対応</span></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="data-row">
+                                        <td><input type="checkbox" class="checkbox"></td>
+                                        <td>
+                                            <button class="toggle-details-btn" aria-expanded="false">
+                                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td>2016/06/01</td>
+                                        <td>160601R00103</td>
+                                        <td>SP武川</td>
+                                        <td>チェーン</td>
+                                        <td>SP-CH003</td>
+                                        <td>4904123778899</td>
+                                        <td>¥8,500</td>
+                                        <td>¥0</td>
+                                        <td>1</td>
+                                        <td>SP-003</td>
+                                        <td>2016/08/15</td>
+                                        <td>0</td>
+                                        <td>520-120L</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="details-row">
+                                        <td colspan="16">
+                                            <div class="details-card">
+                                                <img src="https://via.placeholder.com/100x100?text=SP-CH003" alt="image">
+                                                <div class="details-card-info">
+                                                    <div><span class="label">タイプ:</span><span class="value">ドライブチェーン</span></div>
+                                                    <div><span class="label">備考:</span><span class="value">高強度</span></div>
+                                                    <div><span class="label">対応車種メーカー:</span><span class="value">スポーツバイク</span></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -3509,7 +3738,7 @@
                                 <button type="submit" aria-label="検索" id="delivery-search-btn"></button>
                             </form>
                             <div class="dynamic-actions" id="delivery-actions">
-                                <button class="btn btn-secondary" id="btn-back-to-arranged">手配済に戻す</button>
+                                <button class="btn btn-secondary" id="btn-back-to-arranged" disabled>手配済に戻す</button>
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     <label for="delivery-date" style="font-size:14px; color:#374151;">日付選択</label>
                                     <input type="date" id="delivery-date" class="form-input"
@@ -3537,7 +3766,7 @@
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" class="checkbox" id="delivery-main-checkbox"></th>
-                                        <th></th>
+                                        <th>明細情報</th>
                                         <th>受注日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -4279,11 +4508,18 @@
                     const orderDelayExportBtn = document.getElementById('order-delay-export-csv-btn');
                     const orderDelayFaxBtn = document.getElementById('order-delay-fax-modal-btn');
 
-                    if (delayBtn && editBtn && editBtnDelay) {
+                    // テーブルの切り替え
+                    const unprocessedTable = document.getElementById('order-unprocessed-table');
+                    const arrangedTable = document.getElementById('order-arranged-table');
+                    
+                    if (delayBtn && editBtn && editBtnDelay && unprocessedTable && arrangedTable) {
                         const label = this.textContent;
                         const showDelayTabs = ['手配済', '在庫あり', '納期超過', 'BO'];
                         if (showDelayTabs.some(t => label.includes(t))) {
                             // 手配済／在庫あり／納期超過／BO では 遅延処理と編集ボタン（遅延処理用）を表示
+                            // また、手配済用テーブルを表示
+                            unprocessedTable.style.display = 'none';
+                            arrangedTable.style.display = 'table';
                             editBtn.style.display = 'none';
                             if (orderExportBtn) orderExportBtn.style.display = 'none';
                             if (orderFaxBtn) orderFaxBtn.style.display = 'none';
@@ -4293,6 +4529,9 @@
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = '';
                         } else {
                             // 未処理・手配中などその他タブでは編集ボタンを表示、遅延処理は非表示
+                            // また、未処理用テーブルを表示
+                            unprocessedTable.style.display = 'table';
+                            arrangedTable.style.display = 'none';
                             editBtn.style.display = '';
                             if (orderExportBtn) orderExportBtn.style.display = '';
                             if (orderFaxBtn) orderFaxBtn.style.display = '';
@@ -4380,16 +4619,16 @@
         }
 
         function updateActionButtons() {
-            const checkedBoxes = document.querySelectorAll('#quotation-view tbody td .checkbox:checked');
-            const hasSelection = checkedBoxes.length > 0;
+            // 見積処理のボタン制御
+            const quotationCheckedBoxes = document.querySelectorAll('#quotation-view tbody td .checkbox:checked');
+            const quotationHasSelection = quotationCheckedBoxes.length > 0;
 
-            // コンテナは常時表示。ボタンのみ有効/無効を切り替える。
             const editBtn = document.getElementById('edit-btn');
             const csvExportBtn = document.getElementById('export-dropdown-btn');
             const faxModalBtn = document.getElementById('fax-modal-btn');
 
             // チェックボックスが選択されていない場合は全て無効化
-            if (!hasSelection) {
+            if (!quotationHasSelection) {
                 if (editBtn) editBtn.disabled = true;
                 if (csvExportBtn) csvExportBtn.disabled = true;
                 if (faxModalBtn) faxModalBtn.disabled = true;
@@ -4398,6 +4637,39 @@
                 if (editBtn) editBtn.disabled = false;
                 if (csvExportBtn) csvExportBtn.disabled = false;
                 if (faxModalBtn) faxModalBtn.disabled = false;
+            }
+
+            // 受注処理のボタン制御
+            const orderCheckedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+            const orderHasSelection = orderCheckedBoxes.length > 0;
+
+            const orderEditBtn = document.getElementById('order-edit-btn');
+            const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
+            const orderCsvExportBtn = document.getElementById('order-export-csv-btn');
+            const orderDelayCsvExportBtn = document.getElementById('order-delay-export-csv-btn');
+            const orderFaxModalBtn = document.getElementById('order-fax-modal-btn');
+            const orderDelayFaxModalBtn = document.getElementById('order-delay-fax-modal-btn');
+            const delayProcessingBtn = document.getElementById('delay-processing-btn');
+            const btnDelay = document.getElementById('btn-delay');
+
+            if (!orderHasSelection) {
+                if (orderEditBtn) orderEditBtn.disabled = true;
+                if (orderEditBtnDelay) orderEditBtnDelay.disabled = true;
+                if (orderCsvExportBtn) orderCsvExportBtn.disabled = true;
+                if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = true;
+                if (orderFaxModalBtn) orderFaxModalBtn.disabled = true;
+                if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = true;
+                if (delayProcessingBtn) delayProcessingBtn.disabled = true;
+                if (btnDelay) btnDelay.disabled = true;
+            } else {
+                if (orderEditBtn) orderEditBtn.disabled = false;
+                if (orderEditBtnDelay) orderEditBtnDelay.disabled = false;
+                if (orderCsvExportBtn) orderCsvExportBtn.disabled = false;
+                if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = false;
+                if (orderFaxModalBtn) orderFaxModalBtn.disabled = false;
+                if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = false;
+                if (delayProcessingBtn) delayProcessingBtn.disabled = false;
+                if (btnDelay) btnDelay.disabled = false;
             }
         }
 
@@ -4480,6 +4752,24 @@
         if (faxModalBtn) {
             faxModalBtn.disabled = true;
         }
+
+        // 受注処理ページのボタンも初期状態で無効化
+        const orderEditBtn = document.getElementById('order-edit-btn');
+        const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
+        const orderCsvExportBtn = document.getElementById('order-export-csv-btn');
+        const orderDelayCsvExportBtn = document.getElementById('order-delay-export-csv-btn');
+        const orderFaxModalBtn = document.getElementById('order-fax-modal-btn');
+        const orderDelayFaxModalBtn = document.getElementById('order-delay-fax-modal-btn');
+        const delayProcessingBtn = document.getElementById('delay-processing-btn');
+        const btnDelay = document.getElementById('btn-delay');
+        if (orderEditBtn) orderEditBtn.disabled = true;
+        if (orderEditBtnDelay) orderEditBtnDelay.disabled = true;
+        if (orderCsvExportBtn) orderCsvExportBtn.disabled = true;
+        if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = true;
+        if (orderFaxModalBtn) orderFaxModalBtn.disabled = true;
+        if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = true;
+        if (delayProcessingBtn) delayProcessingBtn.disabled = true;
+        if (btnDelay) btnDelay.disabled = true;
 
         // 納期選択機能をモーダル内に移動
         if (stockSelect) {
@@ -4811,22 +5101,45 @@
                 dateInput.value = `${y}-${m}-${d}`;
             }
 
+            // 初期状態でボタンを無効化
+            if (backBtn) backBtn.disabled = true;
+            if (shipBtn) shipBtn.disabled = true;
+            
+            // 出荷処理ページの編集・エクスポート・FAXボタンも初期状態で無効化
+            const deliveryEditBtn = document.getElementById('delivery-edit-btn');
+            const deliveryCsvBtn = document.getElementById('delivery-export-dropdown-btn');
+            const deliveryFaxModalBtn = document.getElementById('delivery-fax-modal-btn');
+            if (deliveryEditBtn) deliveryEditBtn.disabled = true;
+            if (deliveryCsvBtn) deliveryCsvBtn.disabled = true;
+            if (deliveryFaxModalBtn) deliveryFaxModalBtn.disabled = true;
+
             function selectedCount() {
                 return root.querySelectorAll('#delivery-wait-table tbody td .checkbox:checked').length;
             }
             function updateActions() {
                 const hasSel = selectedCount() > 0;
-                actions.classList.toggle('show', hasSel);
+                // actions.classList.toggle('show', hasSel); // この行をコメントアウト（常に表示するため）
                 backBtn.disabled = !hasSel;
                 shipBtn.disabled = !(hasSel && !!dateInput.value);
 
-                // 編集ボタンとエクスポート/FAXボタンの表示制御
+                // 編集ボタンとエクスポート/FAXボタンの表示制御を有効/無効制御に変更
                 const editBtn = document.getElementById('delivery-edit-btn');
-                const exportDropdown = document.getElementById('delivery-export-dropdown');
+                const csvBtn = document.getElementById('delivery-export-dropdown-btn');
                 const faxBtn = document.getElementById('delivery-fax-modal-btn');
-                if (editBtn) editBtn.style.display = hasSel ? '' : 'none';
-                if (exportDropdown) exportDropdown.style.display = hasSel ? 'inline-block' : 'none';
-                if (faxBtn) faxBtn.style.display = hasSel ? '' : 'none';
+                
+                // 常に表示し、有効/無効のみ制御
+                if (editBtn) {
+                    editBtn.style.display = '';
+                    editBtn.disabled = !hasSel;
+                }
+                if (csvBtn) {
+                    csvBtn.style.display = '';
+                    csvBtn.disabled = !hasSel;
+                }
+                if (faxBtn) {
+                    faxBtn.style.display = '';
+                    faxBtn.disabled = !hasSel;
+                }
             }
 
             function bindRowCbs() {
@@ -4950,22 +5263,22 @@
                 // 全てのボタンの状態を更新（見積処理と同様の実装）
                 const editBtn = container.querySelector('#order-edit-btn');
                 const editBtnDelay = container.querySelector('#order-edit-btn-delay');
-                const csvBtn = container.querySelector('#order-export-csv-btn');
+                const csvBtn = document.getElementById('order-export-csv-btn');
+                const csvDelayBtn = document.getElementById('order-delay-export-csv-btn');
                 const faxBtn = container.querySelector('#order-fax-modal-btn');
-                const delayBtn = container.querySelector('#btn-delay');
-                const csvDelayBtn = container.querySelector('#order-delay-export-csv-btn');
                 const faxDelayBtn = container.querySelector('#order-delay-fax-modal-btn');
+                const delayBtn = container.querySelector('#btn-delay');
 
                 const hasSelection = count > 0;
 
-                // チェックボックス選択状態に関係なく、常にボタンを有効にする（デフォルト表示のため）
-                if (editBtn) editBtn.disabled = false;
-                if (editBtnDelay) editBtnDelay.disabled = false;
-                if (csvBtn) csvBtn.disabled = false;
-                if (faxBtn) faxBtn.disabled = false;
-                if (delayBtn) delayBtn.disabled = false;
-                if (csvDelayBtn) csvDelayBtn.disabled = false;
-                if (faxDelayBtn) faxDelayBtn.disabled = false;
+                // チェックボックス選択状態に応じてボタンの有効/無効を制御
+                if (editBtn) editBtn.disabled = !hasSelection;
+                if (editBtnDelay) editBtnDelay.disabled = !hasSelection;
+                if (csvBtn) csvBtn.disabled = !hasSelection;
+                if (csvDelayBtn) csvDelayBtn.disabled = !hasSelection;
+                if (faxBtn) faxBtn.disabled = !hasSelection;
+                if (faxDelayBtn) faxDelayBtn.disabled = !hasSelection;
+                if (delayBtn) delayBtn.disabled = !hasSelection;
             }
             function renderSelected() {
                 const checked = Array.from(container.querySelectorAll('tbody td .checkbox:checked'));
@@ -5205,8 +5518,8 @@
         }
 
         // --- Order Edit Modal functionality ---
-        const orderEditBtn = document.getElementById('order-edit-btn');
-        const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
+        // const orderEditBtn = document.getElementById('order-edit-btn'); // 上で既に宣言済み
+        // const orderEditBtnDelay = document.getElementById('order-edit-btn-delay'); // 上で既に宣言済み
         const orderEditModal = document.getElementById('order-edit-modal');
         const orderEditCloseBtn = document.getElementById('order-edit-close-btn');
         const orderAssistSelect = document.getElementById('order-assist-select');
@@ -5644,6 +5957,96 @@
                 if (e.key === 'Escape' && deliveryAlertModal.style.display === 'flex') {
                     deliveryAlertModal.style.display = 'none';
                 }
+            });
+        })();
+    </script>
+    <script>
+        // Header resize functionality
+        (function() {
+            let isResizing = false;
+            let currentHeader = null;
+            let startX = 0;
+            let startWidth = 0;
+
+            function initHeaderResize() {
+                const tables = document.querySelectorAll('.data-table');
+                
+                tables.forEach(table => {
+                    const headers = table.querySelectorAll('th');
+                    
+                    headers.forEach((header, index) => {
+                        // Skip the last header to prevent table overflow
+                        if (index === headers.length - 1) return;
+                        
+                        header.addEventListener('mousedown', function(e) {
+                            const rect = header.getBoundingClientRect();
+                            const isRightEdge = e.clientX > rect.right - 10;
+                            
+                            if (isRightEdge) {
+                                e.preventDefault();
+                                isResizing = true;
+                                currentHeader = header;
+                                startX = e.clientX;
+                                startWidth = header.offsetWidth;
+                                
+                                document.body.style.cursor = 'col-resize';
+                                document.body.style.userSelect = 'none';
+                            }
+                        });
+                        
+                        header.addEventListener('mousemove', function(e) {
+                            if (!isResizing) {
+                                const rect = header.getBoundingClientRect();
+                                const isRightEdge = e.clientX > rect.right - 10;
+                                header.style.cursor = isRightEdge ? 'col-resize' : 'default';
+                            }
+                        });
+                    });
+                });
+                
+                document.addEventListener('mousemove', function(e) {
+                    if (!isResizing || !currentHeader) return;
+                    
+                    const diff = e.clientX - startX;
+                    const newWidth = Math.max(50, startWidth + diff); // Minimum width of 50px
+                    
+                    currentHeader.style.width = newWidth + 'px';
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    if (isResizing) {
+                        isResizing = false;
+                        currentHeader = null;
+                        document.body.style.cursor = '';
+                        document.body.style.userSelect = '';
+                    }
+                });
+            }
+
+            // Initialize on page load and when tables are dynamically updated
+            document.addEventListener('DOMContentLoaded', initHeaderResize);
+            
+            // Re-initialize when pagination changes or tables are updated
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList') {
+                        const addedNodes = Array.from(mutation.addedNodes);
+                        const hasTable = addedNodes.some(node => 
+                            node.nodeType === 1 && 
+                            (node.classList && node.classList.contains('data-table') || 
+                             node.querySelector && node.querySelector('.data-table'))
+                        );
+                        
+                        if (hasTable) {
+                            setTimeout(initHeaderResize, 100);
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
             });
         })();
     </script>
