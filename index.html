@@ -4786,11 +4786,29 @@
         const ownInput = document.getElementById('own-input');
         const editSelectedCount = document.getElementById('edit-selected-count');
 
+        // 編集ボタンにツールチップを追加
+        if (editBtn) {
+            editBtn.title = '選択した商品の納期・備考を編集します';
+        }
+
+        // 更新ボタンにもツールチップを追加
+        if (editApplyBtn) {
+            editApplyBtn.title = '入力した内容を商品に適用します';
+        }
+
         // モーダル内の新しいボタンと要素
         const modalQuotationSendBtn = document.getElementById('modal-quotation-send-btn');
         const modalQuotationProcessingBtn = document.getElementById('modal-quotation-processing-btn');
         const stockSelect = document.getElementById('stock-select');
         let selectedStockValue = null;
+
+        // 見積処理ボタンにツールチップを追加
+        if (modalQuotationSendBtn) {
+            modalQuotationSendBtn.title = '見積書を送信します';
+        }
+        if (modalQuotationProcessingBtn) {
+            modalQuotationProcessingBtn.title = '商品を見積中状態にします';
+        }
 
         // 初期状態: チェックボックス未選択時は全ての操作ボタンを無効化
         // その他の操作ボタンも初期状態で無効化
@@ -4815,6 +4833,14 @@
         const orderDelayFaxModalBtn = document.getElementById('order-delay-fax-modal-btn');
         const delayProcessingBtn = document.getElementById('delay-processing-btn');
         const btnDelay = document.getElementById('btn-delay');
+
+        // 受注編集ボタンにツールチップを追加
+        if (orderEditBtn) {
+            orderEditBtn.title = '選択した受注の納期・備考を編集します';
+        }
+        if (orderEditBtnDelay) {
+            orderEditBtnDelay.title = '遅延している受注の納期・備考を編集します';
+        }
         if (orderEditBtn) orderEditBtn.disabled = true;
         if (orderEditBtnDelay) orderEditBtnDelay.disabled = true;
         if (orderCsvExportBtn) orderCsvExportBtn.disabled = true;
@@ -5162,6 +5188,11 @@
             const deliveryEditBtn = document.getElementById('delivery-edit-btn');
             const deliveryCsvBtn = document.getElementById('delivery-export-dropdown-btn');
             const deliveryFaxModalBtn = document.getElementById('delivery-fax-modal-btn');
+
+            // 納品編集ボタンにツールチップを追加
+            if (deliveryEditBtn) {
+                deliveryEditBtn.title = '選択した納品の情報を編集します';
+            }
             if (deliveryEditBtn) deliveryEditBtn.disabled = true;
             if (deliveryCsvBtn) deliveryCsvBtn.disabled = true;
             if (deliveryFaxModalBtn) deliveryFaxModalBtn.disabled = true;
@@ -5600,6 +5631,17 @@
         const modalBtnToShipmentWait = document.getElementById('modal-btn-to-shipment-wait');
         const modalBtnToInProgress = document.getElementById('modal-btn-to-in-progress');
         const modalBtnToDone = document.getElementById('modal-btn-to-done');
+
+        // 受注処理ボタンにツールチップを追加
+        if (modalBtnToShipmentWait) {
+            modalBtnToShipmentWait.title = '受注を出荷待状態にします';
+        }
+        if (modalBtnToInProgress) {
+            modalBtnToInProgress.title = '受注を手配中状態にします';
+        }
+        if (modalBtnToDone) {
+            modalBtnToDone.title = '受注を完了状態にします';
+        }
 
         // --- Order Edit button open modal ---
         if (orderEditBtn) {
