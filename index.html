@@ -536,6 +536,10 @@
             border-right-color: #60a5fa;
         }
 
+        .data-table th:hover {
+            background-color: #5b5c5e;
+        }
+
         .data-table td {
             padding: 10px 12px;
             /* narrower cell padding */
@@ -831,6 +835,12 @@
             border-radius: 14px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            position: absolute;
+            cursor: move;
+        }
+
+        .modal.dragging {
+            user-select: none;
         }
 
         .modal-header {
@@ -1211,26 +1221,27 @@
         }
 
         .warehouse-overdue-count {
-            background: #dc2626;
+            background: #ff7979;
             color: white;
-            padding: 8px 16px;
+            padding: 8px 35px;
             border-radius: 20px;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 400;
             min-width: 50px;
             text-align: center;
         }
 
         .delivery-detail-btn {
-            background: #3b82f6;
+            background: #1a69e7;
             color: white;
             border: none;
             padding: 8px 16px;
             border-radius: 6px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
             cursor: pointer;
             transition: background-color 0.2s;
+            text-decoration: underline;
         }
 
         .delivery-detail-btn:hover {
@@ -1978,6 +1989,22 @@
             }
 
         }
+
+        /* 必須マークのスタイル */
+        .required-mark {
+            color: #ef4444;
+            font-size: 12px;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        /* セクション区切り線のスタイル */
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: #e5e7eb;
+            margin: 20px 0;
+        }
     </style>
 </head>
 
@@ -2385,8 +2412,8 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" class="checkbox"></th>
-                                        <th>明細情報</th><!-- for toggle button -->
+                                        <th width="45px"><input type="checkbox" class="checkbox"></th>
+                                        <th width="80px">明細情報</th><!-- for toggle button -->
                                         <th>Webike依頼日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -2758,8 +2785,8 @@
                             <table class="data-table" id="order-unprocessed-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" class="checkbox" id="order-main-checkbox"></th>
-                                        <th>明細情報</th><!-- for toggle button -->
+                                        <th width="45px"><input type="checkbox" class="checkbox" id="order-main-checkbox"></th>
+                                        <th width="80px">明細情報</th><!-- for toggle button -->
                                         <th>受注日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -3756,8 +3783,6 @@
 
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="delivery-fax-modal-btn"
-                                    style="display:none;">FAX出力</button>
                             </div>
                         </div>
 
@@ -3765,8 +3790,8 @@
                             <table class="data-table" id="delivery-wait-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" class="checkbox" id="delivery-main-checkbox"></th>
-                                        <th>明細情報</th>
+                                        <th width="45px"><input type="checkbox" class="checkbox" id="order-main-checkbox"></th>
+                                        <th width="80px">明細情報</th><!-- for toggle button -->
                                         <th>受注日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -3883,9 +3908,9 @@
                             <table class="data-table" id="delivery-done-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" class="checkbox" id="delivery-done-main-checkbox">
+                                        <th width="45px"><input type="checkbox" class="checkbox" id="delivery-done-main-checkbox">
                                         </th>
-                                        <th></th>
+                                        <th width="80px">明細情報</th><!-- for toggle button -->
                                         <th>出荷日</th>
                                         <th>SCMコード</th>
                                         <th>メーカー名</th>
@@ -3958,7 +3983,7 @@
                                 <label class="form-label">見積処理操作</label>
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                                     <label for="stock-select"
-                                        style="font-size: 12px; color: #6b7280; min-width: 40px;">納期:</label>
+                                        style="font-size: 16px; color: #6b7280; min-width: 40px;">納期選択</label>
                                     <select id="stock-select" class="form-select" style="flex: 1;">
                                         <option value="">選択してください</option>
                                         <option value="在庫あり">在庫あり</option>
@@ -4046,18 +4071,28 @@
                         <div class="modal-header">受注処理操作</div>
                         <div class="modal-subinfo" id="order-edit-selected-count">選択された商品 0件</div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="form-label">日付選択</label>
-                                <input type="date" id="modal-order-date" class="form-input" style="width: 100%;">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">受注処理操作</label>
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <button class="btn btn-primary" id="modal-btn-to-shipment-wait">出荷待ちにする</button>
-                                    <button class="btn btn-primary" id="modal-btn-to-in-progress">手配中にする</button>
-                                    <button class="btn btn-primary" id="modal-btn-to-done">手配済にする</button>
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label class="form-label">入力支援</label>
+                                    <select class="form-select" id="order-assist-select">
+                                        <option value="">選択してください</option>
+                                        <option value="至急対応お願いします">至急対応お願いします</option>
+                                        <option value="メーカー確認中">メーカー確認中</option>
+                                        <option value="入荷予定日未定">入荷予定日未定</option>
+                                        <option value="出荷準備中">出荷準備中</option>
+                                        <option value="在庫確認中">在庫確認中</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">担当備考</label>
+                                    <input type="text" class="form-input" id="order-memo-input" placeholder="担当備考を入力" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">自社管理番号</label>
+                                    <input type="text" class="form-input" id="order-own-input" placeholder="自社管理番号を入力" />
                                 </div>
                             </div>
+                            <hr class="section-divider">
                             <div class="form-group">
                                 <label class="form-label">入力支援</label>
                                 <select class="form-select" id="order-assist-select">
@@ -5469,7 +5504,16 @@
             if (orderEditSelectedCount) orderEditSelectedCount.textContent = `選択された商品 ${count}件`;
 
             const orderEditModal = document.getElementById('order-edit-modal');
-            if (orderEditModal) orderEditModal.classList.add('show');
+            if (orderEditModal) {
+                // モーダルを中央に配置
+                const modal = orderEditModal.querySelector('.modal');
+                if (modal) {
+                    modal.style.left = '50%';
+                    modal.style.top = '50%';
+                    modal.style.transform = 'translate(-50%, -50%)';
+                }
+                orderEditModal.classList.add('show');
+            }
         }
         function closeOrderEditModal() {
             const orderEditModal = document.getElementById('order-edit-modal');
@@ -5527,6 +5571,12 @@
         const orderOwnInput = document.getElementById('order-own-input');
         const orderEditApplyBtn = document.getElementById('order-edit-apply-btn');
         const modalOrderDate = document.getElementById('modal-order-date');
+
+        // デフォルトで今日の日付を設定
+        if (modalOrderDate) {
+            const today = new Date().toISOString().split('T')[0];
+            modalOrderDate.value = today;
+        }
 
         // モーダル内のアクションボタン
         const modalBtnToShipmentWait = document.getElementById('modal-btn-to-shipment-wait');
@@ -5975,8 +6025,11 @@
                     const headers = table.querySelectorAll('th');
                     
                     headers.forEach((header, index) => {
-                        // Skip the last header to prevent table overflow
-                        if (index === headers.length - 1) return;
+                        // Skip the last header to prevent table overflow, except for RC担当備考 column
+                        const isLastHeader = index === headers.length - 1;
+                        const isRcMemoColumn = header.textContent.trim() === 'RC担当備考';
+                        
+                        if (isLastHeader && !isRcMemoColumn) return;
                         
                         header.addEventListener('mousedown', function(e) {
                             const rect = header.getBoundingClientRect();
@@ -6001,6 +6054,12 @@
                                 header.style.cursor = isRightEdge ? 'col-resize' : 'default';
                             }
                         });
+
+                        // ダブルクリックで自動幅調整機能を追加
+                        header.addEventListener('dblclick', function(e) {
+                            e.preventDefault();
+                            autoResizeColumn(header, index, table);
+                        });
                     });
                 });
                 
@@ -6021,6 +6080,67 @@
                         document.body.style.userSelect = '';
                     }
                 });
+            }
+
+            // カラム自動幅調整関数
+            function autoResizeColumn(header, columnIndex, table) {
+                const tbody = table.querySelector('tbody');
+                if (!tbody) return;
+
+                // RC担当備考カラムの場合、最後のカラムでも処理を許可
+                const isRcMemoColumn = header.textContent.trim() === 'RC担当備考';
+                const headers = table.querySelectorAll('th');
+                const isLastColumn = columnIndex === headers.length - 1;
+
+                // 一時的に幅をautoにして実際のコンテンツ幅を測定
+                const originalWidth = header.style.width;
+                header.style.width = 'auto';
+
+                // ヘッダーのテキスト幅を測定
+                const headerText = header.textContent.trim();
+                const headerCanvas = document.createElement('canvas');
+                const headerContext = headerCanvas.getContext('2d');
+                headerContext.font = window.getComputedStyle(header).font;
+                const headerWidth = headerContext.measureText(headerText).width;
+
+                // 同じカラムの全セルの幅を測定
+                const cells = tbody.querySelectorAll(`tr td:nth-child(${columnIndex + 1})`);
+                let maxContentWidth = headerWidth;
+
+                cells.forEach(cell => {
+                    const cellText = cell.textContent.trim();
+                    if (cellText) {
+                        const cellCanvas = document.createElement('canvas');
+                        const cellContext = cellCanvas.getContext('2d');
+                        cellContext.font = window.getComputedStyle(cell).font;
+                        const cellWidth = cellContext.measureText(cellText).width;
+                        maxContentWidth = Math.max(maxContentWidth, cellWidth);
+                    }
+                });
+
+                // パディングとボーダーを考慮した最終幅を計算
+                const padding = 24; // 左右のパディング合計
+                const minWidth = 60; // 最小幅
+                const maxWidth = 400; // RC担当備考カラムの最大幅を制限
+                let optimalWidth = Math.max(minWidth, Math.ceil(maxContentWidth + padding));
+                
+                // RC担当備考カラムの場合、最大幅を制限
+                if (isRcMemoColumn) {
+                    optimalWidth = Math.min(optimalWidth, maxWidth);
+                }
+
+                // 計算した幅を適用
+                header.style.width = optimalWidth + 'px';
+
+                // 最後のカラムの場合、テーブル全体の幅も調整
+                if (isLastColumn && isRcMemoColumn) {
+                    const currentTableWidth = table.offsetWidth;
+                    const newTableWidth = currentTableWidth + (optimalWidth - (originalWidth === 'auto' ? header.offsetWidth : parseInt(originalWidth)));
+                    table.style.width = Math.max(newTableWidth, 1200) + 'px'; // 最小幅1200pxを維持
+                }
+
+                // 幅が変更されたことをログ出力（デバッグ用）
+                console.log(`Column ${columnIndex + 1} (${headerText}) auto-resized to ${optimalWidth}px`);
             }
 
             // Initialize on page load and when tables are dynamically updated
@@ -6049,6 +6169,86 @@
                 subtree: true
             });
         })();
+
+        // モーダルドラッグ機能
+        function makeModalDraggable() {
+            const modals = document.querySelectorAll('.modal');
+            
+            modals.forEach(modal => {
+                const header = modal.querySelector('.modal-header');
+                if (!header) return;
+                
+                let isDragging = false;
+                let startX, startY, startLeft, startTop;
+                
+                header.style.cursor = 'move';
+                
+                header.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    modal.classList.add('dragging');
+                    
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    
+                    const rect = modal.getBoundingClientRect();
+                    startLeft = rect.left;
+                    startTop = rect.top;
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                    
+                    e.preventDefault();
+                });
+                
+                function onMouseMove(e) {
+                    if (!isDragging) return;
+                    
+                    const deltaX = e.clientX - startX;
+                    const deltaY = e.clientY - startY;
+                    
+                    const newLeft = startLeft + deltaX;
+                    const newTop = startTop + deltaY;
+                    
+                    // 画面外に出ないように制限
+                    const maxLeft = window.innerWidth - modal.offsetWidth;
+                    const maxTop = window.innerHeight - modal.offsetHeight;
+                    
+                    modal.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+                    modal.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
+                    modal.style.transform = 'none';
+                }
+                
+                function onMouseUp() {
+                    isDragging = false;
+                    modal.classList.remove('dragging');
+                    
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                }
+            });
+        }
+        
+        // ページ読み込み時にドラッグ機能を初期化
+        document.addEventListener('DOMContentLoaded', makeModalDraggable);
+        
+        // 動的に追加されるモーダルにもドラッグ機能を適用
+        const modalObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('modal')) {
+                            makeModalDraggable();
+                        }
+                    });
+                }
+            });
+        });
+        
+        modalObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    </script>
     </script>
 </body>
 
