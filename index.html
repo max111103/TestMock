@@ -20,8 +20,13 @@
 
         /* Layout */
         .app-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto 1fr;
             height: 100vh;
+        }
+
+        .app-container.panel-active {
+            grid-template-columns: auto 1fr 350px;
         }
 
         /* Sidebar */
@@ -60,9 +65,10 @@
             border-radius: 8px;
             background: transparent;
             cursor: pointer;
-            transition: opacity .2s, transform .2s;
+            transition: opacity .2s, transform .2s, background-color .2s;
             color: #6b7280;
             /* gray tone */
+            flex-shrink: 0;
         }
 
         .icon-btn svg {
@@ -73,10 +79,69 @@
 
         .icon-btn:hover {
             opacity: 0.8;
+            background-color: #f3f4f6;
         }
 
         .icon-btn:active {
             transform: scale(0.98);
+        }
+
+        /* Icon button for CSV and FAX */
+        .icon-btn-csv {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #059669;
+            border-radius: 8px;
+            background: #059669;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ffffff;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .icon-btn-fax {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #374151;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .icon-btn-csv:hover:not(:disabled) {
+            background: #047857;
+            border-color: #047857;
+        }
+
+        .icon-btn-fax:hover:not(:disabled) {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .icon-btn-csv:disabled,
+        .icon-btn-fax:disabled {
+            background: #f3f4f6 !important;
+            color: #9ca3af !important;
+            border-color: #e5e7eb !important;
+            cursor: not-allowed !important;
+        }
+
+        .icon-btn-csv svg,
+        .icon-btn-fax svg {
+            width: 25px;
+            height: 25px;
+            stroke: currentColor;
         }
 
         /* Collapsed sidebar */
@@ -395,7 +460,39 @@
             justify-content: space-between;
             padding: 20px;
             border-bottom: 1px solid #e5e7eb;
-            flex-direction: row-reverse;
+        }
+
+        .search-fields {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 150px;
+        }
+
+        .search-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .search-field .search-input {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .search-field .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
         }
 
         .search-box {
@@ -417,6 +514,265 @@
         .search-input:focus {
             outline: none;
             border-color: #2563eb;
+        }
+
+        /* Search field with filter button */
+        .search-field-with-filter {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .search-field-with-filter .search-field {
+            flex: 1;
+        }
+
+        .search-filter-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #374151;
+            flex-shrink: 0;
+        }
+
+        .search-filter-btn:hover:not(:disabled) {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .search-filter-btn:disabled {
+            background: #f3f4f6 !important;
+            color: #9ca3af !important;
+            border-color: #e5e7eb !important;
+            cursor: not-allowed !important;
+        }
+
+        .search-filter-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+        }
+
+        /* Search button style */
+        .search-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #2563eb;
+            border-radius: 8px;
+            background: #2563eb;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ffffff;
+            flex-shrink: 0;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+
+        .search-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .search-btn:disabled {
+            background: #f3f4f6 !important;
+            color: #9ca3af !important;
+            border-color: #e5e7eb !important;
+            cursor: not-allowed !important;
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+        }
+
+        /* Additional filter fields */
+        .additional-filters {
+            display: none;
+            padding: 16px 20px;
+            background: #f8fafc;
+        }
+
+        .additional-filters.show {
+            display: block;
+        }
+        /* 追加フィルターグリッド */
+        .additional-filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            max-width: 800px;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-field input {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .filter-field input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* Date range field styles */
+        .date-range-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .date-range-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .date-range-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .date-range-inputs input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .date-range-inputs input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .date-range-separator {
+            font-size: 12px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* 出荷日フィールドを右にずらす */
+        .date-range-field.ship-date-field {
+            margin-left: 40px;
+        }
+
+        /* 複数検索フィールドのスタイル */
+        .multi-search-container {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .multi-search-container.show {
+            display: block;
+        }
+
+        .multi-search-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .multi-search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .multi-search-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .multi-search-field textarea {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 60px;
+            transition: border-color 0.2s;
+        }
+
+        .multi-search-field textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .multi-search-field textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        /* 自社管理番号と担当備考フィールドのスタイル */
+        .management-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+            max-width: 530px;
+        }
+        
+        .management-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .management-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .management-field input,
+        .management-field textarea {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .management-field input:focus,
+        .management-field textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .management-field textarea {
+            resize: vertical;
+            min-height: 60px;
         }
 
         /* New search form styles */
@@ -1294,7 +1650,6 @@
         #order-fax-modal-btn:disabled,
         #order-delay-fax-modal-btn:disabled,
         #delivery-fax-modal-btn:disabled,
-        #edit-btn:disabled,
         #order-edit-btn:disabled,
         #order-edit-btn-delay:disabled,
         #export-dropdown-btn:disabled,
@@ -2005,6 +2360,412 @@
             background: #e5e7eb;
             margin: 20px 0;
         }
+
+        /* 詳細確認ボタンのバッジ */
+        .delivery-detail-btn {
+            position: relative;
+        }
+
+        .detail-btn-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff7979;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* 右側固定パネルスタイル */
+        .right-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            border-left: 1px solid #e0e0e0;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            transition: width .25s ease;
+        }
+
+        .right-panel.show {
+            display: block;
+        }
+
+        /* Collapsed right panel */
+        .right-panel.collapsed {
+            width: 60px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* hide everything inside when collapsed except the header */
+        .right-panel.collapsed .right-panel-body {
+            display: none !important;
+        }
+
+        .right-panel.collapsed .right-panel-title {
+            display: none !important;
+        }
+
+        .right-panel.collapsed .right-panel-header {
+            padding: 16px 8px;
+            justify-content: center;
+        }
+
+        .main-content.quotation-panel-active {
+            margin-right: 350px;
+        }
+
+        .main-content.quotation-panel-collapsed {
+            margin-right: 60px;
+        }
+
+        /* トップバーを固定幅に保つ */
+        .main-content.quotation-panel-active .top-bar {
+            position: fixed;
+            top: 0;
+            left: 250px; /* サイドバーの幅分オフセット */
+            right: 0; /* 画面右端まで */
+            z-index: 100;
+            margin-right: 0; /* パネルの影響を受けないように */
+        }
+
+        .main-content.quotation-panel-collapsed .top-bar {
+            position: fixed;
+            top: 0;
+            left: 250px; /* サイドバーの幅分オフセット */
+            right: 60px; /* 折りたたまれたパネル分の余白 */
+            z-index: 100;
+            margin-right: 0; /* パネルの影響を受けないように */
+        }
+
+        /* パネルが表示されているときのコンテンツエリア調整 */
+        .main-content.quotation-panel-active .content {
+            margin-top: 80px; /* トップバーの高さ分上にずらす */
+        }
+
+        .main-content.quotation-panel-collapsed .content {
+            margin-top: 80px; /* トップバーの高さ分上にずらす */
+        }
+
+        /* サイドバーが折りたたまれた場合のトップバー位置調整 */
+        .sidebar.collapsed ~ .main-content.quotation-panel-active .top-bar {
+            left: 0; /* サイドバーが非表示の場合は左端から */
+        }
+
+        .sidebar.collapsed ~ .main-content.quotation-panel-collapsed .top-bar {
+            left: 0; /* サイドバーが非表示の場合は左端から */
+        }
+
+        .right-panel-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0;
+        }
+
+        .right-panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            margin: 0 16px;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 20px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        /* Enhanced Tag input styles with modern design */
+        .enhanced-tag-input-container {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            min-height: 48px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enhanced-tag-input-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .enhanced-tag-input-container:hover::before {
+            left: 100%;
+        }
+
+        .enhanced-tag-input-container:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .enhanced-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-right: 8px;
+        }
+
+        .enhanced-tag {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 4px 8px 4px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+            transition: all 0.2s ease;
+            animation: tagSlideIn 0.3s ease;
+        }
+
+        @keyframes tagSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .enhanced-tag:hover {
+            transform: translateY(-1px) scale(1.05);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .enhanced-tag .remove {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .enhanced-tag .remove:hover {
+            background: rgba(239, 68, 68, 0.9);
+            transform: scale(1.1);
+        }
+
+        .enhanced-tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 120px;
+            padding: 8px 4px;
+            font-size: 14px;
+            background: transparent;
+            color: #374151;
+        }
+
+        .enhanced-tag-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Search field wrapper with icon */
+        .enhanced-search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 180px;
+            position: relative;
+        }
+
+        .enhanced-search-field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .enhanced-search-field .field-icon {
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+        }
+
+        /* Help text styling - now as tooltip */
+        .search-help-text {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 8px;
+        }
+
+        .search-help-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #1f2937;
+        }
+
+        .search-help-text .help-icon {
+            width: 12px;
+            height: 12px;
+            color: #9ca3af;
+            margin-right: 4px;
+        }
+
+        .enhanced-tag-input-container:hover .search-help-text,
+        .enhanced-tag-input-container:focus-within .search-help-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        /* Enhanced search field positioning for tooltip */
+        .enhanced-search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 180px;
+            position: relative;
+        }
+
+        /* Statistics display */
+        .search-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .search-stats .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .search-stats .stat-number {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Clear all button */
+        .clear-all-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        .clear-all-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        .enhanced-tag-input-container:hover .clear-all-btn {
+            display: flex;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .enhanced-search-field {
+                min-width: 150px;
+            }
+            
+            .enhanced-tag-input-container {
+                min-height: 44px;
+                padding: 6px 10px;
+            }
+            
+            .enhanced-tag {
+                font-size: 11px;
+                padding: 3px 6px 3px 10px;
+            }
+            
+            .enhanced-tag-input {
+                min-width: 100px;
+                font-size: 13px;
+            }
+        }
+
+        /* Animation for stats update */
+        @keyframes statsUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); color: #3b82f6; }
+            100% { transform: scale(1); }
+        }
+
+        .search-stats .stat-item.updated {
+            animation: statsUpdate 0.4s ease;
+        }
     </style>
 </head>
 
@@ -2113,6 +2874,20 @@
                             <div class="dropdown-item" data-warehouse="koshien">甲子園倉庫</div>
                         </div>
                     </div>
+                    <!-- Panel Toggle Button -->
+                    <button id="panel-toggle-btn" class="icon-btn" aria-label="編集パネルの表示/非表示" style="display: none;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="16" rx="3" ry="3" />
+                            <line x1="9" y1="4" x2="9" y2="20" />
+                            <circle cx="6" cy="8" r="1.4" />
+                            <circle cx="6" cy="12" r="1.4" />
+                            <circle cx="6" cy="16" r="1.4" />
+                            <line x1="15" y1="8" x2="19" y2="8" />
+                            <line x1="15" y1="12" x2="19" y2="12" />
+                            <line x1="15" y1="16" x2="19" y2="16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -2143,9 +2918,8 @@
                                         <div class="warehouse-summary-detail">神奈川県座間市広野台2-10-10 GLP座間 1階A区</div>
                                     </div>
                                     <div class="warehouse-summary-actions">
-                                        <div class="warehouse-overdue-count">3件</div>
                                         <button class="delivery-detail-btn"
-                                            onclick="showWarehouseDetail('zama')">詳細確認</button>
+                                            onclick="showWarehouseDetail('zama')">詳細確認<span class="detail-btn-badge">3</span></button>
                                     </div>
                                 </div>
 
@@ -2155,9 +2929,8 @@
                                         <div class="warehouse-summary-detail">神奈川県横浜市金沢区福浦2-1-1 横浜物流センター 2階B区</div>
                                     </div>
                                     <div class="warehouse-summary-actions">
-                                        <div class="warehouse-overdue-count">2件</div>
                                         <button class="delivery-detail-btn"
-                                            onclick="showWarehouseDetail('yokohama')">詳細確認</button>
+                                            onclick="showWarehouseDetail('yokohama')">詳細確認<span class="detail-btn-badge">2</span></button>
                                     </div>
                                 </div>
 
@@ -2167,9 +2940,8 @@
                                         <div class="warehouse-summary-detail">兵庫県西宮市甲子園町8-15 甲子園ロジスティクス 3階C区</div>
                                     </div>
                                     <div class="warehouse-summary-actions">
-                                        <div class="warehouse-overdue-count">1件</div>
                                         <button class="delivery-detail-btn"
-                                            onclick="showWarehouseDetail('koshien')">詳細確認</button>
+                                            onclick="showWarehouseDetail('koshien')">詳細確認<span class="detail-btn-badge">1</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -2387,25 +3159,96 @@
 
                     <div class="data-table-container">
                         <div class="table-tools">
-                            <form action="#" class="search-form-2">
-                                <label>
-                                    <input type="text" placeholder="商品名、商品番号、JAN、SCMコードで検索" id="quotation-search-input">
-                                </label>
-                                <button type="submit" aria-label="検索" id="quotation-search-btn"></button>
-                            </form>
-
+                            <!-- Enhanced Search Fields -->
+                            <div class="search-fields">
+                                <div class="search-field">
+                                    <label for="maker-search">商品メーカー</label>
+                                    <input type="text" id="maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="part-number-search">品番</label>
+                                    <input type="text" id="part-number-search" class="search-input" placeholder="品番を入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="jan-search">JAN</label>
+                                    <input type="text" id="jan-search" class="search-input" placeholder="JANコードを入力">
+                                </div>
+                                <div class="search-field-with-filter">
+                                    <div class="search-field">
+                                        <label for="scm-code-search">SCMコード</label>
+                                        <input type="text" id="scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                    </div>
+                                    <button type="button" class="search-btn" title="検索">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="search-filter-btn" title="フィルター">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                             <!-- Dynamic Action Buttons -->
                             <div class="dynamic-actions" id="dynamic-actions">
                                 <!-- 見積処理関連のボタンは編集モーダルに統合 -->
-                                <button class="btn btn-success" id="edit-btn" disabled>納期操作・備考編集</button>
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-btn" id="export-dropdown-btn"
-                                        disabled>CSV出力</button>
+                                    <button class="icon-btn-csv" id="export-dropdown-btn" title="CSV出力"
+                                        disabled>
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </button>
                                     <div class="dropdown-menu" id="export-dropdown-menu" style="left: auto; right: 0;">
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="fax-modal-btn" style="margin-left:8px;"
-                                    disabled>FAX出力</button>
+                                <button class="icon-btn-fax" id="fax-modal-btn" title="FAX出力"
+                                    disabled>
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Additional Filters -->
+                        <div class="additional-filters" id="quotation-additional-filters">
+                            <div class="additional-filters-grid">
+                                <div class="filter-field">
+                                    <label for="quotation-product-name-filter">商品名</label>
+                                    <input type="text" id="quotation-product-name-filter" placeholder="商品名を入力">
+                                </div>
+                                <div class="date-range-field">
+                                    <label>受注日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="quotation-order-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="quotation-order-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                                <div class="date-range-field ship-date-field">
+                                    <label>出荷日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="quotation-ship-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="quotation-ship-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 自社管理番号と担当備考フィールド -->
+                            <div class="management-fields">
+                                <div class="management-field">
+                                    <label for="quotation-management-number">自社管理番号</label>
+                                    <input type="text" id="quotation-management-number" placeholder="自社管理番号を入力">
+                                </div>
+                                <div class="management-field">
+                                    <label for="quotation-staff-memo">担当備考</label>
+                                    <input type="text" id="quotation-staff-memo" placeholder="担当備考を入力">
+                                </div>
                             </div>
                         </div>
 
@@ -2761,23 +3604,100 @@
 
                     <div class="data-table-container">
                         <div class="table-tools">
-                            <form action="#" class="search-form-2">
-                                <label>
-                                    <input type="text" placeholder="商品名、商品番号、JAN、SCMコードで検索" id="order-search-input">
-                                </label>
-                                <button type="submit" aria-label="検索" id="order-search-btn"></button>
-                            </form>
+                            <!-- Search Fields -->
+                            <div class="search-fields">
+                                <div class="search-field">
+                                    <label for="order-maker-search">商品メーカー</label>
+                                    <input type="text" id="order-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="order-part-number-search">品番</label>
+                                    <input type="text" id="order-part-number-search" class="search-input" placeholder="品番を入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="order-jan-search">JAN</label>
+                                    <input type="text" id="order-jan-search" class="search-input" placeholder="JANを入力">
+                                </div>
+                                <div class="search-field-with-filter">
+                                    <div class="search-field">
+                                        <label for="order-scm-code-search">SCMコード</label>
+                                        <input type="text" id="order-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                    </div>
+                                    <button type="button" class="search-btn" title="検索">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="search-filter-btn" title="フィルター">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="dynamic-actions" id="order-dynamic-actions">
                                 <button class="btn btn-success" id="order-edit-btn">受注操作・備考編集</button>
                                 <button class="btn btn-secondary dropdown-btn" id="order-export-csv-btn">CSV出力</button>
-                                <button class="btn btn-secondary" id="order-fax-modal-btn">FAX出力</button>
+                                <button class="btn btn-secondary" id="order-fax-modal-btn">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px; margin-right: 4px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
+                                    </svg>
+                                    FAX出力
+                                </button>
                                 <button class="btn btn-danger" id="btn-delay" style="display:none;">遅延処理</button>
                                 <button class="btn btn-success" id="order-edit-btn-delay"
                                     style="display:none;">受注操作・備考編集</button>
                                 <button class="btn btn-secondary dropdown-btn" id="order-delay-export-csv-btn"
                                     style="display:none;">CSV出力</button>
                                 <button class="btn btn-secondary" id="order-delay-fax-modal-btn"
-                                    style="display:none;">FAX出力</button>
+                                    style="display:none;">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px; margin-right: 4px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
+                                    </svg>
+                                    FAX出力
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Additional Filters -->
+                        <div class="additional-filters" id="order-additional-filters">
+                            <div class="additional-filters-grid">
+                                <div class="filter-field">
+                                    <label for="order-product-name-filter">商品名</label>
+                                    <input type="text" id="order-product-name-filter" placeholder="商品名を入力">
+                                </div>
+                                <div class="date-range-field">
+                                    <label>受注日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="order-order-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="order-order-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                                <div class="date-range-field ship-date-field">
+                                    <label>出荷日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="order-ship-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="order-ship-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 自社管理番号と担当備考フィールド -->
+                            <div class="management-fields">
+                                <div class="management-field">
+                                    <label for="order-management-number">自社管理番号</label>
+                                    <input type="text" id="order-management-number" placeholder="自社管理番号を入力">
+                                </div>
+                                <div class="management-field">
+                                    <label for="order-staff-memo">担当備考</label>
+                                    <input type="text" id="order-staff-memo" placeholder="担当備考を入力">
+                                </div>
                             </div>
                         </div>
 
@@ -3773,12 +4693,37 @@
                     <!-- 出荷待: アクション付き -->
                     <div class="data-table-container" id="delivery-wait-container">
                         <div class="table-tools">
-                            <form action="#" class="search-form-2">
-                                <label>
-                                    <input type="text" placeholder="商品名、商品番号、JAN、SCMコードで検索" id="delivery-search-input">
-                                </label>
-                                <button type="submit" aria-label="検索" id="delivery-search-btn"></button>
-                            </form>
+                            <!-- Search Fields -->
+                            <div class="search-fields">
+                                <div class="search-field">
+                                    <label for="delivery-maker-search">商品メーカー</label>
+                                    <input type="text" id="delivery-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="delivery-part-number-search">品番</label>
+                                    <input type="text" id="delivery-part-number-search" class="search-input" placeholder="品番を入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="delivery-jan-search">JAN</label>
+                                    <input type="text" id="delivery-jan-search" class="search-input" placeholder="JANを入力">
+                                </div>
+                                <div class="search-field-with-filter">
+                                    <div class="search-field">
+                                        <label for="delivery-scm-code-search">SCMコード</label>
+                                        <input type="text" id="delivery-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                    </div>
+                                    <button type="button" class="search-btn" title="検索">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="search-filter-btn" title="フィルター">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="dynamic-actions" id="delivery-actions">
                                 <button class="btn btn-secondary" id="btn-back-to-arranged" disabled>手配済に戻す</button>
                                 <div style="display:flex; align-items:center; gap:8px;">
@@ -3797,6 +4742,44 @@
                                         style="left: auto; right: 0;">
 
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Filters -->
+                        <div class="additional-filters" id="delivery-additional-filters">
+                            <div class="additional-filters-grid">
+                                <div class="filter-field">
+                                    <label for="delivery-product-name-filter">商品名</label>
+                                    <input type="text" id="delivery-product-name-filter" placeholder="商品名を入力">
+                                </div>
+                                <div class="date-range-field">
+                                    <label>受注日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="delivery-order-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="delivery-order-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                                <div class="date-range-field ship-date-field">
+                                    <label>出荷日</label>
+                                    <div class="date-range-inputs">
+                                        <input type="date" id="delivery-ship-date-from" placeholder="開始日">
+                                        <span class="date-range-separator">〜</span>
+                                        <input type="date" id="delivery-ship-date-to" placeholder="終了日">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 自社管理番号と担当備考フィールド -->
+                            <div class="management-fields">
+                                <div class="management-field">
+                                    <label for="delivery-management-number">自社管理番号</label>
+                                    <input type="text" id="delivery-management-number" placeholder="自社管理番号を入力">
+                                </div>
+                                <div class="management-field">
+                                    <label for="delivery-staff-memo">担当備考</label>
+                                    <input type="text" id="delivery-staff-memo" placeholder="担当備考を入力">
                                 </div>
                             </div>
                         </div>
@@ -3913,12 +4896,32 @@
                     <!-- 出荷済: テーブルのみ（ボタンなし） -->
                     <div class="data-table-container" id="delivery-done-container" style="display:none;">
                         <div class="table-tools">
-                            <form action="#" class="search-form-2">
-                                <label>
-                                    <input type="text" placeholder="商品名、商品番号、JAN、SCMコードで検索" id="delivered-search-input">
-                                </label>
-                                <button type="submit" aria-label="検索" id="delivered-search-btn"></button>
-                            </form>
+                            <!-- Search Fields -->
+                            <div class="search-fields">
+                                <div class="search-field">
+                                    <label for="delivery-done-maker-search">商品メーカー</label>
+                                    <input type="text" id="delivery-done-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="delivery-done-part-number-search">品番</label>
+                                    <input type="text" id="delivery-done-part-number-search" class="search-input" placeholder="品番を入力">
+                                </div>
+                                <div class="search-field">
+                                    <label for="delivery-done-jan-search">JAN</label>
+                                    <input type="text" id="delivery-done-jan-search" class="search-input" placeholder="JANを入力">
+                                </div>
+                                <div class="search-field-with-filter">
+                                    <div class="search-field">
+                                        <label for="delivery-done-scm-code-search">SCMコード</label>
+                                        <input type="text" id="delivery-done-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                    </div>
+                                    <button type="button" class="search-filter-btn" title="フィルター">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="table-scroll">
                             <table class="data-table" id="delivery-done-table">
@@ -3990,60 +4993,6 @@
                 </div>
 
                 <!-- Filter Panel -->
-                <!-- Edit Modal -->
-                <div class="modal-backdrop" id="edit-modal">
-                    <div class="modal">
-                        <div class="modal-header">納期操作・備考編集</div>
-                        <div class="modal-subinfo" id="edit-selected-count">選択された商品 0件</div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="form-label">入力支援</label>
-                                <select class="form-select" id="assist-select">
-                                    <option value="">選択してください</option>
-                                    <option value="至急対応お願いします">至急対応お願いします</option>
-                                    <option value="メーカー確認中">メーカー確認中</option>
-                                    <option value="入荷予定日未定">入荷予定日未定</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">担当備考</label>
-                                <input type="text" class="form-input" id="memo-input" placeholder="担当備考を入力" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">自社管理番号</label>
-                                <input type="text" class="form-input" id="own-input" placeholder="自社管理番号を入力" />
-                                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                    <button class="btn btn-primary" id="edit-apply-btn">更新</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">見積処理操作</label>
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <label for="stock-select"
-                                        style="font-size: 16px; color: #6b7280; min-width: 40px;">納期選択</label>
-                                    <select id="stock-select" class="form-select" style="flex: 1;">
-                                        <option value="">選択してください</option>
-                                        <option value="在庫あり">在庫あり</option>
-                                        <option value="1週間">1週間</option>
-                                        <option value="2週間">2週間</option>
-                                        <option value="3週間">3週間</option>
-                                        <option value="1ヶ月">1ヶ月</option>
-                                        <option value="2ヶ月">2ヶ月</option>
-                                        <option value="3ヶ月">3ヶ月</option>
-                                        <option value="要相談">要相談</option>
-                                    </select>
-                                </div>
-                                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                    <button class="btn btn-primary" id="modal-quotation-send-btn" disabled>見積送信</button>
-                                    <button class="btn btn-primary" id="modal-quotation-processing-btn">見積中にする</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-muted" id="edit-close-btn">閉じる</button>
-                        </div>
-                    </div>
-                </div>
                 <div class="modal-backdrop" id="delay-modal">
                     <div class="modal">
                         <div class="modal-header">遅延処理</div>
@@ -4109,29 +5058,23 @@
                                     <input type="text" class="form-input" id="order-own-input"
                                         placeholder="自社管理番号を入力" />
                                 </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" id="order-edit-apply-btn">更新</button>
+                                </div>
                             </div>
                             <hr class="section-divider">
                             <div class="form-group">
-                                <label class="form-label">入力支援</label>
-                                <select class="form-select" id="order-assist-select">
-                                    <option value="">選択してください</option>
-                                    <option value="至急対応お願いします">至急対応お願いします</option>
-                                    <option value="メーカー確認中">メーカー確認中</option>
-                                    <option value="入荷予定日未定">入荷予定日未定</option>
-                                    <option value="出荷準備中">出荷準備中</option>
-                                    <option value="在庫確認中">在庫確認中</option>
-                                </select>
+                                <label class="form-label">出荷予定日選択</label>
+                                <input type="date" class="form-input" id="modal-order-date" />
                             </div>
                             <div class="form-group">
-                                <label class="form-label">担当備考</label>
-                                <input type="text" class="form-input" id="order-memo-input" placeholder="担当備考を入力" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">自社管理番号</label>
-                                <input type="text" class="form-input" id="order-own-input" placeholder="自社管理番号を入力" />
+                                <label class="form-label">受注処理操作</label>
                                 <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                    <button class="btn btn-primary" id="order-edit-apply-btn">更新</button>
+                                    <button class="btn btn-primary" id="modal-btn-to-shipment-wait">出荷待ちにする</button>
+                                    <button class="btn btn-primary" id="modal-btn-to-in-progress">手配中にする</button>
+                                    <button class="btn btn-success" id="modal-btn-to-done">手配済にする</button>
                                 </div>
+                            </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -4163,6 +5106,50 @@
                             <button class="btn btn-muted" id="tracking-close-btn">閉じる</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel for Quotation -->
+        <div class="right-panel" id="quotation-right-panel">
+            <div class="right-panel-header">
+                <button class="icon-btn" id="quotation-panel-toggle" title="パネルを切り替え">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="m18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <h3 class="right-panel-title">見積処理パネル</h3>
+            </div>
+            <div class="right-panel-body">
+                <div class="form-group">
+                    <label class="form-label">入力支援</label>
+                    <select class="form-select" id="quotation-assist-select">
+                        <option value="">選択してください</option>
+                        <!-- options -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">担当備考</label>
+                    <textarea class="form-input" id="quotation-memo-input" rows="4" placeholder="担当備考を入力"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">自社管理番号</label>
+                    <input type="text" class="form-input" id="quotation-own-input" placeholder="自社管理番号を入力">
+                </div>
+                <button class="btn btn-primary" id="quotation-update-btn">更新</button>
+                <hr class="section-divider">
+                <h4>見積処理操作</h4>
+                <div class="form-group">
+                    <label class="form-label">納期選択</label>
+                    <select class="form-select" id="quotation-delivery-select">
+                        <option value="">選択してください</option>
+                        <!-- options -->
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" id="quotation-send-btn">見積送信</button>
+                    <button class="btn btn-secondary" id="quotation-processing-btn">見積中にする</button>
                 </div>
             </div>
         </div>
@@ -4293,10 +5280,8 @@
 
                 // 見積処理ページが表示されたときにボタンの状態を初期化
                 if (this.getAttribute('href') === '#quotation') {
-                    const editBtn = document.getElementById('edit-btn');
                     const csvExportBtn = document.getElementById('export-dropdown-btn');
                     const faxModalBtn = document.getElementById('fax-modal-btn');
-                    if (editBtn) editBtn.disabled = true;
                     if (csvExportBtn) csvExportBtn.disabled = true;
                     if (faxModalBtn) faxModalBtn.disabled = true;
                 }
@@ -4321,6 +5306,13 @@
 
                 // Re-bind toggle buttons after view switch
                 bindToggleButtons();
+
+                // Toggle quotation panel
+                if (this.getAttribute('href') === '#quotation') {
+                    toggleQuotationPanel(true);
+                } else {
+                    toggleQuotationPanel(false);
+                }
             });
         });
 
@@ -4351,6 +5343,28 @@
                     document.getElementById('quotation-view').style.display = 'block';
                     document.getElementById('order-view').style.display = 'none';
                     document.getElementById('delivery-view').style.display = 'none';
+
+                    // Show edit panel for quotation view
+                    const editPanel = document.getElementById('edit-panel');
+                    if (editPanel) {
+                        editPanel.classList.add('show');
+                    }
+
+                    // Hide order edit panel
+                    const orderEditPanel = document.getElementById('order-edit-panel');
+                    if (orderEditPanel) {
+                        orderEditPanel.classList.remove('show');
+                    }
+
+                    // Initialize quotation pagination
+                    if (quotationTbody && quotationAllRows.length > 0) {
+                        const quotationTotalPages = Math.ceil(quotationAllRows.length / perPage) || 1;
+                        if (quotationTotalPages > 1) {
+                            renderQuotationPage(1);
+                        } else {
+                            buildQuotationPagination(quotationTotalPages);
+                        }
+                    }
 
                     // Show warehouse dropdown
                     const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
@@ -4402,6 +5416,18 @@
                     document.getElementById('quotation-view').style.display = 'none';
                     document.getElementById('order-view').style.display = 'block';
                     document.getElementById('delivery-view').style.display = 'none';
+
+                    // Hide edit panel for quotation view
+                    const editPanel = document.getElementById('edit-panel');
+                    if (editPanel) {
+                        editPanel.classList.remove('show');
+                    }
+
+                    // Hide order edit panel
+                    const orderEditPanel = document.getElementById('order-edit-panel');
+                    if (orderEditPanel) {
+                        orderEditPanel.classList.remove('show');
+                    }
 
                     // Show warehouse dropdown
                     const headerWarehouseDropdown = document.getElementById('header-warehouse-dropdown');
@@ -4543,10 +5569,8 @@
                     }
 
                     // タブ切り替え時にボタンの状態をリセット
-                    const editBtn = document.getElementById('edit-btn');
                     const csvExportBtn = document.getElementById('export-dropdown-btn');
                     const faxModalBtn = document.getElementById('fax-modal-btn');
-                    if (editBtn) editBtn.disabled = true;
                     if (csvExportBtn) csvExportBtn.disabled = true;
                     if (faxModalBtn) faxModalBtn.disabled = true;
                 }
@@ -4593,6 +5617,26 @@
                             if (orderDelayExportBtn) orderDelayExportBtn.style.display = 'none';
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = 'none';
                         }
+                        // Reset pagination when switching tabs
+                        // Update orderTbody based on active table
+                        const activeTable = unprocessedTable.style.display !== 'none' ? unprocessedTable : arrangedTable;
+                        if (activeTable) {
+                            const newTbody = activeTable.querySelector('tbody');
+                            if (newTbody) {
+                                orderTbody = newTbody;
+                                allRows = Array.from(orderTbody.querySelectorAll('tr'));
+                                filteredRows = allRows.slice();
+                                renderPage(1);
+                            }
+                        }
+                        // Re-bind delay button event listener after tab switch
+                        if (delayBtn && delayBtn.style.display !== 'none') {
+                            delayBtn.addEventListener('click', function() {
+                                const count = document.querySelectorAll('#order-view tbody td .checkbox:checked').length;
+                                if (count === 0) { alert('対象の受注を選択してください。'); return; }
+                                openDelayModal();
+                            });
+                        }
                     }
                 }
                 // Re-bind toggle buttons after tab switch to ensure they work for new content
@@ -4610,6 +5654,12 @@
         let filteredRows = allRows.slice();
         const perPage = 100; // 1ページあたり表示件数
         let currentPage = 1;
+
+        // Quotation view pagination setup
+        const quotationTbody = document.querySelector('#quotation-view .data-table tbody');
+        const quotationAllRows = quotationTbody ? Array.from(quotationTbody.querySelectorAll('tr')) : [];
+        let quotationFilteredRows = quotationAllRows.slice();
+        let quotationCurrentPage = 1;
 
         function updateMainCheckboxState() {
             const visibleBoxes = document.querySelectorAll('tbody td .checkbox');
@@ -4630,7 +5680,17 @@
         }
 
         function buildPagination(totalPages) {
-            const pager = document.getElementById('pagination');
+            let pager;
+            const activeView = document.querySelector('.view:not([style*="display: none"])');
+            if (activeView) {
+                if (activeView.id === 'order-view') {
+                    pager = document.getElementById('order-pagination');
+                } else if (activeView.id === 'delivery-view') {
+                    pager = document.getElementById('delivery-pagination');
+                } else if (activeView.id === 'quotation-view') {
+                    pager = document.getElementById('pagination');
+                }
+            }
             if (!pager) return;
             const shown = Math.min(totalPages, 3); // 1〜3ページ分を表示
             pager.innerHTML = '';
@@ -4656,6 +5716,50 @@
             pager.appendChild(next);
         }
 
+        // Quotation view pagination functions
+        function buildQuotationPagination(totalPages) {
+            const pager = document.getElementById('pagination');
+            if (!pager) return;
+            const shown = Math.min(totalPages, 3); // 1〜3ページ分を表示
+            pager.innerHTML = '';
+            const prev = document.createElement('button');
+            prev.textContent = '前へ';
+            prev.className = 'page-btn';
+            prev.disabled = quotationCurrentPage === 1;
+            prev.addEventListener('click', () => renderQuotationPage(quotationCurrentPage - 1));
+            pager.appendChild(prev);
+            for (let i = 1; i <= shown; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'page-btn' + (i === quotationCurrentPage ? ' active' : '');
+                btn.addEventListener('click', () => renderQuotationPage(i));
+                pager.appendChild(btn);
+            }
+            const next = document.createElement('button');
+            next.textContent = '次へ';
+            next.className = 'page-btn';
+            const totalPagesAll = Math.ceil(quotationFilteredRows.length / perPage) || 1;
+            next.disabled = quotationCurrentPage >= totalPagesAll;
+            next.addEventListener('click', () => renderQuotationPage(quotationCurrentPage + 1));
+            pager.appendChild(next);
+        }
+
+        function renderQuotationPage(page) {
+            if (!quotationTbody) return;
+            const totalPages = Math.ceil(quotationFilteredRows.length / perPage) || 1;
+            quotationCurrentPage = Math.max(1, Math.min(page, totalPages));
+            quotationTbody.innerHTML = '';
+            const start = (quotationCurrentPage - 1) * perPage;
+            const end = start + perPage;
+            quotationFilteredRows.slice(start, end).forEach(r => quotationTbody.appendChild(r));
+            // 再バインド
+            attachRowCheckboxListeners();
+            updateMainCheckboxState();
+            updateActionButtons();
+            buildQuotationPagination(totalPages);
+            bindToggleButtons(); // 詳細表示ボタンのイベントリスナーを再バインド
+        }
+
         function renderPage(page) {
             const totalPages = Math.ceil(filteredRows.length / perPage) || 1;
             currentPage = Math.max(1, Math.min(page, totalPages));
@@ -4676,18 +5780,15 @@
             const quotationCheckedBoxes = document.querySelectorAll('#quotation-view tbody td .checkbox:checked');
             const quotationHasSelection = quotationCheckedBoxes.length > 0;
 
-            const editBtn = document.getElementById('edit-btn');
             const csvExportBtn = document.getElementById('export-dropdown-btn');
             const faxModalBtn = document.getElementById('fax-modal-btn');
 
             // チェックボックスが選択されていない場合は全て無効化
             if (!quotationHasSelection) {
-                if (editBtn) editBtn.disabled = true;
                 if (csvExportBtn) csvExportBtn.disabled = true;
                 if (faxModalBtn) faxModalBtn.disabled = true;
             } else {
                 // チェックボックスが選択されている場合は有効化
-                if (editBtn) editBtn.disabled = false;
                 if (csvExportBtn) csvExportBtn.disabled = false;
                 if (faxModalBtn) faxModalBtn.disabled = false;
             }
@@ -4747,76 +5848,42 @@
         // 初期状態でボタンの状態を確実に設定
         updateActionButtons();
 
-        // Quotation search
-        const qSearchInput = document.getElementById('quotation-search-input');
-        const qSearchBtn = document.getElementById('quotation-search-btn');
-        const qSearchForm = qSearchBtn?.closest('form');
-        function applyQuotationSearch(query) {
-            const q = (query || '').trim();
-            if (!q) {
-                filteredRows = allRows.slice();
+        // Initialize quotation pagination if quotation view is active
+        if (quotationTbody && quotationAllRows.length > 0) {
+            const quotationTotalPages = Math.ceil(quotationAllRows.length / perPage) || 1;
+            if (quotationTotalPages > 1) {
+                renderQuotationPage(1);
             } else {
-                const lc = q.toLowerCase();
-                filteredRows = allRows.filter(tr => tr.textContent.toLowerCase().includes(lc));
+                buildQuotationPagination(quotationTotalPages);
             }
-            renderPage(1);
         }
-        qSearchBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            applyQuotationSearch(qSearchInput?.value);
-        });
-        qSearchForm?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            applyQuotationSearch(qSearchInput?.value);
-        });
-        qSearchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') applyQuotationSearch(qSearchInput.value); });
+
+        // Initialize order/delivery pagination if order or delivery view is active
+        const activeView = document.querySelector('.view:not([style*="display: none"])');
+        if (activeView && (activeView.id === 'order-view' || activeView.id === 'delivery-view')) {
+            if (orderTbody && allRows.length > 0) {
+                const totalPages = Math.ceil(allRows.length / perPage) || 1;
+                if (totalPages > 1) {
+                    renderPage(1);
+                } else {
+                    buildPagination(totalPages);
+                }
+            }
+        }
 
         // Dropdown functionality
         const dropdownBtn = null; // 元のドロップダウンは削除済み
         const dropdownMenu = null; // 元のドロップダウンは削除済み
         const quotationSendBtn = null; // 元のボタンは削除済み
         const quotationProcessingBtn = null; // 元のボタンは削除済み
-        // Modal edit button & modal elements
-        const editBtn = document.getElementById('edit-btn');
-        const editModal = document.getElementById('edit-modal');
-        const editCloseBtn = document.getElementById('edit-close-btn');
-        const editApplyBtn = document.getElementById('edit-apply-btn');
-        const assistSelect = document.getElementById('assist-select');
-        const memoInput = document.getElementById('memo-input');
-        const ownInput = document.getElementById('own-input');
-        const editSelectedCount = document.getElementById('edit-selected-count');
+        // Modal edit button & modal elements - 削除済み
 
-        // 編集ボタンにツールチップを追加
-        if (editBtn) {
-            editBtn.title = '選択した商品の納期・備考を編集します';
-        }
-
-        // 更新ボタンにもツールチップを追加
-        if (editApplyBtn) {
-            editApplyBtn.title = '入力した内容を商品に適用します';
-        }
-
-        // モーダル内の新しいボタンと要素
-        const modalQuotationSendBtn = document.getElementById('modal-quotation-send-btn');
-        const modalQuotationProcessingBtn = document.getElementById('modal-quotation-processing-btn');
-        const stockSelect = document.getElementById('stock-select');
-        let selectedStockValue = null;
-
-        // 見積処理ボタンにツールチップを追加
-        if (modalQuotationSendBtn) {
-            modalQuotationSendBtn.title = '見積書を送信します';
-        }
-        if (modalQuotationProcessingBtn) {
-            modalQuotationProcessingBtn.title = '商品を見積中状態にします';
-        }
+        // モーダル内の新しいボタンと要素 - 削除済み
 
         // 初期状態: チェックボックス未選択時は全ての操作ボタンを無効化
         // その他の操作ボタンも初期状態で無効化
         const csvExportBtn = document.getElementById('export-dropdown-btn');
         const faxModalBtn = document.getElementById('fax-modal-btn');
-        if (editBtn) {
-            editBtn.disabled = true;
-        }
         if (csvExportBtn) {
             csvExportBtn.disabled = true;
         }
@@ -4849,54 +5916,6 @@
         if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = true;
         if (delayProcessingBtn) delayProcessingBtn.disabled = true;
         if (btnDelay) btnDelay.disabled = true;
-
-        // 納期選択機能をモーダル内に移動
-        if (stockSelect) {
-            stockSelect.addEventListener('change', function () {
-                selectedStockValue = this.value;
-                // 見積送信ボタンの状態を更新
-                if (modalQuotationSendBtn) {
-                    modalQuotationSendBtn.disabled = !selectedStockValue;
-                }
-                // 納期選択時は「見積中にする」ボタンをグレーアウト
-                if (modalQuotationProcessingBtn) {
-                    if (selectedStockValue) {
-                        modalQuotationProcessingBtn.disabled = true;
-                    } else {
-                        modalQuotationProcessingBtn.disabled = false;
-                    }
-                }
-            });
-        }
-
-        // モーダル内の見積処理ボタン機能
-        if (modalQuotationSendBtn) {
-            modalQuotationSendBtn.addEventListener('click', function () {
-                const checkedBoxes = document.querySelectorAll('td .checkbox:checked');
-                if (!selectedStockValue) {
-                    alert('納期を選択してください。');
-                    return;
-                }
-                if (checkedBoxes.length === 0) {
-                    alert('商品を選択してください。');
-                    return;
-                }
-                alert(`${checkedBoxes.length}件の商品を「${stockSelect.options[stockSelect.selectedIndex].text}」で見積送信しました。`);
-                closeEditModal();
-            });
-        }
-
-        if (modalQuotationProcessingBtn) {
-            modalQuotationProcessingBtn.addEventListener('click', function () {
-                const checkedBoxes = document.querySelectorAll('td .checkbox:checked');
-                if (checkedBoxes.length === 0) {
-                    alert('商品を選択してください。');
-                    return;
-                }
-                alert(`${checkedBoxes.length}件の商品を見積中にしました。`);
-                closeEditModal();
-            });
-        }
 
         // Warehouse dropdown functionality
         const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
@@ -5032,6 +6051,12 @@
                     const isWait = tab.getAttribute('data-tab') === 'wait';
                     waitContainer.style.display = isWait ? 'block' : 'none';
                     doneContainer.style.display = isWait ? 'none' : 'block';
+                    // Reset pagination when switching tabs
+                    if (isWait) {
+                        renderWaitPage(1);
+                    } else {
+                        renderDonePage(1);
+                    }
                 });
             });
 
@@ -5247,53 +6272,6 @@
                 alert(`${selectedCount()}件を ${dateInput.value} に出荷しました。`);
             });
 
-            // 検索（簡易フィルタ）
-            const dSearchInput = document.getElementById('delivery-search-input');
-            const dSearchBtn = document.getElementById('delivery-search-btn');
-            const dSearchForm = dSearchBtn?.closest('form');
-
-            function performDeliverySearch() {
-                const q = (dSearchInput?.value || '').toLowerCase();
-                if (!q) {
-                    waitFiltered = waitRows.slice();
-                } else {
-                    waitFiltered = waitRows.filter(row => row.textContent.toLowerCase().includes(q));
-                }
-                renderWaitPage(1);
-            }
-
-            dSearchBtn?.addEventListener('click', (e) => {
-                e.preventDefault();
-                performDeliverySearch();
-            });
-            dSearchForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                performDeliverySearch();
-            });
-
-            const doneSearchInput = document.getElementById('delivered-search-input');
-            const doneSearchBtn = document.getElementById('delivered-search-btn');
-            const doneSearchForm = doneSearchBtn?.closest('form');
-
-            function performDeliveredSearch() {
-                const q = (doneSearchInput?.value || '').toLowerCase();
-                if (!q) {
-                    doneFiltered = doneRows.slice();
-                } else {
-                    doneFiltered = doneRows.filter(row => row.textContent.toLowerCase().includes(q));
-                }
-                renderDonePage(1);
-            }
-
-            doneSearchBtn?.addEventListener('click', (e) => {
-                e.preventDefault();
-                performDeliveredSearch();
-            });
-            doneSearchForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                performDeliveredSearch();
-            });
-
             // 初期化
             renderWaitPage(1);
             renderDonePage(1);
@@ -5501,50 +6479,12 @@
             // Initialize disabled state on load
             updateButtonStates();
 
-            // Order search
-            const oSearchInput = document.getElementById('order-search-input');
-            const oSearchBtn = document.getElementById('order-search-btn');
-            const oSearchForm = oSearchBtn?.closest('form');
-            function applyOrderSearch(query) {
-                const q = (query || '').trim();
-                if (!q) {
-                    filtered = rows.slice();
-                } else {
-                    const lc = q.toLowerCase();
-                    filtered = rows.filter(tr => tr.textContent.toLowerCase().includes(lc));
-                }
-                renderPage(1);
-            }
-            oSearchBtn?.addEventListener('click', (e) => {
-                e.preventDefault();
-                applyOrderSearch(oSearchInput?.value);
-            });
-            oSearchForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                applyOrderSearch(oSearchInput?.value);
-            });
-            oSearchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') applyOrderSearch(oSearchInput.value); });
-
             // 削除されたボタンのイベントリスナーはここに存在していましたが、モーダル内に統合されました
         })();
     </script>
     <script>
         // --- Modal helpers ---
-        function openEditModal() {
-            const count = document.querySelectorAll('tbody td .checkbox:checked').length;
-            if (editSelectedCount) editSelectedCount.textContent = `選択された商品 ${count}件`;
-
-            // モーダル内のボタンの状態を更新
-            if (modalQuotationSendBtn) {
-                modalQuotationSendBtn.disabled = !selectedStockValue || count === 0;
-            }
-            if (modalQuotationProcessingBtn) {
-                modalQuotationProcessingBtn.disabled = count === 0;
-            }
-
-            if (editModal) editModal.classList.add('show');
-        }
-        function closeEditModal() { if (editModal) editModal.classList.remove('show'); }
+        // Edit Modal関連は削除済み
 
         // --- Order Edit Modal helpers ---
         function openOrderEditModal() {
@@ -5569,46 +6509,13 @@
             if (orderEditModal) orderEditModal.classList.remove('show');
         }
 
-        // --- Edit button open modal ---
-        if (editBtn) {
-            editBtn.disabled = true;
-            editBtn.addEventListener('click', function () {
-                const count = document.querySelectorAll('tbody td .checkbox:checked').length;
-                if (count === 0) return;
-                openEditModal();
-            });
-        }
+        // --- Edit button open modal - 削除済み ---
 
-        // --- Modal close actions ---
-        editCloseBtn?.addEventListener('click', closeEditModal);
-        editModal?.addEventListener('click', function (e) {
-            if (e.target === editModal) closeEditModal();
-        });
+        // --- Modal close actions - 削除済み ---
 
-        // --- 入力支援: テンプレ反映 ---
-        if (assistSelect) {
-            assistSelect.addEventListener('change', function () {
-                if (this.value) memoInput.value = this.value;
-            });
-        }
+        // --- 入力支援: テンプレ反映 - 削除済み ---
 
-        // --- 更新ボタン: 選択行へ反映 ---
-        if (editApplyBtn) {
-            editApplyBtn.addEventListener('click', function () {
-                const memo = memoInput?.value ?? '';
-                const own = ownInput?.value ?? '';
-                const checked = Array.from(document.querySelectorAll('tbody td .checkbox:checked'));
-                checked.forEach(cb => {
-                    const tr = cb.closest('tr');
-                    if (!tr) return;
-                    const tds = tr.querySelectorAll('td');
-                    if (tds[10]) tds[10].textContent = own;   // 自社管理番号
-                    if (tds[11]) tds[11].textContent = memo;  // 担当者備考
-                });
-                // 下部パネルの再描画とモーダルを閉じる
-                closeEditModal();
-            });
-        }
+        // --- 更新ボタン: 選択行へ反映 - 削除済み ---
 
         // --- Order Edit Modal functionality ---
         // const orderEditBtn = document.getElementById('order-edit-btn'); // 上で既に宣言済み
@@ -6308,8 +7215,350 @@
             childList: true,
             subtree: true
         });
+
+        // Quotation right panel functionality
+        const quotationPanel = document.getElementById('quotation-right-panel');
+        const mainContent = document.querySelector('.main-content');
+        const quotationPanelToggle = document.getElementById('quotation-panel-toggle');
+
+        // Function to show/hide quotation panel
+        function toggleQuotationPanel(show, collapsed = false) {
+            if (!quotationPanel || !mainContent) return;
+
+            if (show) {
+                quotationPanel.classList.add('show');
+                
+                if (collapsed) {
+                    quotationPanel.classList.add('collapsed');
+                    mainContent.classList.add('quotation-panel-collapsed');
+                    mainContent.classList.remove('quotation-panel-active');
+                } else {
+                    quotationPanel.classList.remove('collapsed');
+                    mainContent.classList.add('quotation-panel-active');
+                    mainContent.classList.remove('quotation-panel-collapsed');
+                }
+            } else {
+                quotationPanel.classList.remove('show', 'collapsed');
+                mainContent.classList.remove('quotation-panel-active', 'quotation-panel-collapsed');
+            }
+
+            // Save state to localStorage
+            if (show) {
+                localStorage.setItem('scm.quotationPanel.show', '1');
+                localStorage.setItem('scm.quotationPanel.collapsed', collapsed ? '1' : '0');
+            } else {
+                localStorage.setItem('scm.quotationPanel.show', '0');
+            }
+        }
+
+        // Restore panel state from localStorage
+        function restoreQuotationPanelState() {
+            const saved = localStorage.getItem('scm.quotationPanel.show');
+            const collapsedSaved = localStorage.getItem('scm.quotationPanel.collapsed');
+            
+            if (saved === '1') {
+                const isCollapsed = collapsedSaved === '1';
+                toggleQuotationPanel(true, isCollapsed);
+            }
+        }
+
+        // Toggle button functionality
+        if (quotationPanelToggle) {
+            quotationPanelToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                
+                if (!quotationPanel.classList.contains('show')) {
+                    // If panel is not shown, show it expanded
+                    toggleQuotationPanel(true, false);
+                } else if (quotationPanel.classList.contains('collapsed')) {
+                    // If panel is collapsed, expand it
+                    toggleQuotationPanel(true, false);
+                } else {
+                    // If panel is expanded, collapse it
+                    toggleQuotationPanel(true, true);
+                }
+            });
+        }
+
+        // Restore panel state on page load
+        restoreQuotationPanelState();
+
+        // Search functionality for data tables
+        function setupSearchFunctionality() {
+            // Quotation view search
+            const quotationSearchFields = {
+                maker: document.getElementById('maker-search'),
+                partNumber: document.getElementById('part-number-search'),
+                jan: document.getElementById('jan-search'),
+                scmCode: document.getElementById('scm-code-search')
+            };
+
+            // Order view search
+            const orderSearchFields = {
+                maker: document.getElementById('order-maker-search'),
+                partNumber: document.getElementById('order-part-number-search'),
+                jan: document.getElementById('order-jan-search'),
+                scmCode: document.getElementById('order-scm-code-search')
+            };
+
+            // Delivery view search
+            const deliverySearchFields = {
+                maker: document.getElementById('delivery-maker-search'),
+                partNumber: document.getElementById('delivery-part-number-search'),
+                jan: document.getElementById('delivery-jan-search'),
+                scmCode: document.getElementById('delivery-scm-code-search')
+            };
+
+            // Delivery done view search
+            const deliveryDoneSearchFields = {
+                maker: document.getElementById('delivery-done-maker-search'),
+                partNumber: document.getElementById('delivery-done-part-number-search'),
+                jan: document.getElementById('delivery-done-jan-search'),
+                scmCode: document.getElementById('delivery-done-scm-code-search')
+            };
+
+            function filterTableRows(searchFields, tableSelector) {
+                const table = document.querySelector(tableSelector);
+                if (!table) return;
+
+                const tbody = table.querySelector('tbody');
+                if (!tbody) return;
+
+                const rows = Array.from(tbody.querySelectorAll('tr.data-row'));
+                
+                rows.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const maker = cells[4]?.textContent.trim().toLowerCase() || '';
+                    const partNumber = cells[6]?.textContent.trim().toLowerCase() || '';
+                    const jan = cells[7]?.textContent.trim().toLowerCase() || '';
+                    const scmCode = cells[3]?.textContent.trim().toLowerCase() || '';
+
+                    const makerMatch = !searchFields.maker?.value || maker.includes(searchFields.maker.value.toLowerCase());
+                    const partNumberMatch = !searchFields.partNumber?.value || partNumber.includes(searchFields.partNumber.value.toLowerCase());
+                    const janMatch = !searchFields.jan?.value || jan.includes(searchFields.jan.value.toLowerCase());
+                    const scmCodeMatch = !searchFields.scmCode?.value || scmCode.includes(searchFields.scmCode.value.toLowerCase());
+
+                    if (makerMatch && partNumberMatch && janMatch && scmCodeMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            // Add event listeners for quotation view
+            Object.values(quotationSearchFields).forEach(field => {
+                if (field) {
+                    field.addEventListener('input', () => {
+                        filterTableRows(quotationSearchFields, '#quotation-view .data-table');
+                    });
+                }
+            });
+
+            // Add event listeners for order view
+            Object.values(orderSearchFields).forEach(field => {
+                if (field) {
+                    field.addEventListener('input', () => {
+                        filterTableRows(orderSearchFields, '#order-view .data-table');
+                    });
+                }
+            });
+
+            // Add event listeners for delivery view
+            Object.values(deliverySearchFields).forEach(field => {
+                if (field) {
+                    field.addEventListener('input', () => {
+                        filterTableRows(deliverySearchFields, '#delivery-wait-container .data-table');
+                    });
+                }
+            });
+
+            // Add event listeners for delivery done view
+            Object.values(deliveryDoneSearchFields).forEach(field => {
+                if (field) {
+                    field.addEventListener('input', () => {
+                        filterTableRows(deliveryDoneSearchFields, '#delivery-done-container .data-table');
+                    });
+                }
+            });
+        }
+
+        // Initialize search functionality on page load
+        document.addEventListener('DOMContentLoaded', setupSearchFunctionality);
+
+        // フィルターボタンのイベントリスナー
+        document.querySelectorAll('.search-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // どのビューのフィルターボタンかを特定
+                let additionalFiltersId = '';
+                
+                // 親要素をたどって、どのビューにあるボタンかを判定
+                const quotationView = this.closest('#quotation-view');
+                const orderView = this.closest('#order-view');
+                const deliveryView = this.closest('#delivery-view');
+                
+                if (quotationView) {
+                    additionalFiltersId = 'quotation-additional-filters';
+                } else if (orderView) {
+                    additionalFiltersId = 'order-additional-filters';
+                } else if (deliveryView) {
+                    additionalFiltersId = 'delivery-additional-filters';
+                }
+                
+                if (additionalFiltersId) {
+                    const additionalFilters = document.getElementById(additionalFiltersId);
+                    if (additionalFilters) {
+                        // 表示/非表示を切り替え
+                        additionalFilters.classList.toggle('show');
+                    }
+                }
+            });
+        });
+
+        // Enhanced Tag input functionality
+        function setupEnhancedTagInput(containerId, statsId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const tagsDiv = container.querySelector('.enhanced-tags');
+            const input = container.querySelector('.enhanced-tag-input');
+            const clearAllBtn = container.querySelector('.clear-all-btn');
+            const statsElement = document.getElementById(statsId);
+            let tags = [];
+
+            // Update statistics display
+            function updateStats() {
+                const statNumber = statsElement.querySelector('.stat-number');
+                const statItem = statsElement.querySelector('.stat-item');
+                
+                statNumber.textContent = tags.length;
+                statItem.classList.add('updated');
+                setTimeout(() => statItem.classList.remove('updated'), 400);
+            }
+
+            // Add tag function with validation
+            function addTag(value) {
+                const cleanValue = value.trim();
+                if (cleanValue && !tags.includes(cleanValue)) {
+                    tags.push(cleanValue);
+                    
+                    const tag = document.createElement('span');
+                    tag.className = 'enhanced-tag';
+                    tag.innerHTML = `${cleanValue} <span class="remove" data-value="${cleanValue}">×</span>`;
+                    
+                    const removeBtn = tag.querySelector('.remove');
+                    removeBtn.addEventListener('click', function() {
+                        const valueToRemove = this.getAttribute('data-value');
+                        removeTag(valueToRemove);
+                    });
+                    
+                    tagsDiv.appendChild(tag);
+                    updateStats();
+                }
+            }
+
+            // Remove tag function
+            function removeTag(value) {
+                tags = tags.filter(tag => tag !== value);
+                const tagElements = tagsDiv.querySelectorAll('.enhanced-tag');
+                tagElements.forEach(tagElement => {
+                    const removeBtn = tagElement.querySelector('.remove');
+                    if (removeBtn && removeBtn.getAttribute('data-value') === value) {
+                        tagElement.style.animation = 'tagSlideIn 0.3s ease reverse';
+                        setTimeout(() => tagElement.remove(), 300);
+                    }
+                });
+                updateStats();
+            }
+
+            // Clear all tags
+            function clearAllTags() {
+                tags = [];
+                tagsDiv.innerHTML = '';
+                updateStats();
+            }
+
+            // Process input value (split by various delimiters)
+            function processInputValue(value) {
+                const delimiters = /[,\s\n\t]+/;
+                return value.split(delimiters)
+                    .map(v => v.trim())
+                    .filter(v => v.length > 0);
+            }
+
+            // Handle input events
+            input.addEventListener('keydown', function(e) {
+                const value = input.value.trim();
+                
+                if (e.key === 'Enter' && value) {
+                    e.preventDefault();
+                    const values = processInputValue(value);
+                    values.forEach(v => addTag(v));
+                    input.value = '';
+                }
+                
+                if (e.key === 'Backspace' && !value && tags.length > 0) {
+                    removeTag(tags[tags.length - 1]);
+                }
+            });
+
+            // Handle paste events
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                const values = processInputValue(pastedText);
+                values.forEach(v => addTag(v));
+                input.value = '';
+            });
+
+            // Handle input blur (add remaining value)
+            input.addEventListener('blur', function() {
+                const value = input.value.trim();
+                if (value) {
+                    const values = processInputValue(value);
+                    values.forEach(v => addTag(v));
+                    input.value = '';
+                }
+            });
+
+            // Clear all button
+            if (clearAllBtn) {
+                clearAllBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    clearAllTags();
+                });
+            }
+
+            // Return object with public methods
+            return {
+                getTags: () => tags.slice(),
+                addTag: addTag,
+                removeTag: removeTag,
+                clearAll: clearAllTags,
+                setTags: (newTags) => {
+                    clearAllTags();
+                    newTags.forEach(tag => addTag(tag));
+                }
+            };
+        }
+
+        // Initialize enhanced tag inputs for quotation view
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup enhanced tag inputs
+            const partNumberTags = setupEnhancedTagInput('part-number-enhanced-tags', 'part-number-stats');
+            const janTags = setupEnhancedTagInput('jan-enhanced-tags', 'jan-stats');
+            const scmCodeTags = setupEnhancedTagInput('scm-code-enhanced-tags', 'scm-code-stats');
+
+            // Make tag managers globally accessible for search functionality
+            window.quotationTagManagers = {
+                partNumber: partNumberTags,
+                jan: janTags,
+                scmCode: scmCodeTags
+            };
+        });
     </script>
     </script>
+
 </body>
 
 </html>
