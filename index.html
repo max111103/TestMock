@@ -873,6 +873,39 @@
             /* prevent text selection during resize */
             border-right: 1px solid #374151;
             /* visible border for resizing */
+            cursor: pointer;
+            /* sortable columns */
+        }
+
+        .data-table th.sortable:hover {
+            background: #334155;
+        }
+
+        .data-table th .sort-indicator {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 8px;
+            vertical-align: middle;
+            opacity: 0.6;
+        }
+
+        .data-table th.sort-asc .sort-indicator {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 6px solid #ffffff;
+        }
+
+        .data-table th.sort-desc .sort-indicator {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 6px solid #ffffff;
+        }
+
+        .data-table th:not(.sort-asc):not(.sort-desc) .sort-indicator {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 6px solid rgba(255, 255, 255, 0.3);
         }
 
         /* Header resize handle */
@@ -1138,18 +1171,6 @@
             /* same hover as .filter-btn:hover */
         }
 
-        /* Keep a consistent gap and show edit only when rows are selected */
-        #order-edit-btn,
-        #order-edit-btn-delay {
-            display: none;
-        }
-
-        .table-tools .dynamic-actions.show #order-edit-btn,
-        .table-tools .dynamic-actions.show #order-edit-btn-delay {
-            display: inline-flex;
-            align-items: center;
-        }
-
         /* Always show dynamic actions (order view). Buttons will be disabled until a row is selected. */
         #order-view .dynamic-actions {
             display: flex !important;
@@ -1298,10 +1319,25 @@
         /* Pagination */
         .pagination {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .pagination-summary {
+            font-size: 13px;
+            color: #6B7280;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+
+        .pagination-controls {
+            display: flex;
             gap: 8px;
             align-items: center;
-            justify-content: flex-end;
-            padding: 12px 20px 20px;
+            flex-shrink: 0;
         }
 
         .page-btn {
@@ -1650,14 +1686,11 @@
         #order-fax-modal-btn:disabled,
         #order-delay-fax-modal-btn:disabled,
         #delivery-fax-modal-btn:disabled,
-        #order-edit-btn:disabled,
-        #order-edit-btn-delay:disabled,
         #export-dropdown-btn:disabled,
         #order-export-csv-btn:disabled,
         #order-delay-export-csv-btn:disabled,
         #delivery-export-dropdown-btn:disabled,
-        #delay-processing-btn:disabled,
-        #btn-delay:disabled {
+        #delay-processing-btn:disabled {
             background: #d1d5db !important;
             /* グレー */
             color: #9ca3af !important;
@@ -2234,6 +2267,17 @@
             /* Pagination mobile */
             .pagination {
                 padding: 12px 16px 16px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .pagination-summary {
+                text-align: center;
+                font-size: 12px;
+            }
+
+            .pagination-controls {
                 justify-content: center;
             }
 
@@ -2429,6 +2473,23 @@
             margin-right: 60px;
         }
 
+        /* Order panel styles */
+        .main-content.order-panel-active {
+            margin-right: 350px;
+        }
+
+        .main-content.order-panel-collapsed {
+            margin-right: 60px;
+        }
+
+        /* Responsive order panel */
+        @media (max-width: 1024px) {
+            .main-content.order-panel-active,
+            .main-content.order-panel-collapsed {
+                margin-right: 0;
+            }
+        }
+
         /* トップバーを固定幅に保つ */
         .main-content.quotation-panel-active .top-bar {
             position: fixed;
@@ -2491,6 +2552,19 @@
             display: flex;
             gap: 12px;
             margin-top: 16px;
+        }
+
+        .button-group.vertical {
+            flex-direction: column;
+        }
+
+        .selection-count {
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
         }
 
         /* Enhanced Tag input styles with modern design */
@@ -2765,6 +2839,157 @@
 
         .search-stats .stat-item.updated {
             animation: statsUpdate 0.4s ease;
+        }
+
+        /* Tag-based input styles */
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            min-height: 40px;
+            padding: 6px 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            cursor: text;
+            transition: border-color 0.2s;
+        }
+
+        .tag-input-container:focus-within {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .tag-input-container.compact {
+            min-height: 38px;
+            padding: 4px 6px;
+        }
+
+        .tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #374151;
+            flex-shrink: 0;
+        }
+
+        .tag-text {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            padding: 0;
+            margin-left: 2px;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .tag-remove:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 60px;
+            font-size: 14px;
+            padding: 2px 4px;
+            background: transparent;
+        }
+
+        .tag-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Radio button styles */
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: normal;
+            color: #374151;
+        }
+
+        /* Delay processing specific styles */
+        .delay-processing-section {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .delay-processing-section.show {
+            display: block;
+        }
+
+        .delay-date-input {
+            margin-top: 8px;
+            display: none;
+        }
+
+        .delay-date-input.show {
+            display: block;
+        }
+
+        #order-panel-delay-btn {
+            background-color: #f1423c;
+            color: white;
+            border-color: #f1423c;
+        }
+
+        #order-panel-delay-btn:hover:not(:disabled) {
+            background-color: #f1423c;
+            border-color: #f1423c;
+        }
+
+        #order-panel-delay-btn:disabled {
+            background-color: #f3f4f6 !important;
+            color: #9ca3af !important;
+            border-color: #e5e7eb !important;
+            cursor: not-allowed !important;
         }
     </style>
 </head>
@@ -3163,22 +3388,30 @@
                             <div class="search-fields">
                                 <div class="search-field">
                                     <label for="maker-search">商品メーカー</label>
-                                    <input type="text" id="maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                    <div class="tag-input-container compact" id="maker-tag-container">
+                                        <input type="text" class="tag-input" id="maker-search" placeholder="商品メーカーを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="part-number-search">品番</label>
-                                    <input type="text" id="part-number-search" class="search-input" placeholder="品番を入力">
+                                    <div class="tag-input-container compact" id="part-number-tag-container">
+                                        <input type="text" class="tag-input" id="part-number-search" placeholder="品番を入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="jan-search">JAN</label>
-                                    <input type="text" id="jan-search" class="search-input" placeholder="JANコードを入力">
+                                    <div class="tag-input-container compact" id="jan-tag-container">
+                                        <input type="text" class="tag-input" id="jan-search" placeholder="JANコードを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field-with-filter">
                                     <div class="search-field">
                                         <label for="scm-code-search">SCMコード</label>
-                                        <input type="text" id="scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                        <div class="tag-input-container compact" id="scm-code-tag-container">
+                                            <input type="text" class="tag-input" id="scm-code-search" placeholder="SCMコードを入力 (Enter/カンマで追加)">
+                                        </div>
                                     </div>
-                                    <button type="button" class="search-btn" title="検索">
+                                    <button type="button" class="search-btn" id="quotation-search-btn" title="検索">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
@@ -3258,18 +3491,18 @@
                                     <tr>
                                         <th width="45px"><input type="checkbox" class="checkbox"></th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th>Webike依頼日</th>
-                                        <th>SCMコード</th>
-                                        <th>メーカー名</th>
-                                        <th>商品名</th>
-                                        <th>商品番号</th>
-                                        <th>JAN</th>
-                                        <th>定価(税込)</th>
-                                        <th>仕切価格(税抜)</th>
-                                        <th>注文数</th>
-                                        <th>自社管理番号</th>
-                                        <th>担当者備考</th>
-                                        <th>RC担当備考</th>
+                                        <th class="sortable" data-column="request-date">Webike依頼日<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="scm-code">SCMコード<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="maker">メーカー名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-name">商品名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-number">商品番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="jan">JAN<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="price">定価(税込)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="cost-price">仕切価格(税抜)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="quantity">注文数<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="management-number">自社管理番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="staff-memo">担当者備考<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="rc-memo">RC担当備考<span class="sort-indicator"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -3608,22 +3841,30 @@
                             <div class="search-fields">
                                 <div class="search-field">
                                     <label for="order-maker-search">商品メーカー</label>
-                                    <input type="text" id="order-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                    <div class="tag-input-container compact" id="order-maker-tag-container">
+                                        <input type="text" class="tag-input" id="order-maker-search" placeholder="商品メーカーを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="order-part-number-search">品番</label>
-                                    <input type="text" id="order-part-number-search" class="search-input" placeholder="品番を入力">
+                                    <div class="tag-input-container compact" id="order-part-number-tag-container">
+                                        <input type="text" class="tag-input" id="order-part-number-search" placeholder="品番を入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="order-jan-search">JAN</label>
-                                    <input type="text" id="order-jan-search" class="search-input" placeholder="JANを入力">
+                                    <div class="tag-input-container compact" id="order-jan-tag-container">
+                                        <input type="text" class="tag-input" id="order-jan-search" placeholder="JANを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field-with-filter">
                                     <div class="search-field">
                                         <label for="order-scm-code-search">SCMコード</label>
-                                        <input type="text" id="order-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                        <div class="tag-input-container compact" id="order-scm-code-tag-container">
+                                            <input type="text" class="tag-input" id="order-scm-code-search" placeholder="SCMコードを入力 (Enter/カンマで追加)">
+                                        </div>
                                     </div>
-                                    <button type="button" class="search-btn" title="検索">
+                                    <button type="button" class="search-btn" id="order-search-btn" title="検索">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
@@ -3636,29 +3877,29 @@
                                 </div>
                             </div>
                             <div class="dynamic-actions" id="order-dynamic-actions">
-                                <button class="btn btn-success" id="order-edit-btn">受注操作・備考編集</button>
-                                <button class="btn btn-secondary dropdown-btn" id="order-export-csv-btn">CSV出力</button>
-                                <button class="btn btn-secondary" id="order-fax-modal-btn">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px; margin-right: 4px;">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
+                                <button class="icon-btn-csv" id="order-export-csv-btn" title="CSV出力">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
-                                    FAX出力
                                 </button>
-                                <button class="btn btn-danger" id="btn-delay" style="display:none;">遅延処理</button>
-                                <button class="btn btn-success" id="order-edit-btn-delay"
-                                    style="display:none;">受注操作・備考編集</button>
-                                <button class="btn btn-secondary dropdown-btn" id="order-delay-export-csv-btn"
-                                    style="display:none;">CSV出力</button>
-                                <button class="btn btn-secondary" id="order-delay-fax-modal-btn"
-                                    style="display:none;">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px; margin-right: 4px;">
+                                <button class="icon-btn-fax" id="order-fax-modal-btn" title="FAX出力">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
                                     </svg>
-                                    FAX出力
+                                </button>
+                                <button class="icon-btn-csv" id="order-delay-export-csv-btn" title="CSV出力" style="display:none;">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </button>
+                                <button class="icon-btn-fax" id="order-delay-fax-modal-btn" title="FAX出力" style="display:none;">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 1v4h2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 7h2v2h-2z" />
+                                    </svg>
                                 </button>
                             </div>
                         </div>
@@ -3709,19 +3950,19 @@
                                         <th width="45px"><input type="checkbox" class="checkbox"
                                                 id="order-main-checkbox"></th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th>受注日</th>
-                                        <th>SCMコード</th>
-                                        <th>メーカー名</th>
-                                        <th>商品名</th>
-                                        <th>商品番号</th>
-                                        <th>JAN</th>
-                                        <th>定価(税込)</th>
-                                        <th>仕切価格(税抜)</th>
-                                        <th>注文数</th>
-                                        <th>自社管理番号</th>
-                                        <th>納期</th>
-                                        <th>担当者備考</th>
-                                        <th>RC担当備考</th>
+                                        <th class="sortable" data-column="order-date">受注日<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="scm-code">SCMコード<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="maker">メーカー名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-name">商品名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-number">商品番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="jan">JAN<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="price">定価(税込)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="cost-price">仕切価格(税抜)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="quantity">注文数<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="management-number">自社管理番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="delivery-date">納期<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="staff-memo">担当者備考<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="rc-memo">RC担当備考<span class="sort-indicator"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -4697,22 +4938,30 @@
                             <div class="search-fields">
                                 <div class="search-field">
                                     <label for="delivery-maker-search">商品メーカー</label>
-                                    <input type="text" id="delivery-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                    <div class="tag-input-container compact" id="delivery-maker-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-maker-search" placeholder="商品メーカーを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="delivery-part-number-search">品番</label>
-                                    <input type="text" id="delivery-part-number-search" class="search-input" placeholder="品番を入力">
+                                    <div class="tag-input-container compact" id="delivery-part-number-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-part-number-search" placeholder="品番を入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="delivery-jan-search">JAN</label>
-                                    <input type="text" id="delivery-jan-search" class="search-input" placeholder="JANを入力">
+                                    <div class="tag-input-container compact" id="delivery-jan-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-jan-search" placeholder="JANを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field-with-filter">
                                     <div class="search-field">
                                         <label for="delivery-scm-code-search">SCMコード</label>
-                                        <input type="text" id="delivery-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                        <div class="tag-input-container compact" id="delivery-scm-code-tag-container">
+                                            <input type="text" class="tag-input" id="delivery-scm-code-search" placeholder="SCMコードを入力 (Enter/カンマで追加)">
+                                        </div>
                                     </div>
-                                    <button type="button" class="search-btn" title="検索">
+                                    <button type="button" class="search-btn" id="delivery-search-btn" title="検索">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
@@ -4791,17 +5040,17 @@
                                         <th width="45px"><input type="checkbox" class="checkbox"
                                                 id="order-main-checkbox"></th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th>受注日</th>
-                                        <th>SCMコード</th>
-                                        <th>メーカー名</th>
-                                        <th>商品名</th>
-                                        <th>商品番号</th>
-                                        <th>JAN</th>
-                                        <th>定価(税込)</th>
-                                        <th>仕切価格(税抜)</th>
-                                        <th>注文数</th>
-                                        <th>自社管理番号</th>
-                                        <th>担当者備考</th>
+                                        <th class="sortable" data-column="order-date">受注日<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="scm-code">SCMコード<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="maker">メーカー名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-name">商品名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-number">商品番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="jan">JAN<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="price">定価(税込)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="cost-price">仕切価格(税抜)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="quantity">注文数<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="management-number">自社管理番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="staff-memo">担当者備考<span class="sort-indicator"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -4900,21 +5149,34 @@
                             <div class="search-fields">
                                 <div class="search-field">
                                     <label for="delivery-done-maker-search">商品メーカー</label>
-                                    <input type="text" id="delivery-done-maker-search" class="search-input" placeholder="商品メーカーを入力">
+                                    <div class="tag-input-container compact" id="delivery-done-maker-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-done-maker-search" placeholder="商品メーカーを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="delivery-done-part-number-search">品番</label>
-                                    <input type="text" id="delivery-done-part-number-search" class="search-input" placeholder="品番を入力">
+                                    <div class="tag-input-container compact" id="delivery-done-part-number-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-done-part-number-search" placeholder="品番を入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field">
                                     <label for="delivery-done-jan-search">JAN</label>
-                                    <input type="text" id="delivery-done-jan-search" class="search-input" placeholder="JANを入力">
+                                    <div class="tag-input-container compact" id="delivery-done-jan-tag-container">
+                                        <input type="text" class="tag-input" id="delivery-done-jan-search" placeholder="JANを入力 (Enter/カンマで追加)">
+                                    </div>
                                 </div>
                                 <div class="search-field-with-filter">
                                     <div class="search-field">
                                         <label for="delivery-done-scm-code-search">SCMコード</label>
-                                        <input type="text" id="delivery-done-scm-code-search" class="search-input" placeholder="SCMコードを入力">
+                                        <div class="tag-input-container compact" id="delivery-done-scm-code-tag-container">
+                                            <input type="text" class="tag-input" id="delivery-done-scm-code-search" placeholder="SCMコードを入力 (Enter/カンマで追加)">
+                                        </div>
                                     </div>
+                                    <button type="button" class="search-btn" id="delivery-done-search-btn" title="検索">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </button>
                                     <button type="button" class="search-filter-btn" title="フィルター">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -4931,17 +5193,17 @@
                                                 id="delivery-done-main-checkbox">
                                         </th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th>出荷日</th>
-                                        <th>SCMコード</th>
-                                        <th>メーカー名</th>
-                                        <th>商品名</th>
-                                        <th>商品番号</th>
-                                        <th>JAN</th>
-                                        <th>定価(税込)</th>
-                                        <th>仕切価格(税抜)</th>
-                                        <th>注文数</th>
-                                        <th>運送会社</th>
-                                        <th>追跡番号</th>
+                                        <th class="sortable" data-column="ship-date">出荷日<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="scm-code">SCMコード<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="maker">メーカー名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-name">商品名<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="product-number">商品番号<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="jan">JAN<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="price">定価(税込)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="cost-price">仕切価格(税抜)<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="quantity">注文数<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="carrier">運送会社<span class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="tracking">追跡番号<span class="sort-indicator"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -5123,6 +5385,10 @@
             </div>
             <div class="right-panel-body">
                 <div class="form-group">
+                    <label class="form-label">選択件数</label>
+                    <div class="selection-count" id="quotation-panel-selection-count">0件選択中</div>
+                </div>
+                <div class="form-group">
                     <label class="form-label">入力支援</label>
                     <select class="form-select" id="quotation-assist-select">
                         <option value="">選択してください</option>
@@ -5150,6 +5416,89 @@
                 <div class="button-group">
                     <button class="btn btn-primary" id="quotation-send-btn">見積送信</button>
                     <button class="btn btn-secondary" id="quotation-processing-btn">見積中にする</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Right Panel -->
+        <div class="right-panel" id="order-right-panel">
+            <div class="right-panel-header">
+                <button class="icon-btn" id="order-panel-toggle" title="パネルを切り替え">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="m18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <h3 class="right-panel-title">受注処理パネル</h3>
+            </div>
+            <div class="right-panel-body">
+                <div class="form-group">
+                    <label class="form-label">選択件数</label>
+                    <div class="selection-count" id="order-panel-selection-count">0件選択中</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">入力支援</label>
+                    <select class="form-select" id="order-panel-assist-select">
+                        <option value="">選択してください</option>
+                        <option value="発注確認中です">発注確認中です</option>
+                        <option value="在庫確認中です">在庫確認中です</option>
+                        <option value="メーカー確認中です">メーカー確認中です</option>
+                        <option value="納期調整中です">納期調整中です</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">担当備考</label>
+                    <textarea class="form-input" id="order-panel-memo-input" rows="4" placeholder="担当備考を入力"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">自社管理番号</label>
+                    <input type="text" class="form-input" id="order-panel-own-input" placeholder="自社管理番号を入力">
+                </div>
+                <button class="btn btn-primary" id="order-panel-update-btn">更新</button>
+                <hr class="section-divider">
+                <h4>受注処理操作</h4>
+                <div class="form-group">
+                    <label class="form-label">受注日</label>
+                    <input type="date" class="form-input" id="order-panel-date">
+                </div>
+                <div class="button-group vertical">
+                    <button class="btn btn-success" id="order-panel-shipment-wait-btn">出荷待にする</button>
+                    <button class="btn btn-warning" id="order-panel-in-progress-btn">手配中にする</button>
+                    <button class="btn btn-primary" id="order-panel-done-btn">完了にする</button>
+                </div>
+
+                <!-- 遅延処理セクション（手配済、在庫あり、納期超過、BOタブでのみ表示） -->
+                <div class="delay-processing-section" id="order-panel-delay-section">
+                    <h4>遅延処理</h4>
+                    <div class="form-group">
+                        <label class="form-label">発送状況</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="delay-status-undecided" name="delay-status" value="undecided" checked>
+                                <label for="delay-status-undecided">未定</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="delay-status-scheduled" name="delay-status" value="scheduled">
+                                <label for="delay-status-scheduled">発送予定</label>
+                            </div>
+                        </div>
+                        <div class="delay-date-input" id="delay-date-input">
+                            <input type="date" class="form-input" id="order-panel-delay-date" placeholder="発送予定日を選択">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">遅延理由</label>
+                        <select class="form-select" id="order-panel-delay-reason">
+                            <option value="">選択してください</option>
+                            <option value="supplier-delay">仕入先の遅延</option>
+                            <option value="production-delay">生産遅延</option>
+                            <option value="shipping-delay">配送遅延</option>
+                            <option value="inventory-shortage">在庫不足</option>
+                            <option value="quality-issue">品質問題</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    <button class="btn" id="order-panel-delay-btn" disabled>遅延処理実行</button>
                 </div>
             </div>
         </div>
@@ -5312,6 +5661,15 @@
                     toggleQuotationPanel(true);
                 } else {
                     toggleQuotationPanel(false);
+                }
+
+                // Toggle order panel
+                if (this.getAttribute('href') === '#order') {
+                    toggleOrderPanel(true);
+                    // Update selection count when switching to order view
+                    updateOrderPanelSelectionCount();
+                } else {
+                    toggleOrderPanel(false);
                 }
             });
         });
@@ -5577,9 +5935,6 @@
                 // If in order-view, toggle buttons based on active tab
                 const orderView = document.getElementById('order-view');
                 if (orderView && orderView.style.display !== 'none') {
-                    const delayBtn = document.getElementById('btn-delay');
-                    const editBtn = document.getElementById('order-edit-btn');
-                    const editBtnDelay = document.getElementById('order-edit-btn-delay');
                     const orderExportBtn = document.getElementById('order-export-csv-btn');
                     const orderFaxBtn = document.getElementById('order-fax-modal-btn');
                     const orderDelayExportBtn = document.getElementById('order-delay-export-csv-btn');
@@ -5589,33 +5944,33 @@
                     const unprocessedTable = document.getElementById('order-unprocessed-table');
                     const arrangedTable = document.getElementById('order-arranged-table');
 
-                    if (delayBtn && editBtn && editBtnDelay && unprocessedTable && arrangedTable) {
+                    if (unprocessedTable && arrangedTable) {
                         const label = this.textContent;
                         const showDelayTabs = ['手配済', '在庫あり', '納期超過', 'BO'];
+                        const delaySection = document.getElementById('order-panel-delay-section');
+                        
                         if (showDelayTabs.some(t => label.includes(t))) {
-                            // 手配済／在庫あり／納期超過／BO では 遅延処理と編集ボタン（遅延処理用）を表示
+                            // 手配済／在庫あり／納期超過／BO では遅延用のテーブルとボタンを表示
                             // また、手配済用テーブルを表示
                             unprocessedTable.style.display = 'none';
                             arrangedTable.style.display = 'table';
-                            editBtn.style.display = 'none';
                             if (orderExportBtn) orderExportBtn.style.display = 'none';
                             if (orderFaxBtn) orderFaxBtn.style.display = 'none';
-                            delayBtn.style.display = '';
-                            editBtnDelay.style.display = '';
                             if (orderDelayExportBtn) orderDelayExportBtn.style.display = '';
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = '';
+                            // 遅延処理セクションを表示
+                            if (delaySection) delaySection.classList.add('show');
                         } else {
-                            // 未処理・手配中などその他タブでは編集ボタンを表示、遅延処理は非表示
+                            // 未処理・手配中などその他タブでは通常のボタンを表示
                             // また、未処理用テーブルを表示
                             unprocessedTable.style.display = 'table';
                             arrangedTable.style.display = 'none';
-                            editBtn.style.display = '';
                             if (orderExportBtn) orderExportBtn.style.display = '';
                             if (orderFaxBtn) orderFaxBtn.style.display = '';
-                            delayBtn.style.display = 'none';
-                            editBtnDelay.style.display = 'none';
                             if (orderDelayExportBtn) orderDelayExportBtn.style.display = 'none';
                             if (orderDelayFaxBtn) orderDelayFaxBtn.style.display = 'none';
+                            // 遅延処理セクションを非表示
+                            if (delaySection) delaySection.classList.remove('show');
                         }
                         // Reset pagination when switching tabs
                         // Update orderTbody based on active table
@@ -5661,6 +6016,163 @@
         let quotationFilteredRows = quotationAllRows.slice();
         let quotationCurrentPage = 1;
 
+        // Helper function to format currency
+        function formatCurrency(amount) {
+            return '¥' + amount.toLocaleString('ja-JP');
+        }
+
+        // Helper function to parse currency from text
+        function parseCurrency(text) {
+            if (!text) return 0;
+            // Remove currency symbols, commas, and non-numeric characters except decimal point
+            const numericText = text.replace(/[¥,円]/g, '').replace(/[^\d.]/g, '');
+            const value = parseFloat(numericText) || 0;
+            return value;
+        }
+
+        // Helper function to calculate summary data
+        function calculateSummaryData(viewType) {
+            let tbody, visibleRows, checkedRows;
+            
+            if (viewType === 'quotation') {
+                tbody = quotationTbody;
+                // Get currently visible rows in quotation view
+                const start = (quotationCurrentPage - 1) * perPage;
+                const end = start + perPage;
+                visibleRows = quotationFilteredRows.slice(start, end);
+                checkedRows = Array.from(tbody.querySelectorAll('tr .checkbox:checked')).map(cb => cb.closest('tr'));
+            } else if (viewType === 'order') {
+                tbody = orderTbody;
+                // Get currently visible rows in order view
+                const start = (currentPage - 1) * perPage;
+                const end = start + perPage;
+                visibleRows = filteredRows.slice(start, end);
+                checkedRows = Array.from(tbody.querySelectorAll('tr .checkbox:checked')).map(cb => cb.closest('tr'));
+            } else if (viewType === 'delivery') {
+                // For delivery view, we need to check which tab is active
+                const deliveryWaitContainer = document.getElementById('delivery-wait-container');
+                const deliveryDoneContainer = document.getElementById('delivery-done-container');
+                
+                if (deliveryWaitContainer && deliveryWaitContainer.style.display !== 'none') {
+                    tbody = document.querySelector('#delivery-wait-table tbody');
+                    if (tbody && typeof waitCurrentPage !== 'undefined' && typeof waitFiltered !== 'undefined') {
+                        const waitPerPage = 20;
+                        const start = (waitCurrentPage - 1) * waitPerPage;
+                        const end = start + waitPerPage;
+                        visibleRows = waitFiltered.slice(start, end);
+                    } else {
+                        visibleRows = tbody ? Array.from(tbody.querySelectorAll('tr.data-row')) : [];
+                    }
+                } else if (deliveryDoneContainer && deliveryDoneContainer.style.display !== 'none') {
+                    tbody = document.querySelector('#delivery-done-table tbody');
+                    if (tbody && typeof doneCurrentPage !== 'undefined' && typeof doneFiltered !== 'undefined') {
+                        const donePerPage = 20;
+                        const start = (doneCurrentPage - 1) * donePerPage;
+                        const end = start + donePerPage;
+                        visibleRows = doneFiltered.slice(start, end);
+                    } else {
+                        visibleRows = tbody ? Array.from(tbody.querySelectorAll('tr.data-row')) : [];
+                    }
+                } else {
+                    return { checkedCount: 0, visibleTotal: 0, checkedTotal: 0 };
+                }
+                
+                checkedRows = tbody ? Array.from(tbody.querySelectorAll('tr .checkbox:checked')).map(cb => cb.closest('tr')) : [];
+            } else {
+                return { checkedCount: 0, visibleTotal: 0, checkedTotal: 0 };
+            }
+
+            const checkedCount = checkedRows.length;
+            
+            // Helper function to get price from a row
+            function getPriceFromRow(row) {
+                const cells = row.querySelectorAll('td');
+                // Look for price column - typically contains ¥ symbol or large numbers
+                for (let i = 0; i < cells.length; i++) {
+                    const cellText = cells[i].textContent.trim();
+                    // Check if this looks like a price (contains ¥ or is a large number with commas)
+                    if (cellText.includes('¥') || (cellText.match(/^\d{1,3}(,\d{3})*$/) && parseInt(cellText.replace(/,/g, '')) > 100)) {
+                        const price = parseCurrency(cellText);
+                        if (price > 0) {
+                            return price;
+                        }
+                    }
+                }
+                return 0;
+            }
+
+            // Calculate visible total (currently displayed rows)
+            let visibleTotal = 0;
+            visibleRows.forEach(row => {
+                visibleTotal += getPriceFromRow(row);
+            });
+
+            // Calculate checked total
+            let checkedTotal = 0;
+            checkedRows.forEach(row => {
+                checkedTotal += getPriceFromRow(row);
+            });
+
+            return { checkedCount, visibleTotal, checkedTotal };
+        }
+
+        // Helper function to update pagination summary
+        function updatePaginationSummary(pagerId, viewType) {
+            const pager = document.getElementById(pagerId);
+            if (!pager) return;
+
+            const summary = calculateSummaryData(viewType);
+            let summaryElement = pager.querySelector('.pagination-summary');
+            
+            if (!summaryElement) {
+                summaryElement = document.createElement('div');
+                summaryElement.className = 'pagination-summary';
+                pager.insertBefore(summaryElement, pager.firstChild);
+            }
+
+            // Calculate visible count (current page)
+            let visibleCount;
+            if (viewType === 'quotation') {
+                const start = (quotationCurrentPage - 1) * perPage;
+                const end = Math.min(start + perPage, quotationFilteredRows.length);
+                visibleCount = end - start;
+            } else if (viewType === 'order') {
+                const start = (currentPage - 1) * perPage;
+                const end = Math.min(start + perPage, filteredRows.length);
+                visibleCount = end - start;
+            } else if (viewType === 'delivery') {
+                // For delivery view, check which tab is active
+                const deliveryWaitContainer = document.getElementById('delivery-wait-container');
+                const deliveryDoneContainer = document.getElementById('delivery-done-container');
+                
+                if (deliveryWaitContainer && deliveryWaitContainer.style.display !== 'none') {
+                    if (typeof waitCurrentPage !== 'undefined' && typeof waitFiltered !== 'undefined') {
+                        const waitPerPage = 20;
+                        const start = (waitCurrentPage - 1) * waitPerPage;
+                        const end = Math.min(start + waitPerPage, waitFiltered.length);
+                        visibleCount = end - start;
+                    } else {
+                        visibleCount = 0;
+                    }
+                } else if (deliveryDoneContainer && deliveryDoneContainer.style.display !== 'none') {
+                    if (typeof doneCurrentPage !== 'undefined' && typeof doneFiltered !== 'undefined') {
+                        const donePerPage = 20;
+                        const start = (doneCurrentPage - 1) * donePerPage;
+                        const end = Math.min(start + donePerPage, doneFiltered.length);
+                        visibleCount = end - start;
+                    } else {
+                        visibleCount = 0;
+                    }
+                } else {
+                    visibleCount = 0;
+                }
+            } else {
+                visibleCount = 0;
+            }
+
+            summaryElement.textContent = `チェック件数 ${summary.checkedCount} 件 / 表示件数 ${visibleCount} 件　チェック定価合計 ${formatCurrency(summary.checkedTotal)} / 表示中定価合計 ${formatCurrency(summary.visibleTotal)}`;
+        }
+
         function updateMainCheckboxState() {
             const visibleBoxes = document.querySelectorAll('tbody td .checkbox');
             const checkedCount = Array.from(visibleBoxes).filter(cb => cb.checked).length;
@@ -5675,6 +6187,16 @@
                 checkbox.addEventListener('change', function () {
                     updateActionButtons();
                     updateMainCheckboxState();
+                    
+                    // Update pagination summaries
+                    const activeView = document.querySelector('.view:not([style*="display: none"])');
+                    if (activeView) {
+                        if (activeView.id === 'quotation-view') {
+                            updatePaginationSummary('pagination', 'quotation');
+                        } else if (activeView.id === 'order-view') {
+                            updatePaginationSummary('order-pagination', 'order');
+                        }
+                    }
                 });
             });
         }
@@ -5721,27 +6243,155 @@
             const pager = document.getElementById('pagination');
             if (!pager) return;
             const shown = Math.min(totalPages, 3); // 1〜3ページ分を表示
+            
+            // Clear and create new structure
             pager.innerHTML = '';
+            
+            // Create summary element
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'pagination-summary';
+            pager.appendChild(summaryDiv);
+            
+            // Create controls container
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'pagination-controls';
+            
             const prev = document.createElement('button');
             prev.textContent = '前へ';
             prev.className = 'page-btn';
             prev.disabled = quotationCurrentPage === 1;
             prev.addEventListener('click', () => renderQuotationPage(quotationCurrentPage - 1));
-            pager.appendChild(prev);
+            controlsDiv.appendChild(prev);
+            
             for (let i = 1; i <= shown; i++) {
                 const btn = document.createElement('button');
                 btn.textContent = i;
                 btn.className = 'page-btn' + (i === quotationCurrentPage ? ' active' : '');
                 btn.addEventListener('click', () => renderQuotationPage(i));
-                pager.appendChild(btn);
+                controlsDiv.appendChild(btn);
             }
+            
             const next = document.createElement('button');
             next.textContent = '次へ';
             next.className = 'page-btn';
             const totalPagesAll = Math.ceil(quotationFilteredRows.length / perPage) || 1;
             next.disabled = quotationCurrentPage >= totalPagesAll;
             next.addEventListener('click', () => renderQuotationPage(quotationCurrentPage + 1));
-            pager.appendChild(next);
+            controlsDiv.appendChild(next);
+            
+            pager.appendChild(controlsDiv);
+            
+            // Update summary
+            updatePaginationSummary('pagination', 'quotation');
+        }
+
+        // Order view pagination functions
+        function buildOrderPagination(totalPages) {
+            const pager = document.getElementById('order-pagination');
+            if (!pager) return;
+            const shown = Math.min(totalPages, 3); // 1〜3ページ分を表示
+            
+            // Clear and create new structure
+            pager.innerHTML = '';
+            
+            // Create summary element
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'pagination-summary';
+            pager.appendChild(summaryDiv);
+            
+            // Create controls container
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'pagination-controls';
+            
+            const prev = document.createElement('button');
+            prev.textContent = '前へ';
+            prev.className = 'page-btn';
+            prev.disabled = currentPage === 1;
+            prev.addEventListener('click', () => renderPage(currentPage - 1));
+            controlsDiv.appendChild(prev);
+            
+            for (let i = 1; i <= shown; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                btn.addEventListener('click', () => renderPage(i));
+                controlsDiv.appendChild(btn);
+            }
+            
+            const next = document.createElement('button');
+            next.textContent = '次へ';
+            next.className = 'page-btn';
+            const totalPagesAll = Math.ceil(filteredRows.length / perPage) || 1;
+            next.disabled = currentPage >= totalPagesAll;
+            next.addEventListener('click', () => renderPage(currentPage + 1));
+            controlsDiv.appendChild(next);
+            
+            pager.appendChild(controlsDiv);
+            
+            // Update summary
+            updatePaginationSummary('order-pagination', 'order');
+        }
+
+        // Delivery view pagination functions
+        function buildDeliveryPagination(totalPages, currentPageVar, pagerId) {
+            const pager = document.getElementById(pagerId);
+            if (!pager) return;
+            const shown = Math.min(totalPages, 3); // 1〜3ページ分を表示
+            
+            // Clear and create new structure
+            pager.innerHTML = '';
+            
+            // Create summary element
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'pagination-summary';
+            pager.appendChild(summaryDiv);
+            
+            // Create controls container
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'pagination-controls';
+            
+            const prev = document.createElement('button');
+            prev.textContent = '前へ';
+            prev.className = 'page-btn';
+            prev.disabled = currentPageVar === 1;
+            
+            // Determine which render function to use
+            if (pagerId === 'delivery-pagination') {
+                prev.addEventListener('click', () => renderWaitPage(currentPageVar - 1));
+            } else if (pagerId === 'delivery-done-pagination') {
+                prev.addEventListener('click', () => renderDonePage(currentPageVar - 1));
+            }
+            controlsDiv.appendChild(prev);
+            
+            for (let i = 1; i <= shown; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'page-btn' + (i === currentPageVar ? ' active' : '');
+                
+                if (pagerId === 'delivery-pagination') {
+                    btn.addEventListener('click', () => renderWaitPage(i));
+                } else if (pagerId === 'delivery-done-pagination') {
+                    btn.addEventListener('click', () => renderDonePage(i));
+                }
+                controlsDiv.appendChild(btn);
+            }
+            
+            const next = document.createElement('button');
+            next.textContent = '次へ';
+            next.className = 'page-btn';
+            next.disabled = currentPageVar >= totalPages;
+            
+            if (pagerId === 'delivery-pagination') {
+                next.addEventListener('click', () => renderWaitPage(currentPageVar + 1));
+            } else if (pagerId === 'delivery-done-pagination') {
+                next.addEventListener('click', () => renderDonePage(currentPageVar + 1));
+            }
+            controlsDiv.appendChild(next);
+            
+            pager.appendChild(controlsDiv);
+            
+            // Update summary
+            updatePaginationSummary(pagerId, 'delivery');
         }
 
         function renderQuotationPage(page) {
@@ -5771,7 +6421,7 @@
             attachRowCheckboxListeners();
             updateMainCheckboxState();
             updateActionButtons();
-            buildPagination(totalPages);
+            buildOrderPagination(totalPages);
             bindToggleButtons(); // 詳細表示ボタンのイベントリスナーを再バインド
         }
 
@@ -5797,33 +6447,24 @@
             const orderCheckedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
             const orderHasSelection = orderCheckedBoxes.length > 0;
 
-            const orderEditBtn = document.getElementById('order-edit-btn');
-            const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
             const orderCsvExportBtn = document.getElementById('order-export-csv-btn');
             const orderDelayCsvExportBtn = document.getElementById('order-delay-export-csv-btn');
             const orderFaxModalBtn = document.getElementById('order-fax-modal-btn');
             const orderDelayFaxModalBtn = document.getElementById('order-delay-fax-modal-btn');
             const delayProcessingBtn = document.getElementById('delay-processing-btn');
-            const btnDelay = document.getElementById('btn-delay');
 
             if (!orderHasSelection) {
-                if (orderEditBtn) orderEditBtn.disabled = true;
-                if (orderEditBtnDelay) orderEditBtnDelay.disabled = true;
                 if (orderCsvExportBtn) orderCsvExportBtn.disabled = true;
                 if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = true;
                 if (orderFaxModalBtn) orderFaxModalBtn.disabled = true;
                 if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = true;
                 if (delayProcessingBtn) delayProcessingBtn.disabled = true;
-                if (btnDelay) btnDelay.disabled = true;
             } else {
-                if (orderEditBtn) orderEditBtn.disabled = false;
-                if (orderEditBtnDelay) orderEditBtnDelay.disabled = false;
                 if (orderCsvExportBtn) orderCsvExportBtn.disabled = false;
                 if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = false;
                 if (orderFaxModalBtn) orderFaxModalBtn.disabled = false;
                 if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = false;
                 if (delayProcessingBtn) delayProcessingBtn.disabled = false;
-                if (btnDelay) btnDelay.disabled = false;
             }
         }
 
@@ -5834,6 +6475,16 @@
                 });
                 updateActionButtons();
                 updateMainCheckboxState();
+                
+                // Update pagination summaries
+                const activeView = document.querySelector('.view:not([style*="display: none"])');
+                if (activeView) {
+                    if (activeView.id === 'quotation-view') {
+                        updatePaginationSummary('pagination', 'quotation');
+                    } else if (activeView.id === 'order-view') {
+                        updatePaginationSummary('order-pagination', 'order');
+                    }
+                }
             });
         }
 
@@ -5858,6 +6509,12 @@
             }
         }
 
+        // Initialize order pagination - always show pagination buttons
+        if (orderTbody && allRows.length >= 0) {
+            const totalPages = Math.ceil(allRows.length / perPage) || 1;
+            buildOrderPagination(totalPages);
+        }
+
         // Initialize order/delivery pagination if order or delivery view is active
         const activeView = document.querySelector('.view:not([style*="display: none"])');
         if (activeView && (activeView.id === 'order-view' || activeView.id === 'delivery-view')) {
@@ -5865,8 +6522,6 @@
                 const totalPages = Math.ceil(allRows.length / perPage) || 1;
                 if (totalPages > 1) {
                     renderPage(1);
-                } else {
-                    buildPagination(totalPages);
                 }
             }
         }
@@ -5892,30 +6547,17 @@
         }
 
         // 受注処理ページのボタンも初期状態で無効化
-        const orderEditBtn = document.getElementById('order-edit-btn');
-        const orderEditBtnDelay = document.getElementById('order-edit-btn-delay');
         const orderCsvExportBtn = document.getElementById('order-export-csv-btn');
         const orderDelayCsvExportBtn = document.getElementById('order-delay-export-csv-btn');
         const orderFaxModalBtn = document.getElementById('order-fax-modal-btn');
         const orderDelayFaxModalBtn = document.getElementById('order-delay-fax-modal-btn');
         const delayProcessingBtn = document.getElementById('delay-processing-btn');
-        const btnDelay = document.getElementById('btn-delay');
 
-        // 受注編集ボタンにツールチップを追加
-        if (orderEditBtn) {
-            orderEditBtn.title = '選択した受注の納期・備考を編集します';
-        }
-        if (orderEditBtnDelay) {
-            orderEditBtnDelay.title = '遅延している受注の納期・備考を編集します';
-        }
-        if (orderEditBtn) orderEditBtn.disabled = true;
-        if (orderEditBtnDelay) orderEditBtnDelay.disabled = true;
         if (orderCsvExportBtn) orderCsvExportBtn.disabled = true;
         if (orderDelayCsvExportBtn) orderDelayCsvExportBtn.disabled = true;
         if (orderFaxModalBtn) orderFaxModalBtn.disabled = true;
         if (orderDelayFaxModalBtn) orderDelayFaxModalBtn.disabled = true;
         if (delayProcessingBtn) delayProcessingBtn.disabled = true;
-        if (btnDelay) btnDelay.disabled = true;
 
         // Warehouse dropdown functionality
         const warehouseDropdownBtn = document.getElementById('warehouse-dropdown-btn');
@@ -6097,31 +6739,7 @@
             }
 
             function buildWaitPagination(totalPages) {
-                if (!waitPager) return;
-                waitPager.innerHTML = '';
-
-                const prev = document.createElement('button');
-                prev.textContent = '前へ';
-                prev.className = 'page-btn';
-                prev.disabled = waitCurrentPage === 1;
-                prev.addEventListener('click', () => renderWaitPage(waitCurrentPage - 1));
-                waitPager.appendChild(prev);
-
-                for (let i = 1; i <= Math.min(totalPages, 5); i++) {
-                    const btn = document.createElement('button');
-                    btn.textContent = i;
-                    btn.className = 'page-btn';
-                    if (i === waitCurrentPage) btn.classList.add('active');
-                    btn.addEventListener('click', () => renderWaitPage(i));
-                    waitPager.appendChild(btn);
-                }
-
-                const next = document.createElement('button');
-                next.textContent = '次へ';
-                next.className = 'page-btn';
-                next.disabled = waitCurrentPage >= totalPages;
-                next.addEventListener('click', () => renderWaitPage(waitCurrentPage + 1));
-                waitPager.appendChild(next);
+                buildDeliveryPagination(totalPages, waitCurrentPage, 'delivery-pagination');
             }
 
             // ===== 出荷済タブのページネーション =====
@@ -6153,36 +6771,14 @@
                     }
                 });
 
+                // チェックボックスのイベントリスナーを再バインド
+                bindRowCbs();
                 // ページネーションボタンを更新
                 buildDonePagination(totalPages);
             }
 
             function buildDonePagination(totalPages) {
-                if (!donePager) return;
-                donePager.innerHTML = '';
-
-                const prev = document.createElement('button');
-                prev.textContent = '前へ';
-                prev.className = 'page-btn';
-                prev.disabled = doneCurrentPage === 1;
-                prev.addEventListener('click', () => renderDonePage(doneCurrentPage - 1));
-                donePager.appendChild(prev);
-
-                for (let i = 1; i <= Math.min(totalPages, 5); i++) {
-                    const btn = document.createElement('button');
-                    btn.textContent = i;
-                    btn.className = 'page-btn';
-                    if (i === doneCurrentPage) btn.classList.add('active');
-                    btn.addEventListener('click', () => renderDonePage(i));
-                    donePager.appendChild(btn);
-                }
-
-                const next = document.createElement('button');
-                next.textContent = '次へ';
-                next.className = 'page-btn';
-                next.disabled = doneCurrentPage >= totalPages;
-                next.addEventListener('click', () => renderDonePage(doneCurrentPage + 1));
-                donePager.appendChild(next);
+                buildDeliveryPagination(totalPages, doneCurrentPage, 'delivered-pagination');
             }
 
             // 出荷待テーブルのチェックボックスとアクション
@@ -6253,13 +6849,27 @@
 
             function bindRowCbs() {
                 root.querySelectorAll('#delivery-wait-table tbody td .checkbox').forEach(cb => {
-                    cb.addEventListener('change', updateActions);
+                    cb.addEventListener('change', () => {
+                        updateActions();
+                        // ページネーションサマリーを更新
+                        updatePaginationSummary('#delivery-pagination');
+                    });
+                });
+                
+                // 出荷済タブのチェックボックスイベントリスナーも追加
+                root.querySelectorAll('#delivery-done-table tbody td .checkbox').forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        // ページネーションサマリーを更新
+                        updatePaginationSummary('#delivered-pagination');
+                    });
                 });
             }
 
             mainCb?.addEventListener('change', function () {
                 root.querySelectorAll('#delivery-wait-table tbody td .checkbox').forEach(cb => { cb.checked = mainCb.checked; });
                 updateActions();
+                // ページネーションサマリーを更新
+                updatePaginationSummary('#delivery-pagination');
             });
             dateInput?.addEventListener('change', updateActions);
 
@@ -6367,11 +6977,14 @@
                         renderSelected();
                         updateMainCheckbox();
                         updateButtonStates();
+                        // Update order pagination summary
+                        updatePaginationSummary('order-pagination', 'order');
                     });
                 });
             }
             function buildPager(total) {
                 if (!pager) return;
+                const shown = Math.min(total, 3); // 1〜3ページ分を表示
                 pager.innerHTML = '';
                 const prev = document.createElement('button');
                 prev.textContent = '前へ';
@@ -6379,7 +6992,6 @@
                 prev.disabled = current === 1;
                 prev.addEventListener('click', () => renderPage(current - 1));
                 pager.appendChild(prev);
-                const shown = Math.min(total, 5);
                 for (let i = 1; i <= shown; i++) {
                     const b = document.createElement('button');
                     b.textContent = String(i);
@@ -6413,6 +7025,8 @@
                 renderSelected();
                 updateMainCheckbox();
                 updateButtonStates();
+                // Update order pagination summary
+                updatePaginationSummary('order-pagination', 'order');
             });
 
             // 編集ボタン：見積処理と同じモーダルを開く
@@ -6475,6 +7089,10 @@
             // 初期化
             renderPage(1);
             renderSelected();
+
+            // Initialize pagination - always show pagination buttons
+            const initialTotalPages = Math.ceil(filtered.length / perPage) || 1;
+            buildPager(initialTotalPages);
 
             // Initialize disabled state on load
             updateButtonStates();
@@ -6853,6 +7471,10 @@
             const orderExportBtn = document.getElementById('order-export-csv-btn');
             if (orderExportBtn) {
                 orderExportBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('受注処理のCSVエクスポートを実行しました。');
                 });
             }
@@ -6861,6 +7483,10 @@
             const orderFaxBtn = document.getElementById('order-fax-modal-btn');
             if (orderFaxBtn) {
                 orderFaxBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('受注処理のFAX出力モーダルを開きます。');
                 });
             }
@@ -6869,6 +7495,10 @@
             const orderDelayExportBtn = document.getElementById('order-delay-export-csv-btn');
             if (orderDelayExportBtn) {
                 orderDelayExportBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('受注処理（遅延処理）のCSVエクスポートを実行しました。');
                 });
             }
@@ -6877,6 +7507,10 @@
             const orderDelayFaxBtn = document.getElementById('order-delay-fax-modal-btn');
             if (orderDelayFaxBtn) {
                 orderDelayFaxBtn.addEventListener('click', function () {
+                    if (this.disabled) {
+                        alert('商品を選択してください。');
+                        return;
+                    }
                     alert('受注処理（遅延処理）のFAX出力モーダルを開きます。');
                 });
             }
@@ -6907,26 +7541,6 @@
                 });
             }
 
-            // ドロップダウンメニューの動作（受注処理 - 通常）
-            const orderExportDropdownBtn = document.getElementById('order-export-dropdown-btn');
-            const orderExportDropdownMenu = document.getElementById('order-export-dropdown-menu');
-            if (orderExportDropdownBtn && orderExportDropdownMenu) {
-                orderExportDropdownBtn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    orderExportDropdownMenu.style.display = orderExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
-                });
-            }
-
-            // ドロップダウンメニューの動作（受注処理 - 遅延処理用）
-            const orderDelayExportDropdownBtn = document.getElementById('order-delay-export-dropdown-btn');
-            const orderDelayExportDropdownMenu = document.getElementById('order-delay-export-dropdown-menu');
-            if (orderDelayExportDropdownBtn && orderDelayExportDropdownMenu) {
-                orderDelayExportDropdownBtn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    orderDelayExportDropdownMenu.style.display = orderDelayExportDropdownMenu.style.display === 'block' ? 'none' : 'block';
-                });
-            }
-
             // ドロップダウンメニューの動作（納期調整）
             const deliveryExportDropdownBtn = document.getElementById('delivery-export-dropdown-btn');
             const deliveryExportDropdownMenu = document.getElementById('delivery-export-dropdown-menu');
@@ -6940,8 +7554,6 @@
             // ドロップダウンメニューを閉じる処理
             document.addEventListener('click', function () {
                 if (quotationExportDropdownMenu) quotationExportDropdownMenu.style.display = 'none';
-                if (orderExportDropdownMenu) orderExportDropdownMenu.style.display = 'none';
-                if (orderDelayExportDropdownMenu) orderDelayExportDropdownMenu.style.display = 'none';
                 if (deliveryExportDropdownMenu) deliveryExportDropdownMenu.style.display = 'none';
             });
 
@@ -7004,6 +7616,7 @@
 
                             if (isRightEdge) {
                                 e.preventDefault();
+                                e.stopPropagation(); // Prevent sort from triggering
                                 isResizing = true;
                                 currentHeader = header;
                                 startX = e.clientX;
@@ -7018,7 +7631,7 @@
                             if (!isResizing) {
                                 const rect = header.getBoundingClientRect();
                                 const isRightEdge = e.clientX > rect.right - 10;
-                                header.style.cursor = isRightEdge ? 'col-resize' : 'default';
+                                header.style.cursor = isRightEdge ? 'col-resize' : (header.classList.contains('sortable') ? 'pointer' : 'default');
                             }
                         });
 
@@ -7125,7 +7738,10 @@
                         );
 
                         if (hasTable) {
-                            setTimeout(initHeaderResize, 100);
+                            setTimeout(() => {
+                                initHeaderResize();
+                                setupTableSort(); // Re-initialize sort functionality
+                            }, 100);
                         }
                     }
                 });
@@ -7283,6 +7899,247 @@
         // Restore panel state on page load
         restoreQuotationPanelState();
 
+        // Order right panel functionality
+        const orderPanel = document.getElementById('order-right-panel');
+        const orderPanelToggle = document.getElementById('order-panel-toggle');
+
+        // Function to show/hide order panel
+        function toggleOrderPanel(show, collapsed = false) {
+            if (!orderPanel || !mainContent) return;
+
+            if (show) {
+                orderPanel.classList.add('show');
+                
+                if (collapsed) {
+                    orderPanel.classList.add('collapsed');
+                    mainContent.classList.add('order-panel-collapsed');
+                    mainContent.classList.remove('order-panel-active');
+                } else {
+                    orderPanel.classList.remove('collapsed');
+                    mainContent.classList.add('order-panel-active');
+                    mainContent.classList.remove('order-panel-collapsed');
+                }
+            } else {
+                orderPanel.classList.remove('show', 'collapsed');
+                mainContent.classList.remove('order-panel-active', 'order-panel-collapsed');
+            }
+
+            // Save state to localStorage
+            if (show) {
+                localStorage.setItem('scm.orderPanel.show', '1');
+                localStorage.setItem('scm.orderPanel.collapsed', collapsed ? '1' : '0');
+            } else {
+                localStorage.setItem('scm.orderPanel.show', '0');
+            }
+        }
+
+        // Restore order panel state from localStorage
+        function restoreOrderPanelState() {
+            const saved = localStorage.getItem('scm.orderPanel.show');
+            const collapsedSaved = localStorage.getItem('scm.orderPanel.collapsed');
+            
+            if (saved === '1') {
+                const isCollapsed = collapsedSaved === '1';
+                toggleOrderPanel(true, isCollapsed);
+            }
+        }
+
+        // Order panel toggle button functionality
+        if (orderPanelToggle) {
+            orderPanelToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                
+                if (!orderPanel.classList.contains('show')) {
+                    // If panel is not shown, show it expanded
+                    toggleOrderPanel(true, false);
+                } else if (orderPanel.classList.contains('collapsed')) {
+                    // If panel is collapsed, expand it
+                    toggleOrderPanel(true, false);
+                } else {
+                    // If panel is expanded, collapse it
+                    toggleOrderPanel(true, true);
+                }
+            });
+        }
+
+        // Order panel functionality
+        function updateOrderPanelSelectionCount() {
+            const checkedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+            const count = checkedBoxes.length;
+            const selectionCountElement = document.getElementById('order-panel-selection-count');
+            if (selectionCountElement) {
+                selectionCountElement.textContent = `${count}件選択中`;
+            }
+        }
+
+        // Order panel input support
+        const orderPanelAssistSelect = document.getElementById('order-panel-assist-select');
+        const orderPanelMemoInput = document.getElementById('order-panel-memo-input');
+        const orderPanelOwnInput = document.getElementById('order-panel-own-input');
+        const orderPanelDateInput = document.getElementById('order-panel-date');
+        const orderPanelUpdateBtn = document.getElementById('order-panel-update-btn');
+
+        // Set default date to today
+        if (orderPanelDateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            orderPanelDateInput.value = today;
+        }
+
+        // Assistant select functionality
+        if (orderPanelAssistSelect && orderPanelMemoInput) {
+            orderPanelAssistSelect.addEventListener('change', function() {
+                if (this.value) {
+                    orderPanelMemoInput.value = this.value;
+                }
+            });
+        }
+
+        // Update button functionality
+        if (orderPanelUpdateBtn) {
+            orderPanelUpdateBtn.addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('更新する受注を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の受注を更新しました。`);
+            });
+        }
+
+        // Order panel action buttons
+        const orderPanelShipmentWaitBtn = document.getElementById('order-panel-shipment-wait-btn');
+        const orderPanelInProgressBtn = document.getElementById('order-panel-in-progress-btn');
+        const orderPanelDoneBtn = document.getElementById('order-panel-done-btn');
+
+        if (orderPanelShipmentWaitBtn) {
+            orderPanelShipmentWaitBtn.addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('処理する受注を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の受注を出荷待状態にしました。`);
+            });
+        }
+
+        if (orderPanelInProgressBtn) {
+            orderPanelInProgressBtn.addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('処理する受注を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の受注を手配中状態にしました。`);
+            });
+        }
+
+        if (orderPanelDoneBtn) {
+            orderPanelDoneBtn.addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('#order-view tbody td .checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    alert('処理する受注を選択してください。');
+                    return;
+                }
+                alert(`${checkedBoxes.length}件の受注を完了状態にしました。`);
+            });
+        }
+
+        // Restore order panel state on page load
+        restoreOrderPanelState();
+
+        // Tag-based input functionality
+        function setupTagInput(containerId, inputId) {
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            
+            if (!container || !input) return;
+
+            let tags = [];
+
+            function createTag(text) {
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.innerHTML = `
+                    <span class="tag-text" title="${text}">${text}</span>
+                    <button type="button" class="tag-remove" aria-label="削除">×</button>
+                `;
+                
+                const removeBtn = tag.querySelector('.tag-remove');
+                removeBtn.addEventListener('click', () => {
+                    const tagText = tag.querySelector('.tag-text').textContent;
+                    tags = tags.filter(t => t !== tagText);
+                    tag.remove();
+                });
+                
+                return tag;
+            }
+
+            function addTag(text) {
+                text = text.trim();
+                if (text && !tags.includes(text)) {
+                    tags.push(text);
+                    const tag = createTag(text);
+                    container.insertBefore(tag, input);
+                }
+            }
+
+            function parseInput(value) {
+                // Split by comma, semicolon, or newline
+                return value.split(/[,;\n]+/).map(s => s.trim()).filter(s => s);
+            }
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    const values = parseInput(input.value);
+                    values.forEach(addTag);
+                    input.value = '';
+                } else if (e.key === 'Backspace' && input.value === '' && tags.length > 0) {
+                    // Remove last tag when backspace is pressed on empty input
+                    const lastTag = container.querySelector('.tag:last-of-type');
+                    if (lastTag) {
+                        const tagText = lastTag.querySelector('.tag-text').textContent;
+                        tags = tags.filter(t => t !== tagText);
+                        lastTag.remove();
+                    }
+                }
+            });
+
+            input.addEventListener('blur', () => {
+                if (input.value.trim()) {
+                    const values = parseInput(input.value);
+                    values.forEach(addTag);
+                    input.value = '';
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                const values = parseInput(pastedText);
+                values.forEach(addTag);
+            });
+
+            container.addEventListener('click', () => {
+                input.focus();
+            });
+
+            // Public method to get all tags
+            container.getTags = () => tags.slice();
+
+            // Public method to clear all tags
+            container.clearTags = () => {
+                tags = [];
+                container.querySelectorAll('.tag').forEach(tag => tag.remove());
+            };
+
+            // Public method to set tags
+            container.setTags = (newTags) => {
+                container.clearTags();
+                newTags.forEach(addTag);
+            };
+        }
+
         // Search functionality for data tables
         function setupSearchFunctionality() {
             // Quotation view search
@@ -7333,10 +8190,65 @@
                     const jan = cells[7]?.textContent.trim().toLowerCase() || '';
                     const scmCode = cells[3]?.textContent.trim().toLowerCase() || '';
 
-                    const makerMatch = !searchFields.maker?.value || maker.includes(searchFields.maker.value.toLowerCase());
-                    const partNumberMatch = !searchFields.partNumber?.value || partNumber.includes(searchFields.partNumber.value.toLowerCase());
-                    const janMatch = !searchFields.jan?.value || jan.includes(searchFields.jan.value.toLowerCase());
-                    const scmCodeMatch = !searchFields.scmCode?.value || scmCode.includes(searchFields.scmCode.value.toLowerCase());
+                    // Handle maker tag-based search
+                    let makerMatch = true;
+                    if (searchFields.maker) {
+                        const makerContainer = searchFields.maker.closest('.tag-input-container');
+                        if (makerContainer && makerContainer.getTags) {
+                            const makerTags = makerContainer.getTags();
+                            if (makerTags.length > 0) {
+                                makerMatch = makerTags.some(tag => maker.includes(tag.toLowerCase()));
+                            }
+                        } else if (searchFields.maker.value) {
+                            // Fallback for non-tag inputs
+                            makerMatch = maker.includes(searchFields.maker.value.toLowerCase());
+                        }
+                    }
+
+                    // Handle part number tag-based search
+                    let partNumberMatch = true;
+                    if (searchFields.partNumber) {
+                        const partNumberContainer = searchFields.partNumber.closest('.tag-input-container');
+                        if (partNumberContainer && partNumberContainer.getTags) {
+                            const partNumberTags = partNumberContainer.getTags();
+                            if (partNumberTags.length > 0) {
+                                partNumberMatch = partNumberTags.some(tag => partNumber.includes(tag.toLowerCase()));
+                            }
+                        } else if (searchFields.partNumber.value) {
+                            // Fallback for non-tag inputs
+                            partNumberMatch = partNumber.includes(searchFields.partNumber.value.toLowerCase());
+                        }
+                    }
+
+                    // Handle JAN tag-based search
+                    let janMatch = true;
+                    if (searchFields.jan) {
+                        const janContainer = searchFields.jan.closest('.tag-input-container');
+                        if (janContainer && janContainer.getTags) {
+                            const janTags = janContainer.getTags();
+                            if (janTags.length > 0) {
+                                janMatch = janTags.some(tag => jan.includes(tag.toLowerCase()));
+                            }
+                        } else if (searchFields.jan.value) {
+                            // Fallback for non-tag inputs
+                            janMatch = jan.includes(searchFields.jan.value.toLowerCase());
+                        }
+                    }
+                    
+                    // Handle SCM code tag-based search
+                    let scmCodeMatch = true;
+                    if (searchFields.scmCode) {
+                        const scmContainer = searchFields.scmCode.closest('.tag-input-container');
+                        if (scmContainer && scmContainer.getTags) {
+                            const scmTags = scmContainer.getTags();
+                            if (scmTags.length > 0) {
+                                scmCodeMatch = scmTags.some(tag => scmCode.includes(tag.toLowerCase()));
+                            }
+                        } else if (searchFields.scmCode.value) {
+                            // Fallback for non-tag inputs
+                            scmCodeMatch = scmCode.includes(searchFields.scmCode.value.toLowerCase());
+                        }
+                    }
 
                     if (makerMatch && partNumberMatch && janMatch && scmCodeMatch) {
                         row.style.display = '';
@@ -7346,45 +8258,180 @@
                 });
             }
 
-            // Add event listeners for quotation view
-            Object.values(quotationSearchFields).forEach(field => {
-                if (field) {
-                    field.addEventListener('input', () => {
-                        filterTableRows(quotationSearchFields, '#quotation-view .data-table');
-                    });
-                }
-            });
+            // Add event listeners for quotation view search button
+            const quotationSearchBtn = document.getElementById('quotation-search-btn');
+            if (quotationSearchBtn) {
+                quotationSearchBtn.addEventListener('click', () => {
+                    filterTableRows(quotationSearchFields, '#quotation-view .data-table');
+                    // Update pagination summary after search
+                    setTimeout(() => updatePaginationSummary('pagination', 'quotation'), 100);
+                });
+            }
 
-            // Add event listeners for order view
-            Object.values(orderSearchFields).forEach(field => {
-                if (field) {
-                    field.addEventListener('input', () => {
-                        filterTableRows(orderSearchFields, '#order-view .data-table');
-                    });
-                }
-            });
+            // Add event listeners for order view search button
+            const orderSearchBtn = document.getElementById('order-search-btn');
+            if (orderSearchBtn) {
+                orderSearchBtn.addEventListener('click', () => {
+                    filterTableRows(orderSearchFields, '#order-view .data-table');
+                    // Update pagination summary after search
+                    setTimeout(() => updatePaginationSummary('order-pagination', 'order'), 100);
+                });
+            }
 
-            // Add event listeners for delivery view
-            Object.values(deliverySearchFields).forEach(field => {
-                if (field) {
-                    field.addEventListener('input', () => {
-                        filterTableRows(deliverySearchFields, '#delivery-wait-container .data-table');
-                    });
-                }
-            });
+            // Add event listeners for delivery view search button
+            const deliverySearchBtn = document.getElementById('delivery-search-btn');
+            if (deliverySearchBtn) {
+                deliverySearchBtn.addEventListener('click', () => {
+                    filterTableRows(deliverySearchFields, '#delivery-wait-container .data-table');
+                });
+            }
 
-            // Add event listeners for delivery done view
-            Object.values(deliveryDoneSearchFields).forEach(field => {
-                if (field) {
-                    field.addEventListener('input', () => {
-                        filterTableRows(deliveryDoneSearchFields, '#delivery-done-container .data-table');
-                    });
-                }
-            });
+            // Add event listeners for delivery done view search button
+            const deliveryDoneSearchBtn = document.getElementById('delivery-done-search-btn');
+            if (deliveryDoneSearchBtn) {
+                deliveryDoneSearchBtn.addEventListener('click', () => {
+                    filterTableRows(deliveryDoneSearchFields, '#delivery-done-container .data-table');
+                });
+            }
+
+            // Initialize tag-based inputs for SCM code fields
+            setupTagInput('scm-code-tag-container', 'scm-code-search');
+            setupTagInput('order-scm-code-tag-container', 'order-scm-code-search');
+            setupTagInput('delivery-scm-code-tag-container', 'delivery-scm-code-search');
+            setupTagInput('delivery-done-scm-code-tag-container', 'delivery-done-scm-code-search');
+
+            // Initialize tag-based inputs for maker fields
+            setupTagInput('maker-tag-container', 'maker-search');
+            setupTagInput('order-maker-tag-container', 'order-maker-search');
+            setupTagInput('delivery-maker-tag-container', 'delivery-maker-search');
+            setupTagInput('delivery-done-maker-tag-container', 'delivery-done-maker-search');
+
+            // Initialize tag-based inputs for part number fields
+            setupTagInput('part-number-tag-container', 'part-number-search');
+            setupTagInput('order-part-number-tag-container', 'order-part-number-search');
+            setupTagInput('delivery-part-number-tag-container', 'delivery-part-number-search');
+            setupTagInput('delivery-done-part-number-tag-container', 'delivery-done-part-number-search');
+
+            // Initialize tag-based inputs for JAN fields
+            setupTagInput('jan-tag-container', 'jan-search');
+            setupTagInput('order-jan-tag-container', 'order-jan-search');
+            setupTagInput('delivery-jan-tag-container', 'delivery-jan-search');
+            setupTagInput('delivery-done-jan-tag-container', 'delivery-done-jan-search');
         }
 
         // Initialize search functionality on page load
         document.addEventListener('DOMContentLoaded', setupSearchFunctionality);
+
+        // Table sorting functionality
+        function setupTableSort() {
+            const tables = document.querySelectorAll('.data-table');
+            
+            tables.forEach(table => {
+                const headers = table.querySelectorAll('th.sortable');
+                
+                headers.forEach(header => {
+                    header.addEventListener('click', (e) => {
+                        // Prevent sorting during resize
+                        if (e.target.closest('.data-table th')?.style.cursor === 'col-resize') {
+                            return;
+                        }
+                        
+                        const column = header.dataset.column;
+                        if (!column) return;
+                        
+                        const tbody = table.querySelector('tbody');
+                        if (!tbody) return;
+                        
+                        // Get current sort direction
+                        const currentSort = header.classList.contains('sort-asc') ? 'asc' : 
+                                          header.classList.contains('sort-desc') ? 'desc' : 'none';
+                        
+                        // Clear all sort indicators in this table
+                        table.querySelectorAll('th.sortable').forEach(th => {
+                            th.classList.remove('sort-asc', 'sort-desc');
+                        });
+                        
+                        // Set new sort direction
+                        let newSort;
+                        if (currentSort === 'none' || currentSort === 'desc') {
+                            newSort = 'asc';
+                            header.classList.add('sort-asc');
+                        } else {
+                            newSort = 'desc';
+                            header.classList.add('sort-desc');
+                        }
+                        
+                        // Get column index (accounting for checkbox and detail columns)
+                        const headerIndex = Array.from(header.parentNode.children).indexOf(header);
+                        
+                        // Get all rows (excluding details rows)
+                        const rows = Array.from(tbody.querySelectorAll('tr.data-row')).map(row => {
+                            // Also collect any following details row
+                            const detailsRow = row.nextElementSibling;
+                            const hasDetails = detailsRow && detailsRow.classList.contains('details-row');
+                            return {
+                                dataRow: row,
+                                detailsRow: hasDetails ? detailsRow : null
+                            };
+                        });
+                        
+                        // Sort rows based on column content
+                        rows.sort((a, b) => {
+                            const cellA = a.dataRow.children[headerIndex];
+                            const cellB = b.dataRow.children[headerIndex];
+                            
+                            if (!cellA || !cellB) return 0;
+                            
+                            let valueA = cellA.textContent.trim();
+                            let valueB = cellB.textContent.trim();
+                            
+                            // Handle different data types
+                            if (column.includes('date')) {
+                                // Date sorting
+                                valueA = new Date(valueA.replace(/\//g, '-'));
+                                valueB = new Date(valueB.replace(/\//g, '-'));
+                                if (isNaN(valueA)) valueA = new Date(0);
+                                if (isNaN(valueB)) valueB = new Date(0);
+                            } else if (column.includes('price') || column.includes('quantity')) {
+                                // Numeric sorting
+                                valueA = parseFloat(valueA.replace(/[¥,円]/g, '')) || 0;
+                                valueB = parseFloat(valueB.replace(/[¥,円]/g, '')) || 0;
+                            } else {
+                                // String sorting (case insensitive)
+                                valueA = valueA.toLowerCase();
+                                valueB = valueB.toLowerCase();
+                            }
+                            
+                            let result = 0;
+                            if (valueA < valueB) result = -1;
+                            else if (valueA > valueB) result = 1;
+                            
+                            return newSort === 'desc' ? -result : result;
+                        });
+                        
+                        // Clear tbody and re-append sorted rows
+                        tbody.innerHTML = '';
+                        rows.forEach(rowData => {
+                            tbody.appendChild(rowData.dataRow);
+                            if (rowData.detailsRow) {
+                                tbody.appendChild(rowData.detailsRow);
+                            }
+                        });
+                        
+                        // Re-attach event listeners
+                        bindToggleButtons();
+                        
+                        // Re-attach checkbox listeners if they exist
+                        if (typeof initCheckboxListeners === 'function') {
+                            initCheckboxListeners();
+                        }
+                    });
+                });
+            });
+        }
+
+        // Initialize table sorting on page load
+        document.addEventListener('DOMContentLoaded', setupTableSort);
 
         // フィルターボタンのイベントリスナー
         document.querySelectorAll('.search-filter-btn').forEach(btn => {
@@ -7555,6 +8602,76 @@
                 jan: janTags,
                 scmCode: scmCodeTags
             };
+        });
+
+        // 遅延処理機能のJavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const delayStatusRadios = document.querySelectorAll('input[name="delay-status"]');
+            const delayDateInput = document.getElementById('delay-date-input');
+            const delayReasonSelect = document.getElementById('order-panel-delay-reason');
+            const delayProcessBtn = document.getElementById('order-panel-delay-btn');
+
+            // ラジオボタンの変更で日付入力の表示/非表示を切り替え
+            delayStatusRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'scheduled') {
+                        delayDateInput.classList.add('show');
+                    } else {
+                        delayDateInput.classList.remove('show');
+                    }
+                    updateDelayButtonState();
+                });
+            });
+
+            // 遅延理由選択時にボタンの状態を更新
+            if (delayReasonSelect) {
+                delayReasonSelect.addEventListener('change', updateDelayButtonState);
+            }
+
+            // 遅延処理ボタンの有効/無効を制御
+            function updateDelayButtonState() {
+                if (delayProcessBtn && delayReasonSelect) {
+                    const reasonSelected = delayReasonSelect.value !== '';
+                    delayProcessBtn.disabled = !reasonSelected;
+                }
+            }
+
+            // 遅延処理ボタンのクリックイベント
+            if (delayProcessBtn) {
+                delayProcessBtn.addEventListener('click', function() {
+                    const selectedRows = document.querySelectorAll('.data-table tbody tr input[type="checkbox"]:checked');
+                    if (selectedRows.length === 0) {
+                        alert('処理する行を選択してください。');
+                        return;
+                    }
+
+                    const selectedStatus = document.querySelector('input[name="delay-status"]:checked').value;
+                    const delayDate = document.getElementById('order-panel-delay-date').value;
+                    const delayReason = delayReasonSelect.value;
+
+                    let confirmMessage = `${selectedRows.length}件の遅延処理を実行しますか？\n\n`;
+                    confirmMessage += `発送状況: ${selectedStatus === 'undecided' ? '未定' : '発送予定'}\n`;
+                    if (selectedStatus === 'scheduled' && delayDate) {
+                        confirmMessage += `発送予定日: ${delayDate}\n`;
+                    }
+                    confirmMessage += `遅延理由: ${delayReasonSelect.options[delayReasonSelect.selectedIndex].text}`;
+
+                    if (confirm(confirmMessage)) {
+                        // 実際の処理はここに実装
+                        alert(`遅延処理が完了しました。\n処理件数: ${selectedRows.length}件`);
+                        
+                        // フォームをリセット
+                        document.getElementById('delay-status-undecided').checked = true;
+                        delayDateInput.classList.remove('show');
+                        document.getElementById('order-panel-delay-date').value = '';
+                        delayReasonSelect.value = '';
+                        updateDelayButtonState();
+                    }
+                });
+            }
+
+            // 初期状態でボタンを無効化
+            updateDelayButtonState();
         });
     </script>
     </script>
