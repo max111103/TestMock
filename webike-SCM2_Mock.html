@@ -468,15 +468,18 @@
             display: flex;
             gap: 16px;
             flex: 1;
-            max-width: 800px;
+            max-width: 1200px; /* 最大幅を少し大きくする */
             align-items: flex-end;
+            flex-wrap: wrap; /* 必要に応じて折り返し */
         }
 
         .search-field {
             display: flex;
             flex-direction: column;
             gap: 4px;
-            min-width: 150px;
+            min-width: 200px;
+            flex: 1 1 auto; /* より柔軟なサイズ調整 */
+            max-width: 350px; /* 最大幅を制限 */
         }
 
         .search-field label {
@@ -925,10 +928,6 @@
             border-right: 2px solid transparent;
         }
 
-        .data-table th:hover::after {
-            border-right-color: #60a5fa;
-        }
-
         .data-table th:hover {
             background-color: #5b5c5e;
         }
@@ -953,6 +952,102 @@
         #order-view table.data-table td {
             padding-top: 8px;
             padding-bottom: 8px;
+        }
+
+        /* Enhanced quotation view table cells for better content display */
+        #quotation-view table.data-table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: none;
+            vertical-align: top;
+            line-height: 1.4;
+        }
+
+        /* Enhanced order view table cells for better content display */
+        #order-view table.data-table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: none;
+            vertical-align: top;
+            line-height: 1.4;
+        }
+
+        /* Enhanced delivery view table cells for better content display */
+        #delivery-view table.data-table td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: none;
+            vertical-align: top;
+            line-height: 1.4;
+        }
+
+        /* Specific handling for long text columns in quotation view */
+        #quotation-view table.data-table td:nth-child(n+5) {
+            min-width: 120px;
+        }
+
+        /* Specific handling for long text columns in order view */
+        #order-view table.data-table td:nth-child(n+5) {
+            min-width: 120px;
+        }
+
+        /* Specific handling for long text columns in delivery view */
+        #delivery-view table.data-table td:nth-child(n+5) {
+            min-width: 120px;
+        }
+
+        /* Quotation view table container with horizontal scroll */
+        #quotation-view .table-scroll {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        /* Order view table container with horizontal scroll */
+        #order-view .table-scroll {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        /* Delivery view table container with horizontal scroll */
+        #delivery-view .table-scroll {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        /* Quotation view table with minimum width to ensure horizontal scroll */
+        #quotation-view .data-table {
+            min-width: 1600px;
+            table-layout: auto;
+        }
+
+        /* Order view table with minimum width to ensure horizontal scroll */
+        #order-view .data-table {
+            min-width: 1600px;
+            table-layout: auto;
+        }
+
+        /* Delivery view table with minimum width to ensure horizontal scroll */
+        #delivery-view .data-table {
+            min-width: 1600px;
+            table-layout: auto;
+        }
+
+        /* Quotation view header auto-resize indicator */
+        #quotation-view table.data-table th.sortable:hover::after {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            font-size: 10px;
+            color: #6b7280;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1000;
         }
 
         .data-table tr:hover {
@@ -1554,6 +1649,203 @@
             color: #0284c7;
         }
 
+        .view-all-notifications-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .view-all-notifications-btn:hover {
+            background: #0284c7;
+        }
+
+        /* All Notifications Modal Styles */
+        .all-notifications-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .all-notifications-modal-backdrop.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .all-notifications-modal {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .all-notifications-modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .all-notifications-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0ea5e9;
+        }
+
+        .all-notifications-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .all-notifications-modal-close:hover {
+            color: #374151;
+        }
+
+        .all-notifications-modal-body {
+            padding: 16px;
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .all-notifications-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 16px;
+        }
+
+        .notification-detail-panel {
+            width: 400px;
+            border-left: 1px solid #e2e8f0;
+            padding-left: 16px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .notification-detail-panel.show {
+            display: block;
+        }
+
+        .notification-detail-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .notification-detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .notification-detail-date {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .notification-detail-content {
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .notification-detail-content h4 {
+            color: #1f2937;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .notification-detail-content p {
+            margin-bottom: 12px;
+        }
+
+        .notification-detail-content ul {
+            margin-bottom: 12px;
+            padding-left: 20px;
+        }
+
+        .notification-detail-content li {
+            margin-bottom: 8px;
+        }
+
+        /* レスポンシブデザイン対応 */
+        @media (max-width: 768px) {
+            .all-notifications-modal-body {
+                flex-direction: column;
+            }
+
+            .notification-detail-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+                margin-top: 16px;
+                padding-left: 0;
+                padding-top: 16px;
+            }
+
+            .all-notifications-list-container {
+                padding-right: 0;
+            }
+        }
+
+        .all-notifications-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .all-notifications-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+        }
+
+        .all-notifications-list li:last-child {
+            border-bottom: none;
+        }
+
+        .notification-title-btn {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 12px 0;
+            color: #374151;
+            cursor: pointer;
+            font-size: inherit;
+        }
+
+        .notification-title-btn:hover {
+            color: #0ea5e9;
+            background: #f8fafc;
+        }
+
+        .notification-title-btn.selected {
+            background: #e0f2fe;
+            color: #0ea5e9;
+            font-weight: 600;
+        }
+
         .new-badge {
             position: absolute;
             top: -5px;
@@ -2112,7 +2404,10 @@
             background-color: #fef08a !important;
             color: #000000 !important;
             font-weight: 500 !important;
-            border: 1px solid #eab308 !important;
+            border-left: 1px solid #eab308 !important;
+            border-top: 1px solid #eab308 !important;
+            border-bottom: 1px solid #eab308 !important;
+            border-right: 1px solid #f3f4f6 !important; /* グリッド線を維持 */
             padding: 6px !important;
             border-radius: 4px !important;
             font-size: 13px !important;
@@ -2256,6 +2551,17 @@
                 padding: 16px;
                 flex-direction: column;
                 gap: 12px;
+            }
+
+            .search-fields {
+                flex-direction: column;
+                max-width: none;
+                gap: 12px;
+            }
+
+            .search-field {
+                min-width: auto;
+                width: 100%;
             }
 
             .search-form-2 {
@@ -2808,6 +3114,15 @@
             margin-right: 8px;
         }
 
+        /* 拡張タグ入力の3列グリッドレイアウト */
+        .enhanced-tag-input-container.has-tags .enhanced-tags {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            width: 100%;
+            margin-right: 0;
+        }
+
         .enhanced-tag {
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
@@ -2821,6 +3136,19 @@
             box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
             transition: all 0.2s ease;
             animation: tagSlideIn 0.3s ease;
+            width: 100%;
+            justify-content: space-between;
+            min-height: 28px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .enhanced-tag span:first-child {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
         }
 
         @keyframes tagSlideIn {
@@ -3026,6 +3354,26 @@
                 min-width: 100px;
                 font-size: 13px;
             }
+
+            /* タブレット・モバイルでは2列表示 */
+            .tag-input-container.has-tags {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .enhanced-tag-input-container.has-tags .enhanced-tags {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 非常に小さい画面では1列表示 */
+        @media (max-width: 480px) {
+            .tag-input-container.has-tags {
+                grid-template-columns: 1fr;
+            }
+
+            .enhanced-tag-input-container.has-tags .enhanced-tags {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Animation for stats update */
@@ -3052,7 +3400,7 @@
         .tag-input-container {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
+            align-items: flex-start;
             gap: 4px;
             min-height: 40px;
             padding: 6px 8px;
@@ -3061,6 +3409,10 @@
             background: white;
             cursor: text;
             transition: border-color 0.2s;
+            max-height: none;
+            overflow: visible;
+            width: 100%; /* 親要素の幅を最大限活用 */
+            box-sizing: border-box;
         }
 
         .tag-input-container:focus-within {
@@ -3073,24 +3425,45 @@
             padding: 4px 6px;
         }
 
+        /* タグを動的な幅で flexbox レイアウトで表示 */
+        .tag-input-container.has-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: start;
+            align-content: start;
+            padding: 8px;
+            min-width: 200px; /* 最小幅を設定 */
+        }
+
+        /* 入力フィールドを新しい行に配置 */
+        .tag-input-container.has-tags .tag-input {
+            flex-basis: 100%;
+            margin-top: 4px;
+        }
+
         .tag {
             display: flex;
             align-items: center;
             gap: 4px;
-            padding: 2px 6px;
+            padding: 4px 8px;
             background: #f3f4f6;
             border: 1px solid #d1d5db;
             border-radius: 4px;
             font-size: 12px;
             color: #374151;
             flex-shrink: 0;
+            min-height: 28px;
+            box-sizing: border-box;
+            max-width: fit-content; /* コンテンツに合わせて幅を調整 */
         }
 
         .tag-text {
-            max-width: 120px;
+            flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            min-width: 0;
         }
 
         .tag-remove {
@@ -3120,7 +3493,7 @@
             border: none;
             outline: none;
             flex: 1;
-            min-width: 60px;
+            min-width: 120px;
             font-size: 14px;
             padding: 2px 4px;
             background: transparent;
@@ -3226,7 +3599,8 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             width: 90%;
             max-width: 800px;
-            max-height: 200vh;
+            height: 640px; /* 固定高さに変更 */
+            max-height: 640px; /* 最大高さを固定 */
             overflow: hidden;
             transform: scale(0.9);
             transition: transform 0.3s ease;
@@ -3313,7 +3687,7 @@
 
         .settings-modal-body {
             padding: 24px;
-            max-height: 65vh;
+            height: calc(600px - 170px); /* ヘッダー、タブ、フッターの高さを考慮 */
             overflow-y: auto;
         }
 
@@ -4456,31 +4830,18 @@
                     <div class="notification-area" style="margin-top: 20px;">
                         <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">お知らせ</h3>
                         <div class="notification update-notification read" id="update-notification"
-                            style="background-color: #f8fafc; border-color: #e2e8f0;">
+                            style="background-color: #f8fafc; border-color: #e2e8f0; position: relative;">
                             <div class="notification-text">
                                 <div class="update-title" id="update-title">
-                                    【2025年08月18日（月）】Webike-SCM お知らせ
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="margin-bottom: 8px;">【2025年08月18日（月）】Webike-SCM お知らせ</li>
+                                        <li style="margin-bottom: 8px;">【2025年08月20日（火）】システムメンテナンスのお知らせ</li>
+                                        <li>【2025年08月15日（木）】新機能リリースのご案内</li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="new-badge" id="new-badge">NEW</div>
-                        </div>
-
-                        <div class="notification update-notification read"
-                            style="background-color: #f8fafc; border-color: #e2e8f0; margin-top: 12px;">
-                            <div class="notification-text">
-                                <div class="update-title">
-                                    【2025年08月20日（火）】システムメンテナンスのお知らせ
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="notification update-notification read"
-                            style="background-color: #f8fafc; border-color: #e2e8f0; margin-top: 12px;">
-                            <div class="notification-text">
-                                <div class="update-title">
-                                    【2025年08月15日（木）】新機能リリースのご案内
-                                </div>
-                            </div>
+                            <button class="view-all-notifications-btn" id="view-all-notifications-btn">すべて見る</button>
                         </div>
                     </div>
 
@@ -4504,6 +4865,35 @@
                                     <li style="margin-bottom: 8px;">CSV出力時のエラーハンドリングを改善</li>
                                 </ul>
                                 <p style="color: #6b7280; font-size: 14px;">何かご不明な点がございましたら、サポートまでお問い合わせください。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Notifications Modal -->
+                    <div class="all-notifications-modal-backdrop" id="all-notifications-modal-backdrop">
+                        <div class="all-notifications-modal">
+                            <div class="all-notifications-modal-header">
+                                <div class="all-notifications-modal-title">過去のお知らせ</div>
+                                <button class="all-notifications-modal-close" id="all-notifications-modal-close">&times;</button>
+                            </div>
+                            <div class="all-notifications-modal-body">
+                                <div class="all-notifications-list-container">
+                                    <ul class="all-notifications-list">
+                                        <li><button class="notification-title-btn" data-index="0">【2025年08月18日（月）】Webike-SCM お知らせ</button></li>
+                                        <li><button class="notification-title-btn" data-index="1">【2025年08月20日（火）】システムメンテナンスのお知らせ</button></li>
+                                        <li><button class="notification-title-btn" data-index="2">【2025年08月15日（木）】新機能リリースのご案内</button></li>
+                                        <li><button class="notification-title-btn" data-index="3">【2025年08月10日（月）】セキュリティアップデートのお知らせ</button></li>
+                                        <li><button class="notification-title-btn" data-index="4">【2025年08月05日（水）】新機能追加のお知らせ</button></li>
+                                        <li><button class="notification-title-btn" data-index="5">【2025年07月30日（火）】システム改善のお知らせ</button></li>
+                                    </ul>
+                                </div>
+                                <div class="notification-detail-panel" id="notification-detail-panel">
+                                    <div class="notification-detail-header">
+                                        <div class="notification-detail-title" id="notification-detail-title"></div>
+                                        <div class="notification-detail-date" id="notification-detail-date"></div>
+                                    </div>
+                                    <div class="notification-detail-content" id="notification-detail-content"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -4720,14 +5110,10 @@
                                     <div class="dropdown-menu" id="export-dropdown-menu" style="left: auto; right: 0;">
                                     </div>
                                 </div>
-                                <button class="icon-btn-fax" id="fax-modal-btn" title="FAX出力" disabled>
+                                <button class="icon-btn-fax" id="fax-modal-btn" title="書類出力" disabled>
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M20 1v4h2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M18 7h2v2h-2z" />
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </button>
                             </div>
@@ -5189,14 +5575,10 @@
                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </button>
-                                <button class="icon-btn-fax" id="order-fax-modal-btn" title="FAX出力">
+                                <button class="icon-btn-fax" id="order-fax-modal-btn" title="書類出力">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M20 1v4h2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M18 7h2v2h-2z" />
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </button>
                                 <button class="icon-btn-csv" id="order-delay-export-csv-btn" title="CSV出力"
@@ -5206,15 +5588,11 @@
                                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </button>
-                                <button class="icon-btn-fax" id="order-delay-fax-modal-btn" title="FAX出力"
+                                <button class="icon-btn-fax" id="order-delay-fax-modal-btn" title="書類出力"
                                     style="display:none;">
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M5 3V1a1 1 0 011-1h12a1 1 0 011 1v2M5 3h14M5 3H3a2 2 0 00-2 2v12a2 2 0 002 2h2m0-14v12h14V5H5zM1 10h2m0 0h2m-2 0v2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M20 1v4h2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M18 7h2v2h-2z" />
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </button>
                             </div>
@@ -6913,11 +7291,41 @@
     <script>
         // Login check - redirect to login page if not authenticated
         (function() {
+            // デバッグ用: ローカルストレージの状態をコンソールに出力
+            console.log('Login check - isLoggedIn:', localStorage.getItem('isLoggedIn'));
+            
             if (localStorage.getItem('isLoggedIn') !== 'true') {
-                window.location.href = 'login.html';
+                console.log('Not logged in, redirecting to login page...');
+                window.location.href = 'webike-SCM2_Mock_login.html';
                 return;
             }
+            
+            console.log('User is logged in, continuing to main page...');
         })();
+
+        // デバッグ用グローバル関数
+        window.debugLogin = {
+            // ログイン状態をリセット
+            logout: function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                console.log('Logged out, reloading page...');
+                window.location.reload();
+            },
+            // ログイン状態を設定
+            login: function(username = 'testuser') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                console.log('Logged in as:', username);
+            },
+            // 現在の状態を確認
+            status: function() {
+                console.log('Login status:', {
+                    isLoggedIn: localStorage.getItem('isLoggedIn'),
+                    username: localStorage.getItem('username')
+                });
+            }
+        };
 
         // Sidebar show/hide toggle
         (function () {
@@ -8834,6 +9242,204 @@
         })();
     </script>
     <script>
+        // All Notifications Modal Functionality
+        (function () {
+            const viewAllBtn = document.getElementById('view-all-notifications-btn');
+            const allNotificationsModal = document.getElementById('all-notifications-modal-backdrop');
+            const allNotificationsModalClose = document.getElementById('all-notifications-modal-close');
+            const notificationDetailPanel = document.getElementById('notification-detail-panel');
+            const notificationDetailTitle = document.getElementById('notification-detail-title');
+            const notificationDetailDate = document.getElementById('notification-detail-date');
+            const notificationDetailContent = document.getElementById('notification-detail-content');
+
+            // 過去のお知らせデータ
+            const pastNotifications = [
+                {
+                    title: "Webike-SCM お知らせ",
+                    date: "2025年08月18日（月）",
+                    content: `
+                        <h4>システムバグ修正のお知らせ</h4>
+                        <p>平素より弊社サービスをご利用いただき、ありがとうございます。</p>
+                        <p>2025年08月18日（月）夜間にWebike-SCMのバグ修正を行いました。今回のアップデートは、一部仕入先様の処理中に下記のエラーメッセージが表示される事象への対応となり、現在は解消しております。</p>
+                        <h4>修正内容</h4>
+                        <ul>
+                            <li>見積処理中のタイムアウトエラーを修正</li>
+                            <li>一部ブラウザでの表示崩れを修正</li>
+                            <li>CSV出力時のエラーハンドリングを改善</li>
+                        </ul>
+                        <p>何かご不明な点がございましたら、サポートまでお問い合わせください。</p>
+                    `
+                },
+                {
+                    title: "システムメンテナンスのお知らせ",
+                    date: "2025年08月20日（火）",
+                    content: `
+                        <h4>定期メンテナンス実施のご案内</h4>
+                        <p>下記の日程でシステムメンテナンスを実施いたします。</p>
+                        <h4>メンテナンス日時</h4>
+                        <p><strong>2025年08月20日（火）午前2時～午前4時</strong></p>
+                        <h4>メンテナンス内容</h4>
+                        <ul>
+                            <li>サーバー機器の定期メンテナンス</li>
+                            <li>データベースの最適化</li>
+                            <li>セキュリティパッチの適用</li>
+                        </ul>
+                        <p>メンテナンス中はサービスをご利用いただけません。ご不便をおかけいたしますが、ご理解のほどよろしくお願いいたします。</p>
+                    `
+                },
+                {
+                    title: "新機能リリースのご案内",
+                    date: "2025年08月15日（木）",
+                    content: `
+                        <h4>高度な検索フィルター機能追加</h4>
+                        <p>新機能「高度な検索フィルター」をリリースしました。</p>
+                        <h4>新機能の特徴</h4>
+                        <ul>
+                            <li>複数条件での絞り込み検索</li>
+                            <li>日付範囲指定での検索</li>
+                            <li>カスタムフィルターの保存機能</li>
+                            <li>検索結果の並び替え機能</li>
+                        </ul>
+                        <p>この機能により、より詳細な条件でデータを検索できるようになります。使い方はヘルプページをご参照ください。</p>
+                    `
+                },
+                {
+                    title: "セキュリティアップデートのお知らせ",
+                    date: "2025年08月10日（月）",
+                    content: `
+                        <h4>セキュリティ強化実施のお知らせ</h4>
+                        <p>セキュリティ強化のため、システムのアップデートを実施しました。</p>
+                        <h4>変更内容</h4>
+                        <ul>
+                            <li>パスワードの強度要件変更</li>
+                            <li>ログイン認証の強化</li>
+                            <li>データ暗号化レベルの向上</li>
+                        </ul>
+                        <h4>新しいパスワード要件</h4>
+                        <ul>
+                            <li>8文字以上</li>
+                            <li>大文字・小文字・数字・記号を含む</li>
+                            <li>過去3回と異なるパスワード</li>
+                        </ul>
+                        <p>新しい要件をご確認の上、パスワードの変更をお願いいたします。</p>
+                    `
+                },
+                {
+                    title: "新機能追加のお知らせ",
+                    date: "2025年08月05日（水）",
+                    content: `
+                        <h4>一括処理機能の追加</h4>
+                        <p>新機能「一括処理」を追加しました。</p>
+                        <h4>機能詳細</h4>
+                        <ul>
+                            <li>複数データの同時処理</li>
+                            <li>バッチ処理のスケジュール設定</li>
+                            <li>処理結果の自動通知</li>
+                            <li>エラー発生時の自動ロールバック</li>
+                        </ul>
+                        <p>これにより、大量のデータを効率的に処理できるようになります。操作方法はマニュアルをご参照ください。</p>
+                    `
+                },
+                {
+                    title: "システム改善のお知らせ",
+                    date: "2025年07月30日（火）",
+                    content: `
+                        <h4>パフォーマンス改善実施</h4>
+                        <p>システムのパフォーマンスを大幅に改善しました。</p>
+                        <h4>改善内容</h4>
+                        <ul>
+                            <li>ページ読み込み速度を平均30%向上</li>
+                            <li>データベースクエリの最適化</li>
+                            <li>キャッシュ機能の強化</li>
+                            <li>レスポンシブデザインの改善</li>
+                        </ul>
+                        <p>これらの改善により、より快適にシステムをご利用いただけるようになりました。今後も継続的に改善を行ってまいります。</p>
+                    `
+                }
+            ];
+
+            // ボタンクリックでモーダル表示
+            if (viewAllBtn) {
+                viewAllBtn.addEventListener('click', function () {
+                    allNotificationsModal.classList.add('show');
+                    // モーダル表示時にサイドパネルを非表示にする
+                    resetDetailPanel();
+                });
+            }
+
+            // モーダル閉じる
+            if (allNotificationsModalClose) {
+                allNotificationsModalClose.addEventListener('click', function () {
+                    allNotificationsModal.classList.remove('show');
+                    resetDetailPanel();
+                });
+            }
+
+            // モーダル背景クリックで閉じる
+            if (allNotificationsModal) {
+                allNotificationsModal.addEventListener('click', function (e) {
+                    if (e.target === allNotificationsModal) {
+                        allNotificationsModal.classList.remove('show');
+                        resetDetailPanel();
+                    }
+                });
+            }
+
+            // ESCキーでモーダル閉じる
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && allNotificationsModal && allNotificationsModal.classList.contains('show')) {
+                    allNotificationsModal.classList.remove('show');
+                    resetDetailPanel();
+                }
+            });
+
+            // サイドパネルをリセット
+            function resetDetailPanel() {
+                if (notificationDetailPanel) {
+                    notificationDetailPanel.classList.remove('show');
+                }
+                // 選択状態をリセット
+                document.querySelectorAll('.notification-title-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            }
+
+            // タイトルボタンのクリックイベント
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('notification-title-btn')) {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    const notification = pastNotifications[index];
+                    
+                    if (notification) {
+                        // 他のボタンの選択状態を解除
+                        document.querySelectorAll('.notification-title-btn').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+                        
+                        // クリックされたボタンを選択状態にする
+                        e.target.classList.add('selected');
+                        
+                        // サイドパネルに内容を表示
+                        if (notificationDetailTitle) {
+                            notificationDetailTitle.textContent = notification.title;
+                        }
+                        if (notificationDetailDate) {
+                            notificationDetailDate.textContent = notification.date;
+                        }
+                        if (notificationDetailContent) {
+                            notificationDetailContent.innerHTML = notification.content;
+                        }
+                        
+                        // サイドパネルを表示
+                        if (notificationDetailPanel) {
+                            notificationDetailPanel.classList.add('show');
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+    <script>
         // Mobile responsive functionality
         (function () {
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -9095,7 +9701,22 @@
                         // ダブルクリックで自動幅調整機能を追加
                         header.addEventListener('dblclick', function (e) {
                             e.preventDefault();
+                            
+                            // 視覚的フィードバックを表示
+                            const originalBg = header.style.backgroundColor;
+                            header.style.backgroundColor = '#e0f2fe';
+                            header.style.transition = 'background-color 0.2s ease';
+                            
+                            // 自動調整を実行
                             autoResizeColumn(header, index, table);
+                            
+                            // フィードバックをリセット
+                            setTimeout(() => {
+                                header.style.backgroundColor = originalBg;
+                                setTimeout(() => {
+                                    header.style.transition = '';
+                                }, 200);
+                            }, 300);
                         });
                     });
                 });
@@ -9129,52 +9750,85 @@
                 const headers = table.querySelectorAll('th');
                 const isLastColumn = columnIndex === headers.length - 1;
 
-                // 一時的に幅をautoにして実際のコンテンツ幅を測定
-                const originalWidth = header.style.width;
-                header.style.width = 'auto';
+                // 一時的な測定用要素を作成
+                const measureElement = document.createElement('div');
+                measureElement.style.cssText = `
+                    position: absolute;
+                    visibility: hidden;
+                    white-space: nowrap;
+                    top: -9999px;
+                    left: -9999px;
+                `;
+                document.body.appendChild(measureElement);
 
                 // ヘッダーのテキスト幅を測定
                 const headerText = header.textContent.trim();
-                const headerCanvas = document.createElement('canvas');
-                const headerContext = headerCanvas.getContext('2d');
-                headerContext.font = window.getComputedStyle(header).font;
-                const headerWidth = headerContext.measureText(headerText).width;
+                const headerComputedStyle = window.getComputedStyle(header);
+                measureElement.style.font = headerComputedStyle.font;
+                measureElement.style.fontWeight = headerComputedStyle.fontWeight;
+                measureElement.style.fontSize = headerComputedStyle.fontSize;
+                measureElement.textContent = headerText;
+                let maxContentWidth = measureElement.offsetWidth;
 
                 // 同じカラムの全セルの幅を測定
-                const cells = tbody.querySelectorAll(`tr td:nth-child(${columnIndex + 1})`);
-                let maxContentWidth = headerWidth;
-
+                const cells = tbody.querySelectorAll(`tr.data-row td:nth-child(${columnIndex + 1})`);
+                
                 cells.forEach(cell => {
                     const cellText = cell.textContent.trim();
                     if (cellText) {
-                        const cellCanvas = document.createElement('canvas');
-                        const cellContext = cellCanvas.getContext('2d');
-                        cellContext.font = window.getComputedStyle(cell).font;
-                        const cellWidth = cellContext.measureText(cellText).width;
-                        maxContentWidth = Math.max(maxContentWidth, cellWidth);
+                        const cellComputedStyle = window.getComputedStyle(cell);
+                        measureElement.style.font = cellComputedStyle.font;
+                        measureElement.style.fontWeight = cellComputedStyle.fontWeight;
+                        measureElement.style.fontSize = cellComputedStyle.fontSize;
+                        
+                        // 1行表示用：テキスト全体を1行として測定
+                        measureElement.textContent = cellText;
+                        maxContentWidth = Math.max(maxContentWidth, measureElement.offsetWidth);
                     }
                 });
+
+                // 測定用要素を削除
+                document.body.removeChild(measureElement);
 
                 // パディングとボーダーを考慮した最終幅を計算
                 const padding = 24; // 左右のパディング合計
                 const minWidth = 60; // 最小幅
-                const maxWidth = 400; // RC担当備考カラムの最大幅を制限
+                const maxWidth = isRcMemoColumn ? 600 : 800; // RC担当備考は600px、その他は800px
                 let optimalWidth = Math.max(minWidth, Math.ceil(maxContentWidth + padding));
 
-                // RC担当備考カラムの場合、最大幅を制限
-                if (isRcMemoColumn) {
+                // 最大幅を制限（ただし、見積処理画面では制限を緩く）
+                const isQuotationView = table.closest('#quotation-view') !== null;
+                const isOrderView = table.closest('#order-view') !== null;
+                const isDeliveryView = table.closest('#delivery-view') !== null;
+                if (isQuotationView || isOrderView || isDeliveryView) {
+                    // 見積処理画面、受注処理画面、納品処理画面では1行表示なのでより大きな最大幅を設定
+                    const quotationMaxWidth = isRcMemoColumn ? 800 : 1200;
+                    optimalWidth = Math.min(optimalWidth, quotationMaxWidth);
+                } else {
                     optimalWidth = Math.min(optimalWidth, maxWidth);
                 }
 
                 // 計算した幅を適用
                 header.style.width = optimalWidth + 'px';
 
+                // 対応するすべての列のセルにも幅を適用
+                const allCells = table.querySelectorAll(`td:nth-child(${columnIndex + 1})`);
+                allCells.forEach(cell => {
+                    cell.style.maxWidth = optimalWidth + 'px';
+                    cell.style.minWidth = optimalWidth + 'px';
+                });
+
                 // 最後のカラムの場合、テーブル全体の幅も調整
-                if (isLastColumn && isRcMemoColumn) {
+                if (isLastColumn && (isRcMemoColumn || isQuotationView || isOrderView || isDeliveryView)) {
                     const currentTableWidth = table.offsetWidth;
-                    const newTableWidth = currentTableWidth + (optimalWidth - (originalWidth === 'auto' ? header.offsetWidth : parseInt(originalWidth)));
+                    const originalWidth = header.dataset.originalWidth || header.offsetWidth;
+                    const widthDiff = optimalWidth - parseInt(originalWidth);
+                    const newTableWidth = currentTableWidth + widthDiff;
                     table.style.width = Math.max(newTableWidth, 1200) + 'px'; // 最小幅1200pxを維持
                 }
+
+                // 元の幅を記録
+                header.dataset.originalWidth = optimalWidth;
 
                 // 幅が変更されたことをログ出力（デバッグ用）
                 console.log(`Column ${columnIndex + 1} (${headerText}) auto-resized to ${optimalWidth}px`);
@@ -9666,6 +10320,7 @@
                     const tagText = tag.querySelector('.tag-text').textContent;
                     tags = tags.filter(t => t !== tagText);
                     tag.remove();
+                    updateContainerClass();
                 });
 
                 return tag;
@@ -9677,6 +10332,15 @@
                     tags.push(text);
                     const tag = createTag(text);
                     container.insertBefore(tag, input);
+                    updateContainerClass();
+                }
+            }
+
+            function updateContainerClass() {
+                if (tags.length > 0) {
+                    container.classList.add('has-tags');
+                } else {
+                    container.classList.remove('has-tags');
                 }
             }
 
@@ -9685,20 +10349,27 @@
                 return value.split(/[,;\n]+/).map(s => s.trim()).filter(s => s);
             }
 
+            // Backspace handling on keydown (keep immediate behavior)
             input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ',') {
-                    e.preventDefault();
-                    const values = parseInput(input.value);
-                    values.forEach(addTag);
-                    input.value = '';
-                } else if (e.key === 'Backspace' && input.value === '' && tags.length > 0) {
+                if (e.key === 'Backspace' && input.value === '' && tags.length > 0) {
                     // Remove last tag when backspace is pressed on empty input
                     const lastTag = container.querySelector('.tag:last-of-type');
                     if (lastTag) {
                         const tagText = lastTag.querySelector('.tag-text').textContent;
                         tags = tags.filter(t => t !== tagText);
                         lastTag.remove();
+                        updateContainerClass();
                     }
+                }
+            });
+
+            // Use keyup for Enter and comma so IME composition is committed before reading input.value
+            input.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    const values = parseInput(input.value);
+                    values.forEach(addTag);
+                    input.value = '';
                 }
             });
 
@@ -9983,12 +10654,26 @@
                             let valueB = cellB.textContent.trim();
 
                             // Handle different data types
-                            if (column.includes('date')) {
-                                // Date sorting
+                            if (column.includes('date') && column !== 'delivery-date') {
+                                // Date sorting (except delivery-date which contains status text)
                                 valueA = new Date(valueA.replace(/\//g, '-'));
                                 valueB = new Date(valueB.replace(/\//g, '-'));
                                 if (isNaN(valueA)) valueA = new Date(0);
                                 if (isNaN(valueB)) valueB = new Date(0);
+                            } else if (column === 'delivery-date') {
+                                // Delivery status sorting with priority order
+                                const statusPriority = {
+                                    '納期超過': 1,
+                                    '手配中': 2,
+                                    '手配済': 3,
+                                    '在庫あり': 4,
+                                    'BO': 5,
+                                    '出荷待': 6,
+                                    '出荷済': 7,
+                                    '': 999 // Empty values last
+                                };
+                                valueA = statusPriority[valueA] || 999;
+                                valueB = statusPriority[valueB] || 999;
                             } else if (column.includes('price') || column.includes('quantity')) {
                                 // Numeric sorting
                                 valueA = parseFloat(valueA.replace(/[¥,円]/g, '')) || 0;
@@ -10078,6 +10763,16 @@
                 statNumber.textContent = tags.length;
                 statItem.classList.add('updated');
                 setTimeout(() => statItem.classList.remove('updated'), 400);
+                updateContainerClass();
+            }
+
+            // Update container class based on tag count
+            function updateContainerClass() {
+                if (tags.length > 0) {
+                    container.classList.add('has-tags');
+                } else {
+                    container.classList.remove('has-tags');
+                }
             }
 
             // Add tag function with validation
@@ -10088,7 +10783,7 @@
 
                     const tag = document.createElement('span');
                     tag.className = 'enhanced-tag';
-                    tag.innerHTML = `${cleanValue} <span class="remove" data-value="${cleanValue}">×</span>`;
+                    tag.innerHTML = `<span>${cleanValue}</span> <span class="remove" data-value="${cleanValue}">×</span>`;
 
                     const removeBtn = tag.querySelector('.remove');
                     removeBtn.addEventListener('click', function () {
@@ -10131,18 +10826,22 @@
             }
 
             // Handle input events
+            // Keep Backspace handling on keydown for immediate UX
             input.addEventListener('keydown', function (e) {
                 const value = input.value.trim();
+                if (e.key === 'Backspace' && !value && tags.length > 0) {
+                    removeTag(tags[tags.length - 1]);
+                }
+            });
 
-                if (e.key === 'Enter' && value) {
+            // Use keyup for Enter so IME composition is committed before reading input.value
+            input.addEventListener('keyup', function (e) {
+                const value = input.value.trim();
+                if ((e.key === 'Enter' || e.key === ',') && value) {
                     e.preventDefault();
                     const values = processInputValue(value);
                     values.forEach(v => addTag(v));
                     input.value = '';
-                }
-
-                if (e.key === 'Backspace' && !value && tags.length > 0) {
-                    removeTag(tags[tags.length - 1]);
                 }
             });
 
@@ -11863,7 +12562,7 @@
                         localStorage.removeItem('username');
                         
                         // ログイン画面に遷移
-                        window.location.href = 'login.html';
+                        window.location.href = 'webike-SCM2_Mock_login.html';
                     }
                 }
             });
