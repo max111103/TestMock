@@ -204,16 +204,19 @@
             
             // 簡単なログイン検証（実際のプロジェクトでは適切な認証を実装してください）
             setTimeout(() => {
-                if (username && password) {
+                if (username === 'admin' && password === 'admin') {
                     // ログイン成功の場合
+                    console.log('Login successful for user:', username);
                     // ローカルストレージにログイン状態を保存
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('username', username);
                     
+                    console.log('Redirecting to main page...');
                     // ダッシュボード画面に遷移
-                    window.location.href = 'index.html';
+                    window.location.href = 'webike-SCM2_Mock.html';
                 } else {
                     // ログイン失敗の場合
+                    console.log('Login failed - invalid username or password');
                     loginButton.classList.remove('loading');
                     errorMessage.style.display = 'block';
                 }
@@ -222,11 +225,38 @@
 
         // ページ読み込み時にログイン状態をチェック
         window.addEventListener('load', function() {
+            console.log('Login page loaded - isLoggedIn:', localStorage.getItem('isLoggedIn'));
             if (localStorage.getItem('isLoggedIn') === 'true') {
                 // 既にログインしている場合はダッシュボードに遷移
-                window.location.href = 'index.html';
+                console.log('Already logged in, redirecting to main page...');
+                window.location.href = 'webike-SCM2_Mock.html';
             }
         });
+
+        // デバッグ用グローバル関数
+        window.debugLogin = {
+            // ログイン状態をリセット
+            logout: function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                console.log('Logged out, reloading page...');
+                window.location.reload();
+            },
+            // ログイン状態を設定
+            login: function(username = 'testuser') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                console.log('Logged in as:', username);
+                window.location.href = 'webike-SCM2_Mock.html';
+            },
+            // 現在の状態を確認
+            status: function() {
+                console.log('Login status:', {
+                    isLoggedIn: localStorage.getItem('isLoggedIn'),
+                    username: localStorage.getItem('username')
+                });
+            }
+        };
 
         // Enter キーでログインフォームを送信
         document.addEventListener('keypress', function(e) {
