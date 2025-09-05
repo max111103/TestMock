@@ -5167,7 +5167,7 @@
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="scm-code">SCMコード<span
                                                 class="sort-indicator"></span></th>
-                                        <th class="sortable" data-column="maker">メーカー名<span
+                                        <th class="sortable" data-column="maker">商品メーカー<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="product-name">商品名<span
                                                 class="sort-indicator"></span></th>
@@ -5644,11 +5644,11 @@
                                         <th width="45px"><input type="checkbox" class="checkbox"
                                                 id="order-main-checkbox"></th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th class="sortable" data-column="order-date">受注日<span
+                                        <th class="sortable" data-column="order-date">webike依頼日<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="scm-code">SCMコード<span
                                                 class="sort-indicator"></span></th>
-                                        <th class="sortable" data-column="maker">メーカー名<span
+                                        <th class="sortable" data-column="maker">商品メーカー<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="product-name">商品名<span
                                                 class="sort-indicator"></span></th>
@@ -6480,9 +6480,9 @@
                                         <th><input type="checkbox" class="checkbox" id="order-arranged-main-checkbox">
                                         </th>
                                         <th>明細情報</th><!-- for toggle button -->
-                                        <th>受注日</th>
+                                        <th>webike依頼日</th>
                                         <th>SCMコード</th>
-                                        <th>メーカー名</th>
+                                        <th>商品メーカー</th>
                                         <th>商品名</th>
                                         <th>商品番号</th>
                                         <th>JAN</th>
@@ -6744,11 +6744,11 @@
                                         <th width="45px"><input type="checkbox" class="checkbox"
                                                 id="order-main-checkbox"></th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th class="sortable" data-column="order-date">受注日<span
+                                        <th class="sortable" data-column="order-date">webike依頼日<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="scm-code">SCMコード<span
                                                 class="sort-indicator"></span></th>
-                                        <th class="sortable" data-column="maker">メーカー名<span
+                                        <th class="sortable" data-column="maker">商品メーカー<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="product-name">商品名<span
                                                 class="sort-indicator"></span></th>
@@ -6762,7 +6762,13 @@
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="quantity">注文数<span
                                                 class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="arrival-quantity">入荷数<span
+                                                class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="management-number">自社管理番号<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="arrival-scheduled">入荷予定<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="delay-count">遅延回数<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="staff-memo">担当者備考<span
                                                 class="sort-indicator"></span></th>
@@ -6791,9 +6797,12 @@
                                         <td>1</td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="16">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=DT-OF-01"
                                                     alt="image">
@@ -6918,11 +6927,11 @@
                                                 id="delivery-done-main-checkbox">
                                         </th>
                                         <th width="80px">明細情報</th><!-- for toggle button -->
-                                        <th class="sortable" data-column="ship-date">出荷日<span
+                                        <th class="sortable" data-column="ship-date">webike依頼日<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="scm-code">SCMコード<span
                                                 class="sort-indicator"></span></th>
-                                        <th class="sortable" data-column="maker">メーカー名<span
+                                        <th class="sortable" data-column="maker">商品メーカー<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="product-name">商品名<span
                                                 class="sort-indicator"></span></th>
@@ -6935,6 +6944,16 @@
                                         <th class="sortable" data-column="cost-price">仕切価格(税抜)<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="quantity">注文数<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="arrival-quantity">入荷数<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="own-management-number">自社管理番号<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="shipping-date">出荷日<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="staff-note">担当備考<span
+                                                class="sort-indicator"></span></th>
+                                        <th class="sortable" data-column="rc-staff-note">RC担当備考<span
                                                 class="sort-indicator"></span></th>
                                         <th class="sortable" data-column="carrier">運送会社<span
                                                 class="sort-indicator"></span></th>
@@ -6963,11 +6982,16 @@
                                         <td>¥15,800</td>
                                         <td>¥0</td>
                                         <td>1</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td>ヤマト運輸</td>
                                         <td>ABC123456789</td>
                                     </tr>
                                     <tr class="details-row">
-                                        <td colspan="13">
+                                        <td colspan="18">
                                             <div class="details-card">
                                                 <img src="https://via.placeholder.com/100x100?text=SP-HL-01"
                                                     alt="image">
@@ -7194,7 +7218,7 @@
             <hr class="section-divider">
             <h4>受注処理操作</h4>
             <div class="form-group">
-                <label class="form-label">受注日</label>
+                <label class="form-label">webike依頼日</label>
                 <input type="date" class="form-input" id="order-panel-date">
             </div>
             <div class="button-group vertical">
@@ -11050,7 +11074,7 @@
             { name: 'SCMコード', enabled: true, order: 6 },
             { name: '定価(税抜)', enabled: false, order: 7 },
             { name: '仕切価格(税抜)', enabled: false, order: 8 },
-            { name: '受注日', enabled: true, order: 9 },
+            { name: 'webike依頼日', enabled: true, order: 9 },
             { name: '出荷日', enabled: false, order: 10 },
             { name: '商品メーカー', enabled: false, order: 11 },
             { name: 'JAN', enabled: false, order: 12 },
